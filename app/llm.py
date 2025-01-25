@@ -1,0 +1,332 @@
+# app/llm.py
+from dataclasses import dataclass
+from typing import List, Optional, Dict, Any, Union
+import json
+import os
+from datetime import datetime, timedelta
+import logging
+import openai
+from flask import current_app
+from .language_service import LanguageService
+from .prompts import PROMPTS
+
+# Configure logger
+logger = logging.getLogger('llm_calls')
+logger.setLevel(logging.INFO)
+
+
+def setup_logging():
+    """Setup rotating file handler for LLM calls."""
+    logger = logging.getLogger('llm_calls')
+    if logger.handlers:
+        logger.handlers.clear()
+    
+    # Get the project root directory (parent of app/)
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    logs_dir = os.path.join(project_root, 'logs')
+    
+    # Ensure log directory exists
+    os.makedirs(logs_dir, exist_ok=True)
+    
+    handler = logging.handlers.RotatingFileHandler(
+        os.path.join(logs_dir, 'llm_calls.log'),
+        maxBytes=5*1024*1024,
+        backupCount=5
+    )
+    
+    class JsonFormatter(logging.Formatter):
+        def format(self, record):
+            # For API call logs (containing all required fields)
+            if all(hasattr(record, field) for field in 
+                  ['function', 'input', 'output', 'estimated_cost']):
+                log_record = {
+                    'timestamp': self.formatTime(record, self.datefmt),
+                    'level': record.levelname,
+                    'type': 'api_call',
+                    'session_id': getattr(record, 'session_id', 'unknown'),
+                    'function': getattr(record, 'function'),
+                    'input': getattr(record, 'input'),
+                    'output': getattr(record, 'output'),
+                    'estimated_cost': getattr(record, 'estimated_cost'),
+                    'input_tokens': getattr(record, 'input_tokens'),
+                    'output_tokens': getattr(record, 'output_tokens'),
+                    'total_tokens': getattr(record, 'total_tokens')
+                }
+            # For regular logs
+            else:
+                log_record = {
+                    'timestamp': self.formatTime(record, self.datefmt),
+                    'level': record.levelname,
+                    'type': 'info',
+                    'session_id': getattr(record, 'session_id', 'unknown'),
+                    'message': record.getMessage()
+                }
+            return json.dumps(log_record)
+
+    handler.setFormatter(JsonFormatter(datefmt='%Y-%m-%d %H:%M:%S'))
+    logger.addHandler(handler)
+    logger.propagate = False
+
+
+@dataclass
+class ProcessContext:
+    """Container for process analysis input data."""
+    description: str
+    additional_context: str = ""
+    base64_image: Optional[str] = None
+    language: str = "en" 
+
+class CostLimitExceeded(Exception):
+    """Raised when daily API cost threshold is exceeded."""
+    pass
+
+# app/llm.py
+
+class LLMService:
+    """Service for handling LLM operations with cost tracking."""
+    
+    def __init__(self, session_id: Optional[str] = None):
+        """Initialize OpenAI client with Azure configuration.
+        
+        Args:
+            session_id: Optional session ID. If not provided, will try to get from Flask session.
+        """
+        self.client = openai.AzureOpenAI(
+            api_key=current_app.config['AZURE_API_KEY'],
+            api_version=current_app.config['AZURE_API_VERSION'],
+            azure_endpoint=current_app.config['AZURE_API_URL']
+        )
+        self.language_service = LanguageService()
+        
+        # If session_id is provided, use it; otherwise try to get from Flask session
+        if session_id:
+            self.session_id = session_id
+        else:
+            from flask import session, has_request_context
+            if has_request_context() and 'id' in session:
+                self.session_id = session['id']
+            else:
+                self.session_id = 'no_session'
+
+    
+    def _log_info(self, message: str) -> None:
+        """Log general information with session ID."""
+        logger = logging.getLogger('llm_calls')
+        logger.info(message, extra={'session_id': self.session_id})
+
+    def _log_api_call(self, function: str, input_data: str, 
+                     output_data: Any, token_usage: Dict[str, int]) -> None:
+        """Log API call details with cost estimation."""
+        try:
+            cost = (
+                token_usage['prompt_tokens'] * (5 / 1_000_000) +  
+                token_usage['completion_tokens'] * (15 / 1_000_000)
+            )
+
+            logger = logging.getLogger('llm_calls')
+            logger.info('', extra={
+                'session_id': self.session_id,
+                'function': function,
+                'input': input_data,
+                'output': output_data,
+                'estimated_cost': round(cost, 5),
+                'input_tokens': token_usage['prompt_tokens'],
+                'output_tokens': token_usage['completion_tokens'],
+                'total_tokens': token_usage['total_tokens'],
+            })
+        except Exception as e:
+            self._log_info(f'Error logging API call: {str(e)}')
+
+    def _get_prompt(self, key: str, process: ProcessContext, **kwargs) -> str:
+        """
+        Get prompt template and format it with parameters.
+        
+        Args:
+            key: Prompt template key
+            process: Process context containing language
+            **kwargs: Additional formatting parameters
+            
+        Returns:
+            str: Formatted prompt
+            
+        Raises:
+            KeyError: If prompt template not found
+        """
+        try:
+            template = PROMPTS[process.language][key]
+            return template.format(
+                process_description=process.description,
+                additional_context=process.additional_context,
+                **kwargs
+            )
+        except KeyError:
+            logger.error(f"Prompt template not found: {process.language}/{key}")
+            # Fallback to English if template not found in detected language
+            return PROMPTS['en'][key].format(
+                process_description=process.description,
+                additional_context=process.additional_context,
+                **kwargs
+            )
+
+    def detect_language(self, process: ProcessContext) -> str:
+        """Detect language for a process."""
+        detected_language = self.language_service.detect_language(
+            text=process.description,
+            base64_image=process.base64_image
+        )
+        self._log_info(f"Language detected: {detected_language}")
+        return detected_language
+
+    def get_workarounds(self, process: ProcessContext) -> List[str]:
+        """Get initial workaround suggestions for a process."""
+        if not self._check_cost_threshold():
+            raise CostLimitExceeded("Daily cost threshold exceeded")
+
+        # Get appropriate prompt template
+        key = "start_with_image" if process.base64_image else "start_no_image"
+        prompt = self._get_prompt(key, process)
+        
+        messages = self._create_messages(prompt, process)
+        
+        completion = self.client.beta.chat.completions.parse(
+            model="gpt-4o-low-sensitivity-filter",
+            messages=messages,
+            response_format={"type": "json_object"},
+        )
+
+        self._log_api_call(
+            function="get_workarounds",
+            input_data=prompt,
+            output_data=completion.choices[0].message.content,
+            token_usage=completion.usage.model_dump()
+        )
+
+        return json.loads(completion.choices[0].message.content)['workarounds']
+
+    def get_similar_workarounds(
+        self,
+        process: ProcessContext,
+        similar_workaround: str
+    ) -> List[str]:
+        """Get workarounds similar to a reference workaround."""
+        if not self._check_cost_threshold():
+            raise CostLimitExceeded("Daily cost threshold exceeded")
+        # Get appropriate prompt template
+        key = "similar_with_image" if process.base64_image else "similar_no_image"
+        prompt = self._get_prompt(key, process, similar_workaround=similar_workaround)
+        
+        messages = self._create_messages(prompt, process)
+        
+        completion = self.client.beta.chat.completions.parse(
+            model="gpt-4o-low-sensitivity-filter",
+            messages=messages,
+            response_format={"type": "json_object"},
+        )
+
+        self._log_api_call(
+            function="get_similar_workarounds",
+            input_data=prompt,
+            output_data=completion.choices[0].message.content,
+            token_usage=completion.usage.model_dump()
+        )
+
+        return json.loads(completion.choices[0].message.content)['workarounds']
+
+    def generate_node_label(
+        self,
+        workaround: str,
+        other_workarounds: List[str]
+    ) -> str:
+        """Generate a label for a workaround node."""
+        if not self._check_cost_threshold():
+            raise CostLimitExceeded("Daily cost threshold exceeded")
+
+        prompt = get_node_label_prompt(workaround, other_workarounds)
+
+        completion = self.client.chat.completions.create(
+            model="gpt-4o-low-sensitivity-filter",
+            messages=[{"role": "user", "content": prompt}]
+        )
+
+        self._log_api_call(
+            function="generate_node_label",
+            input_data=prompt,
+            output_data=completion.choices[0].message.content,
+            token_usage=completion.usage.model_dump()
+        )
+
+        return completion.choices[0].message.content.strip()
+
+    def _check_cost_threshold(self) -> bool:
+        """Check if API usage is within daily cost threshold."""
+        threshold = float(current_app.config.get('DAILY_COST_THRESHOLD', 10.0))
+        cutoff_time = datetime.now() - timedelta(hours=24)
+        total_cost = 0.0
+        
+        # Get logs directory from app config
+        log_file = os.path.join(current_app.config['LOGS_DIR'], 'llm_calls.log')
+
+        try:
+            with open(log_file, 'r') as log_file:
+                for line in log_file:
+                    try:
+                        log_entry = json.loads(line.strip())
+                        timestamp = datetime.strptime(
+                            log_entry['timestamp'],
+                            '%Y-%m-%d %H:%M:%S'
+                        )
+                        if timestamp >= cutoff_time:
+                            cost = log_entry.get('estimated_cost', 0)
+                            if cost:
+                                total_cost += float(cost)
+                    except (json.JSONDecodeError, KeyError, ValueError):
+                        continue
+
+            # Log current cost status
+            self._log_info(f"Current 24h API cost: ${total_cost:.4f}")
+                
+        except FileNotFoundError:
+            self._log_info("No cost log file found - starting fresh")
+            return True
+
+        return total_cost < threshold
+
+    def _create_messages(
+        self,
+        prompt: str,
+        process: ProcessContext
+    ) -> List[Dict]:
+        """Create message list for API call, handling images if present."""
+        if process.base64_image:
+            return [{
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": prompt},
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": f"data:image/jpeg;base64,{process.base64_image}"
+                        }
+                    }
+                ]
+            }]
+        return [{"role": "user", "content": prompt}]
+
+
+def get_node_label_prompt(workaround, other_workarounds):
+    formatted_other_workarounds = '\n'.join(f"- {w}" for w in other_workarounds) or "None"
+    prompt = f"""
+        You are a helpful assistant that generates short, descriptive labels for workarounds. Generate a concise label (maximum of 3 words) that highlights what is unique or distinctive about the following workaround compared to others. The label should be clear, action-oriented, or outcome-focused to help users quickly understand its unique aspect.
+        It is crucial, that the label is the same language as the current workaround.
+
+        Current Workaround:
+        {workaround}
+
+        Other Workarounds:
+        {formatted_other_workarounds}
+        """
+    return prompt
+
+
+# Initialize logging when module is imported
+setup_logging()

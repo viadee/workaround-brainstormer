@@ -1,0 +1,77 @@
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.pytest_cache/
+.python-version
+
+# Logs
+logs/
+*.log
+
+# Temporary uploads
+temp_uploads/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Documentation and research
+docs/
+research/
+*.md
+README.md
+
+# Development and testing
+tests/
+test/
+testing/
+.env.test
+.env.local
+.env.development
+
+# Build and distribution
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+bin/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+
+# Docker specific
+Dockerfile*
+docker-compose*
+.docker/
+.dockerignore
+
+*.dylib

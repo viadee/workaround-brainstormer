@@ -1,0 +1,104 @@
+<!-- templates/base.html -->
+{% extends "base.html" %}
+
+{% block title %}Node Map Web App{% endblock %}
+
+{% block content %}
+<!-- Map container (left side) -->
+<div id="map-container">
+    <div class="spinner" id="map-spinner"></div>
+    <div id="instructions">
+        Left click to expand similar workarounds.<br>
+        Right click to collapse.
+    </div>
+    <div id="app-version">App Version: {{ app_version }}</div>
+</div>
+
+<!-- Sidebar (right side) -->
+<div id="sidebar">
+    <!-- Input Container -->
+    <div id="input-container">
+        <h2>
+            <span class="header-text">
+                <i class="fas fa-sitemap"></i> Process Description
+            </span>
+            <span class="icon-container">
+                <i class="fas fa-cog" id="settings-icon"></i>
+            </span>
+        </h2>
+
+        <!-- File upload alert area -->
+        <div id="file-upload-alert" class="file-upload-alert"></div>
+
+        <div class="upload-container" id="upload-container">
+            <!-- Process Description Input -->
+            <textarea 
+                id="process-input" 
+                class="process-textarea"
+                placeholder="Type your process description here..."
+            ></textarea>
+        
+            <!-- Instructions Overlay -->
+            <div class="overlay-placeholder" id="overlay-placeholder">
+                <div class="upload-instructions">
+                    <i class="fas fa-file-upload upload-icon"></i>
+                    <p class="drag-drop-text">Drag & drop a process diagram here</p>
+                    <p class="browse-text">or <a href="#" id="browse-link" class="browse-link">click to browse</a></p>
+                </div>
+            </div>
+        
+            <!-- Hidden File Input -->
+            <input 
+                type="file" 
+                id="file-input" 
+                accept=".svg,.png,.jpg,.jpeg,.pdf"
+                hidden
+            />
+        
+            <!-- Upload Feedback Area -->
+            <div class="file-preview-overlay">
+                <img src="" alt="File preview">
+                <button class="file-preview-remove" aria-label="Remove file">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="file-preview-filename"></div>
+            </div>
+        </div>
+
+        <!-- Expert panel (toggled via settings icon) -->
+        <div id="expert-panel">
+            <h3>Additional Context</h3>
+            <textarea 
+                id="additional-context" 
+                placeholder="Enter additional context about the company or process"
+                style="width: 100%; min-height: 100px;"
+            ></textarea>
+        </div>
+
+        <!-- Start button -->
+        <button id="start-button">Generate Workarounds</button>
+    </div>
+
+    <!-- Info Container: Workaround List -->
+    <div id="info-container">
+        <h2>
+            <span class="header-text">
+                <i class="fas fa-list"></i> Workaround List
+            </span>
+            <span class="icon-container">
+                <a href="#" id="download-btn" class="download-icon" title="Download Workarounds">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                </a>
+            </span>
+        </h2>
+        <div id="workarounds-list"><!-- Dynamically generated list --></div>
+    </div>
+</div>
+{% endblock %}

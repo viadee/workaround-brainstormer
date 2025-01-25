@@ -1,0 +1,13 @@
+aiohttp
+Flask
+langdetect
+numpy
+openai
+pdf2image
+Pillow
+pytesseract
+python-dotenv
+reportlab
+svglib
+Werkzeug
+rlPyCairo
