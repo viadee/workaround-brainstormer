@@ -42,6 +42,9 @@ RUN mkdir -p /app/logs /app/temp_uploads
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Install Gunicorn
+RUN pip install --no-cache-dir gunicorn
+
 # Copy the application code
 COPY app app/
 COPY static static/
@@ -54,7 +57,7 @@ RUN chmod -R 755 /app && \
     chmod -R 777 /app/temp_uploads
 
 # Expose port 5001
-EXPOSE 5001
+EXPOSE 5000
 
-# Set the entry point to run your app
-CMD ["python", "run.py"]
+# Use Gunicorn as the final command
+CMD ["gunicorn", "run:app", "--workers=8", "--bind=0.0.0.0:5000"]

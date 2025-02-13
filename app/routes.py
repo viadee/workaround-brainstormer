@@ -9,6 +9,7 @@ import json
 import time
 import uuid
 
+from .prompts import DEFAULT_FEW_SHOT_EXAMPLES
 from .auth import login_required, admin_required, check_credentials
 from .utils import save_uploaded_file, process_image, format_workarounds_tree
 from .llm import LLMService, ProcessContext, CostLimitExceeded
@@ -64,7 +65,8 @@ def index():
     current_app.logger.info("Rendering index for: %s", session.get('username'))
     return render_template(
         'index.html',
-        app_version=current_app.config['APP_VERSION']
+        app_version=current_app.config['APP_VERSION'],
+                default_few_shot_examples=DEFAULT_FEW_SHOT_EXAMPLES
     )
 
 @main_bp.route('/download_logs')
@@ -310,3 +312,17 @@ def test_logging():
     })
     
     return jsonify({'status': 'Logging test complete'})
+
+@main_bp.route('/update_few_shot_examples', methods=['POST'])
+@login_required
+def update_few_shot_examples():
+    """Update the few shot examples based on user input."""
+    try:
+        data = request.get_json()
+        # Expecting data in the form: { "few_shot_examples": { "en": { "start_no_image": [ ... ] } } }
+        session['few_shot_examples'] = data.get('few_shot_examples', {})
+        current_app.logger.info("Few shot examples updated.")
+        return jsonify({"status": "success"})
+    except Exception as e:
+        current_app.logger.exception("Error updating few shot examples: %s", e)
+        return jsonify({"error": str(e)}), 500

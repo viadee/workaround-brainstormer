@@ -101,8 +101,13 @@ class GraphManager {
             .attr("stroke", this.colors.stroke)
             .attr("stroke-width", 2);
 
+        // Show appropriate text in tooltip
+        const tooltipText = d.id === 0 ? 
+            (d.description || d.text) : // For root node, show description if available
+            d.text; // For other nodes, show the regular text
+
         this.tooltip
-            .html(d.text)
+            .html(tooltipText)
             .style("left", (event.pageX + 15) + "px")
             .style("top", (event.pageY - 28) + "px")
             .style("display", "block");

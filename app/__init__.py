@@ -18,7 +18,7 @@ def create_app(testing: bool = False) -> Flask:
                 static_folder='../static')       
 
     # Load configuration
-    app.secret_key = os.getenv('APP_SECRET_KEY')
+    app.secret_key = os.getenv('APPSECRETKEY')
     app.config.update(
         UPLOAD_FOLDER=os.path.join(PROJECT_ROOT, 'temp_uploads'),
         MAX_CONTENT_LENGTH=5 * 1024 * 1024,  # 5MB limit
@@ -26,10 +26,10 @@ def create_app(testing: bool = False) -> Flask:
         APP_VERSION=APP_VERSION,
         TESTING=testing,
         # OpenAI settings
-        AZURE_API_KEY=os.getenv('AZURE_API_KEY'),
-        AZURE_API_VERSION=os.getenv('AZURE_API_VERSION', '2023-12-01-preview'),
-        AZURE_API_URL=os.getenv('AZURE_API_URL'),
-        DAILY_COST_THRESHOLD=float(os.getenv('DAILY_COST_THRESHOLD', '10.0')),
+        AZURE_API_KEY=os.getenv('AZUREAPIKEY'),
+        AZURE_API_VERSION=os.getenv('AZUREAPIVERSION', '2023-12-01-preview'),
+        AZURE_API_URL=os.getenv('AZUREAPIURL'),
+        DAILY_COST_THRESHOLD=float(os.getenv('DAILYCOSTTHRESHOLD', '10.0')),
         # Add logs directory to config
         LOGS_DIR=os.path.join(PROJECT_ROOT, 'logs')
     )

@@ -6,7 +6,7 @@ from werkzeug.security import check_password_hash
 
 # Authentication configuration
 ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD_HASH = os.getenv('ADMIN_PASSWORD_HASH')
+ADMIN_PASSWORD_HASH = os.getenv('ADMINPASSWORDHASH')
 
 def login_required(f):
     """Decorator to require login for routes."""
@@ -48,6 +48,6 @@ def check_credentials(username: str, password: str) -> bool:
         return check_password_hash(ADMIN_PASSWORD_HASH, password)
     
     # Check regular user credentials
-    user = os.getenv('WA_USERNAME')
-    pass_hash = os.getenv('WA_PASSWORD_HASH')
+    user = os.getenv('WAUSERNAME')
+    pass_hash = os.getenv('WAPASSWORDHASH')
     return user == username and check_password_hash(pass_hash, password)

@@ -6,17 +6,17 @@ from app import create_app
 load_dotenv(find_dotenv())
 
 ## required environment variables
-# AZURE_API_KEY
-# AZURE_API_URL
-# APP_SECRET_KEY
-# WA_PASSWORD_HASH
-# WA_USERNAME
-# ADMIN_PASSWORD_HASH
-# DAILY_COST_THRESHOLD
+# AZUREAPIKEY
+# AZUREAPIURL
+# APPSECRETKEY
+# WAPASSWORDHASH
+# WAUSERNAME
+# ADMINPASSWORDHASH
+# DAILYCOSTTHRESHOLD
 
 # Create application instance
 app = create_app()
 
 if __name__ == '__main__':
 
-    app.run(debug=False, port=5001, host='0.0.0.0')
+    app.run(debug=False, port=5000, host='0.0.0.0')

@@ -65,6 +65,11 @@
             </div>
         </div>
 
+        <div id="context-hint" class="context-hint" style="display: none;">
+            <i class="fas fa-lightbulb"></i>
+            <span>Click the <i class="fas fa-cog"></i> icon to add more context about your process!</span>
+        </div>
+
         <!-- Expert panel (toggled via settings icon) -->
         <div id="expert-panel">
             <h3>Additional Context</h3>
@@ -73,6 +78,36 @@
                 placeholder="Enter additional context about the company or process"
                 style="width: 100%; min-height: 100px;"
             ></textarea>
+            <!-- Nicely styled button to open the few–shot editor -->
+            <button id="edit-few-shot-btn" type="button" class="edit-btn">Edit Few Shot Examples</button>
+        </div>
+
+        <!-- Modal for editing few-shot examples -->
+        <div id="few-shot-modal" class="modal">
+            <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Edit Few Shot Examples</h3>
+            
+            <!-- Language tabs (using short labels) -->
+            <div id="language-tabs" style="margin-bottom:10px;">
+                <button class="lang-tab" data-lang="en">EN</button>
+                <button class="lang-tab" data-lang="de">DE</button>
+                <!-- Add more tabs as needed -->
+            </div>
+            
+            <!-- Editor container where each example row is rendered -->
+            <div id="few-shot-editor"></div>
+            
+            <!-- New row for adding an example, so that the plus button aligns with the checkboxes -->
+            <div class="few-shot-row add-row">
+                <button id="add-example-btn" type="button" class="add-example-btn">
+                <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            
+            <!-- Inline feedback message -->
+            <div id="few-shot-feedback" class="feedback-message" style="display:none;"></div>
+            </div>
         </div>
 
         <!-- Start button -->

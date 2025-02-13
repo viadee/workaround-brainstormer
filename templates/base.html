@@ -14,6 +14,10 @@
     <script src="https://kit.fontawesome.com/441def4347.js" crossorigin="anonymous"></script>
 
     <!-- Additional head content -->
+    <script type="text/javascript">
+        // This variable is now available to your JS code.
+        var defaultFewShotExamples = {{ default_few_shot_examples|tojson }};
+    </script>
     {% block head %}{% endblock %}
 </head>
 <body>
@@ -30,7 +34,7 @@
     {% endif %}
 
     {% block content %}{% endblock %}
-
+    
     <!-- Load dependencies first -->
     <script src="{{ url_for('static', filename='js/graphManager.js') }}"></script>
     <script src="{{ url_for('static', filename='js/fileUpload.js') }}"></script>
@@ -38,6 +42,7 @@
     
     <!-- Load main app last -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/fewShotEditor.js') }}"></script>
 
     <!-- Additional scripts -->
     {% block scripts %}{% endblock %}

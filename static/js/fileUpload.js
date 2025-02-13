@@ -4,6 +4,12 @@ class FileUploadManager {
         this.uploadedFile = null;
         this.initializeElements();
         this.setupEventListeners();
+        this.contextHint = document.getElementById('context-hint');
+        this.settingsIcon = document.getElementById('settings-icon');
+        this.settingsIcon.addEventListener('click', () => {
+            this.contextHint.style.display = 'none';
+            this.settingsIcon.classList.remove('pulse-attention');
+        });
     }
 
     initializeElements() {
@@ -107,10 +113,6 @@ class FileUploadManager {
         const isValidType = Object.values(validTypes).includes(fileExtension) || 
                           Object.keys(validTypes).includes(file.type);
 
-        console.log('File type:', file.type);
-        console.log('File extension:', fileExtension);
-        console.log('Is valid type:', isValidType);
-
         if (!isValidType) {
             this.showAlert("Please upload an SVG, PNG, JPEG, or PDF file.", true);
             return;
@@ -120,6 +122,15 @@ class FileUploadManager {
             this.showAlert("File size must be less than 5MB.", true);
             return;
         }
+
+        const expertPanel = document.getElementById('expert-panel');
+            if (expertPanel.style.display === 'none' || !expertPanel.style.display) {
+                // Show the hint
+                this.contextHint.style.display = 'flex';
+                
+                // Add pulse animation to settings icon
+                this.settingsIcon.classList.add('pulse-attention');
+            }
 
         // Valid file - show preview
         this.uploadedFile = file;
@@ -135,9 +146,12 @@ class FileUploadManager {
 
         this.showAlert(`File "${file.name}" uploaded successfully.`, false);
 
-        // Dispatch event for other components
+        // Dispatch event for other components with filename
         window.dispatchEvent(new CustomEvent('fileUploaded', { 
-            detail: { file: this.uploadedFile }
+            detail: { 
+                file: this.uploadedFile,
+                filename: file.name 
+            }
         }));
     }
 
@@ -145,6 +159,8 @@ class FileUploadManager {
         this.previewOverlay.style.display = 'none';
         this.fileInput.value = '';
         this.uploadedFile = null;
+        this.contextHint.style.display = 'none';
+        this.settingsIcon.classList.remove('pulse-attention');
         this.hideAlert();
 
         // Dispatch event for other components

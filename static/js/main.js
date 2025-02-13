@@ -1,11 +1,13 @@
 // static/js/main.js
 class App {
     constructor() {
-        this.nextNodeId = 1; // root node = 0
+        this.nextNodeId = 1;
         this.isExpanding = false;
+        this.currentFilename = null;
         this.setupComponents();
         this.setupEventListeners();
     }
+
 
     setupComponents() {
         this.graphManager = window.graphManager;
@@ -32,6 +34,16 @@ class App {
             startButton.addEventListener("click", () => this.createInitialStructure());
         }
 
+        // File upload event
+        window.addEventListener('fileUploaded', (e) => {
+            this.currentFilename = e.detail.filename;
+        });
+
+        // File removal event
+        window.addEventListener('fileRemoved', () => {
+            this.currentFilename = null;
+        });
+
         // Node events
         window.addEventListener('nodeClick', (e) => this.expandNode(e.detail.event, e.detail.node));
         window.addEventListener('nodeContextMenu', (e) => this.collapseNode(e.detail.event, e.detail.node));
@@ -45,7 +57,13 @@ class App {
         const description = document.getElementById('process-input').value;
         const additionalContext = document.getElementById('additional-context')?.value || '';
 
-        const rootNode = { id: 0, text: description, expanded: false };
+        // Create root node with description and filename if available
+        const rootNode = { 
+            id: 0, 
+            text: this.currentFilename || description,
+            description: description, // Store original description
+            expanded: false 
+        };
         this.graphManager.addNode(rootNode);
 
         // Build FormData

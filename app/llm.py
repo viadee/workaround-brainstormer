@@ -3,12 +3,13 @@ from dataclasses import dataclass
 from typing import List, Optional, Dict, Any, Union
 import json
 import os
+from flask import session
 from datetime import datetime, timedelta
 import logging
 import openai
 from flask import current_app
 from .language_service import LanguageService
-from .prompts import PROMPTS
+from .prompts import PROMPTS, DEFAULT_FEW_SHOT_EXAMPLES
 
 # Configure logger
 logger = logging.getLogger('llm_calls')
@@ -80,7 +81,6 @@ class CostLimitExceeded(Exception):
     """Raised when daily API cost threshold is exceeded."""
     pass
 
-# app/llm.py
 
 class LLMService:
     """Service for handling LLM operations with cost tracking."""
@@ -140,33 +140,40 @@ class LLMService:
     def _get_prompt(self, key: str, process: ProcessContext, **kwargs) -> str:
         """
         Get prompt template and format it with parameters.
-        
-        Args:
-            key: Prompt template key
-            process: Process context containing language
-            **kwargs: Additional formatting parameters
-            
-        Returns:
-            str: Formatted prompt
-            
-        Raises:
-            KeyError: If prompt template not found
         """
         try:
             template = PROMPTS[process.language][key]
-            return template.format(
-                process_description=process.description,
-                additional_context=process.additional_context,
-                **kwargs
-            )
         except KeyError:
             logger.error(f"Prompt template not found: {process.language}/{key}")
-            # Fallback to English if template not found in detected language
-            return PROMPTS['en'][key].format(
-                process_description=process.description,
-                additional_context=process.additional_context,
-                **kwargs
-            )
+            template = PROMPTS['en'][key]
+
+        # Retrieve the stored few-shot examples from session.
+        stored = session.get('few_shot_examples')
+        # If stored is not a dict (or is missing), convert if it is a list or use an empty dict.
+        if not isinstance(stored, dict):
+            if isinstance(stored, list):
+                # Assume the list belongs to English.
+                stored = {"en": stored}
+            else:
+                stored = {}
+            session['few_shot_examples'] = stored
+
+        # Get the examples for the current language directly.
+        user_examples = stored.get(process.language)
+        if not user_examples:
+            user_examples = DEFAULT_FEW_SHOT_EXAMPLES.get(process.language, [])
+        else:
+            # Filter: keep only examples with selected == True.
+            user_examples = [ex['text'] for ex in user_examples if ex.get('selected', True)]
+
+        few_shot_str = "\n".join(f"- {ex}" for ex in user_examples)
+        
+        return template.format(
+            process_description=process.description,
+            additional_context=process.additional_context,
+            few_shot_examples=few_shot_str,
+            **kwargs
+        )
 
     def detect_language(self, process: ProcessContext) -> str:
         """Detect language for a process."""
