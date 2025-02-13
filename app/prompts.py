@@ -124,8 +124,14 @@ PROMPTS = {
             - **Template:** "As a [role], when [situation], I [action] to [outcome]."
             - Provide **4 unique** workarounds that are similar in nature to the example.
 
-            **Examples of Workarounds:**
-            {few_shot_examples}
+            **Example of Similar Workarounds:**
+            Original:
+            "As a warehouse worker, when the scanning system is slow, I batch scan items at the end of my shift to save time."
+
+            Similar workarounds:
+            - "As a warehouse worker, when the inventory system lags during peak hours, I record items on paper first and enter them during quiet periods to maintain workflow speed."
+            - "As a warehouse worker, when system updates interrupt operations, I group similar items together and process them in bulk when the system is back to reduce total scanning time."
+            - "As a warehouse worker, when network connectivity is unstable, I take photos of barcodes with my phone to scan them later in a location with better connection."
 
             Return the workarounds as a JSON object in the following format:
             {{
@@ -171,9 +177,15 @@ PROMPTS = {
             - **Template:** "As a [role], when [situation], I [action] to [outcome]."
             - Provide **4 unique** workarounds that are similar in nature to the example.
 
-            **Examples of Workarounds:**
-            {few_shot_examples}
-                        
+            **Example of Similar Workarounds:**
+            Original:
+            "As a warehouse worker, when the scanning system is slow, I batch scan items at the end of my shift to save time."
+
+            Similar workarounds:
+            - "As a warehouse worker, when the inventory system lags during peak hours, I record items on paper first and enter them during quiet periods to maintain workflow speed."
+            - "As a warehouse worker, when system updates interrupt operations, I group similar items together and process them in bulk when the system is back to reduce total scanning time."
+            - "As a warehouse worker, when network connectivity is unstable, I take photos of barcodes with my phone to scan them later in a location with better connection."
+
             Return the workarounds as a JSON object in the following format:
             {{
                 "workarounds": [
@@ -308,9 +320,14 @@ PROMPTS = {
             - **Vorlage:** "Als [Rolle], wenn [Situation], handle ich [Aktion], um [Ergebnis] zu erreichen."
             - Geben Sie **4 eindeutige** Workarounds an, die in ihrer Art dem Beispiel ähneln.
 
-            **Beispiele für Workarounds:**
-            {few_shot_examples}
+            **Beispiel für ähnliche Workarounds:**
+            Original:
+            "Als Lagerarbeiter, wenn das Scan-System langsam ist, erfasse ich Artikel am Ende meiner Schicht in einem Schwung, um Zeit zu sparen."
 
+            Ähnliche Workarounds:
+            - "Als Lagerarbeiter, wenn das Warenwirtschaftssystem während der Stoßzeiten verzögert reagiert, notiere ich Artikel zuerst auf Papier und gebe sie in ruhigeren Zeiten ein, um die Geschwindigkeit der Arbeitsabläufe aufrechtzuerhalten."
+            - "Als Lagerarbeiter, wenn Systemaktualisierungen den Betrieb unterbrechen, fasse ich ähnliche Artikel zusammen und verarbeite sie in großen Mengen, wenn das System wieder verfügbar ist, um die Gesamtzeit beim Scannen zu reduzieren."
+            - "Als Lagerarbeiter, wenn die Netzwerkverbindung instabil ist, fotografiere ich Barcodes mit meinem Handy, um sie später an einem Ort mit besserer Verbindung einzuscannen."
 
             Geben Sie die Workarounds als JSON-Objekt im folgenden Format zurück:
             {{
@@ -356,8 +373,14 @@ PROMPTS = {
             - **Vorlage:** "Als [Rolle], wenn [Situation], handle ich [Aktion], um [Ergebnis] zu erreichen."
             - Geben Sie **4 eindeutige** Workarounds an, die in ihrer Art dem Beispiel ähneln.
 
-            **Beispiele für Workarounds:**
-            {few_shot_examples}
+            **Beispiel für ähnliche Workarounds:**
+            Original:
+            "Als Lagerarbeiter, wenn das Scan-System langsam ist, erfasse ich Artikel am Ende meiner Schicht in einem Schwung, um Zeit zu sparen."
+
+            Ähnliche Workarounds:
+            - "Als Lagerarbeiter, wenn das Warenwirtschaftssystem während der Stoßzeiten verzögert reagiert, notiere ich Artikel zuerst auf Papier und gebe sie in ruhigeren Zeiten ein, um die Geschwindigkeit der Arbeitsabläufe aufrechtzuerhalten."
+            - "Als Lagerarbeiter, wenn Systemaktualisierungen den Betrieb unterbrechen, fasse ich ähnliche Artikel zusammen und verarbeite sie in großen Mengen, wenn das System wieder verfügbar ist, um die Gesamtzeit beim Scannen zu reduzieren."
+            - "Als Lagerarbeiter, wenn die Netzwerkverbindung instabil ist, fotografiere ich Barcodes mit meinem Handy, um sie später an einem Ort mit besserer Verbindung einzuscannen."
 
             Geben Sie die Workarounds als JSON-Objekt im folgenden Format zurück:
             {{
