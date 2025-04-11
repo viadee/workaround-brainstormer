@@ -1,33 +1,27 @@
 # Workaround Brainstormer
 
-## Description
+## ℹ️ Description
 Workaround Brainstormer is a web application designed to facilitate the identification of workarounds based on a process description or bpmn diagram.
 It`s generative AI approach helps to identify workarounds in situations where no process data is avaible.
 
-## Features
+## ⭐ Features
 - LLM based workaround generation
 - Visual representation of the workarounds as a network graph
 - Control mechanisms to lighten the generation process
     - manually add and remove corners in the graph (workarounds)
 
-## Workaround generation approach
-
-
 
 ## Getting Started
 
-### Prerequisites
-Before you begin, ensure you have met the following requirements:
-- Python 3.x installed on your machine.
+## Installation
 
-
-### Installation
-Follow these steps to set up the project locally:
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/<username>/fue-wa-brainstormer.git
-
-2. Install depdendecys:
-    - requirements.txt
-    - tesseract
+1. Clone this repository and create a python virtual environment
+2. Install the requirements.txt
+    # pip install -r requirements.txt
+3. Create a .env file based on the .envtemplate and set you variables
+4. Run the flask server for development
+    # python run.py
+5. Or run a production server
+    # pip install uwsgi
+    uwsgi --http 0.0.0.0:5000 --module run:app --master --processes 4 --threads 2
 

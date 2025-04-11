@@ -10,3 +10,5 @@ python-dotenv
 reportlab
 Werkzeug
 rlPyCairo
+dotenv
+cairosvg
