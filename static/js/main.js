@@ -1,3 +1,4 @@
+
 // static/js/main.js
 class App {
     constructor() {
@@ -25,6 +26,8 @@ class App {
                     : 'none';
             });
         }
+
+        this.nodeContextMenu = new window.NodeContextMenu(this.graphManager, () => this.updateUI())
     }
 
     setupEventListeners() {
@@ -46,7 +49,7 @@ class App {
 
         // Node events
         window.addEventListener('nodeClick', (e) => this.expandNode(e.detail.event, e.detail.node));
-        window.addEventListener('nodeContextMenu', (e) => this.showNodeContextMenu(e.detail.event, e.detail.node));
+        window.addEventListener('nodeContextMenu', (e) => this.nodeContextMenu.showNodeContextMenu(e.detail.event, e.detail.node));
         window.addEventListener('highlightNode', (e) => this.graphManager.highlightNode(e.detail.nodeId));
     }
 
@@ -220,131 +223,12 @@ class App {
         this.updateUI();
     }
 
-    collapseNode(event, d) {
-        event.preventDefault();
-
-        // dont't allow collapsing the root node
-        if(d.id == 0)
-            return;
-        // collapse node without children
-        else if(!d.expanded){
-            this.graphManager.removeNode(d.id)
-
-            const parent = this.graphManager.getNodes().find(n => n.id == d.parent)
-            if(parent == undefined){
-                throw new Error("Parentnode is undefined");
-            }
-            if(parent.children == undefined || (parent.children?.length == 1 && parent.children?.find(c => c.id == d.id) != undefined )  ){
-                parent.expanded = false
-            }
-            this.updateUI()
-        // recursive remove children
-        }else{
-            const recursiveRemove = (nodeId) => {
-                const children = this.graphManager.getNodes().filter(n => n.parent === nodeId);
-                children.forEach(child => {
-                    recursiveRemove(child.id);
-                    this.graphManager.removeNode(child.id);
-                });
-            };
-
-            recursiveRemove(d.id);
-            d.expanded = false;
-            this.updateUI();
-            }
-    }
-
     updateUI() {
         this.graphManager.updateGraph();
         this.workaroundsList.updateList(this.graphManager.getNodes());
     }
 
-    showNodeContextMenu(event, d){
-        event.preventDefault();
-
-        this.graphManager.handleMouseOut(event, d)
-        const contextMenu = document.createElement('div');
-        contextMenu.style.left = event.clientX + 10 + 'px'
-        contextMenu.style.top = event.clientY + 'px'
-        contextMenu.className = 'node-contextmenu'
-        
-        const collapseNodeButton = document.createElement('button');
-        collapseNodeButton.innerText = 'Collapse Node'
-        collapseNodeButton.addEventListener('click', () => this.collapseNode(event, d), removeContextMenu(), {once: true})
-        
-        const expandNodeButton = document.createElement('button');
-        expandNodeButton.innerText = 'Add Node'
-        expandNodeButton.addEventListener('click', () => showAddNodeDialog(), removeContextMenu())
-        contextMenu.appendChild(collapseNodeButton);
-        contextMenu.appendChild(expandNodeButton);
-
-        contextMenu.addEventListener('mouseenter', () => contextMenu.addEventListener('mouseleave', removeContextMenu))
-        document.body.addEventListener('click', removeContextMenu, {once: true})
-
-        const gM = this.graphManager;
-        const self = this;
-
-        function removeContextMenu(){
-            contextMenu.remove()
-        }
-        function showAddNodeDialog(){
-            const dialog = document.createElement('div')
-            dialog.id = 'addnode-dialog'
-            dialog.className = 'addnode-dialog'
-
-            const textArea = document.createElement('textarea')
-            textArea.classList = 'addnode-textarea'
-            textArea.placeholder = 'Write workaround description...'
-            textArea.id = 'textArea_addNode'
-            dialog.appendChild(textArea)
-
-            const submitButton = document.createElement('button')
-            submitButton.className = 'addnode-submit-btn'
-            submitButton.innerText = 'Submit'
-            submitButton.addEventListener('click', handleSubmit)
-            dialog.appendChild(submitButton)
-
-
-            const cancelButton = document.createElement('button')
-            cancelButton.className = 'addnode-cancel-btn'
-            cancelButton.innerText = 'Cancel'
-            cancelButton.addEventListener('click', handleClose)
-            dialog.appendChild(cancelButton)
-
-            document.body.appendChild(dialog);
-            
-            function handleSubmit(){
-                const textAreaEl = document.getElementById('textArea_addNode')
-                if(textAreaEl == null){
-                    throw new Error('Textarea Element not found')
-                }
-                const workaroundDescription = textArea.value
-                
-                
-                const newNode = {
-                    id: self.nextNodeId++,
-                    text: workaroundDescription,
-                    parent: d.id,
-                    expanded: false
-                };
-                gM.addNode(newNode);
-                gM.addLink(d.id, newNode.id);
-            
-                d.expanded = true;
-               
-                self.updateUI();
-                removeContextMenu()
-                dialog.remove()
-            }
-
-            function handleClose(){
-                removeContextMenu();
-                dialog.remove();
-            }
-
-        }
-        document.body.appendChild(contextMenu)
-    }
+    
 }
 
 // Initialize everything when the page loads
@@ -355,7 +239,6 @@ window.addEventListener('load', () => {
     window.graphManager = new window.GraphManager();
     window.fileUploadManager = new window.FileUploadManager();
     window.workaroundsList = new window.WorkaroundsList();
-    
     // Initialize the main app
     window.app = new App();
     
