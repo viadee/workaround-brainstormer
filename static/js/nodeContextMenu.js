@@ -42,7 +42,7 @@ class NodeContextMenu{
     }
 
     handleCollapseWithFeedback(){
-          const  
+          
     }
     handleAddNode(){
         const dialog = document.createElement('div')
