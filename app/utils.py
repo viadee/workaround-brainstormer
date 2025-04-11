@@ -2,18 +2,15 @@
 import base64
 from io import BytesIO
 from flask import current_app
-from svglib.svglib import svg2rlg
-from reportlab.graphics import renderPM
 from werkzeug.utils import secure_filename
 import os
-import tempfile
 import logging
-from typing import Union, Dict, Any, Optional, Tuple
+from typing import Optional, Tuple
 from pdf2image import convert_from_path
 from PIL import Image
 import hashlib
 import json
-
+import cairosvg
 logger = logging.getLogger(__name__)
 
 class ImageCache:
@@ -74,10 +71,12 @@ def process_image(file_path: str, original_filename: str) -> str:
         
         # Try to get from cache first
         cached_data = cache.get(cache_key)
+
         if cached_data:
             logger.info(f"Cache hit for {original_filename}")
             return cached_data
-            
+        
+
         # Process based on file type if not in cache
         extension = original_filename.rsplit('.', 1)[1].lower()
         
@@ -100,12 +99,15 @@ def process_image(file_path: str, original_filename: str) -> str:
 
 def _process_svg(file_path: str) -> str:
     """Convert SVG to base64 encoded PNG."""
-    drawing = svg2rlg(file_path)
-    if not drawing:
-        raise ValueError("Failed to convert SVG file")
+   
+    with open(file_path, 'rb') as f:
+        svg_data = f.read()
         
+    # Convert SVG to PNG
     img_data = BytesIO()
-    renderPM.drawToFile(drawing, img_data, fmt="PNG")
+    cairosvg.svg2png(bytestring=svg_data, write_to=img_data)
+    
+    # Get the byte data from the BytesIO buffer and encode it to base64
     return base64.b64encode(img_data.getvalue()).decode('utf-8')
 
 def _process_pdf(file_path: str) -> str:
