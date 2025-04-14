@@ -1,0 +1,48 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Node Map Web App{% endblock %}</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+    <!-- External Dependencies -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://kit.fontawesome.com/441def4347.js" crossorigin="anonymous"></script>
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+    <header>
+
+
+    </header>
+
+    {% block content %}{% endblock %}
+    
+
+    <footer>
+
+    </footer>
+
+    
+    <!-- Load dependencies first -->
+    <script src="{{ url_for('static', filename='js/graphManager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/fileUpload.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/workaroundsList.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/nodeContextMenu.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/WorkaroundGenerationSettings.js') }}"></script>
+
+
+    <!-- Load main app last -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/fewShotEditor.js') }}"></script>
+
+    <!-- Additional scripts -->
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

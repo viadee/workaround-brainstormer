@@ -1,0 +1,64 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Console</title>
+
+    <!-- External Dependencies -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://kit.fontawesome.com/441def4347.js" crossorigin="anonymous"></script>
+
+    <style>
+        .top-buttons {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+            }
+
+            .top-buttons a {
+            text-decoration: none;
+            font-size: 14px;
+            padding: 5px 12px;
+            border: 1px solid #007bff;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            }
+
+        .back-button {
+            color: #007bff;
+            border-color: #007bff;
+            background-color: #fff;
+        }
+        .back-button:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+    </style>
+
+
+</head>
+<body>
+    <div class="top-buttons">
+        <a href="{{ url_for('main.index') }}" class="back-button" style="">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i> Back
+        </a>
+
+    </div>
+
+    <div>
+        
+    </div>
+    
+    <!-- Include Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</body>
+</html>
