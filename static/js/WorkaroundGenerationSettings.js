@@ -20,11 +20,11 @@ class WorkaroundGenerationSettings{
 
         if(this.undesirableWorkarounds.length > 0){
             context += `
-                Folgende sind nicht relevant für den Benutzer und sollten in der Form nicht erneut generiert werden.
-            
-                ${this.undesirableWorkarounds.map(w => { return w.text + `
-                    `} )}
-            `
+            Folgende Workarounds sind nicht relevant für den Benutzer und sollten in der Form nicht erneut generiert werden.
+        
+            ${this.undesirableWorkarounds.map(w => { return w.text + `
+                `} )}
+        `
         }
         return context;
     }
