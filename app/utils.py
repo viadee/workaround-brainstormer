@@ -2,13 +2,10 @@
 import base64
 from io import BytesIO
 from flask import current_app
-from svglib.svglib import svg2rlg
-from reportlab.graphics import renderPM
 from werkzeug.utils import secure_filename
 import os
-import tempfile
 import logging
-from typing import Union, Dict, Any, Optional, Tuple
+from typing import Optional, Tuple
 from pdf2image import convert_from_path
 from PIL import Image
 import hashlib
@@ -74,16 +71,16 @@ def process_image(file_path: str, original_filename: str) -> str:
         
         # Try to get from cache first
         cached_data = cache.get(cache_key)
+
         if cached_data:
             logger.info(f"Cache hit for {original_filename}")
             return cached_data
-            
+        
+
         # Process based on file type if not in cache
         extension = original_filename.rsplit('.', 1)[1].lower()
         
-        if extension == 'svg':
-            base64_data = _process_svg(file_path)
-        elif extension == 'pdf':
+        if extension == 'pdf':
             base64_data = _process_pdf(file_path)
         else:  # Regular image files (png, jpg, jpeg)
             base64_data = _process_regular_image(file_path)
@@ -97,16 +94,6 @@ def process_image(file_path: str, original_filename: str) -> str:
     except Exception as e:
         logger.error(f"Error processing file {original_filename}: {str(e)}")
         raise ValueError(f"Failed to process file: {str(e)}")
-
-def _process_svg(file_path: str) -> str:
-    """Convert SVG to base64 encoded PNG."""
-    drawing = svg2rlg(file_path)
-    if not drawing:
-        raise ValueError("Failed to convert SVG file")
-        
-    img_data = BytesIO()
-    renderPM.drawToFile(drawing, img_data, fmt="PNG")
-    return base64.b64encode(img_data.getvalue()).decode('utf-8')
 
 def _process_pdf(file_path: str) -> str:
     """Convert PDF pages into a single combined image."""

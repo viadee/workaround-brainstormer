@@ -8,6 +8,6 @@ Pillow
 pytesseract
 python-dotenv
 reportlab
-svglib
 Werkzeug
 rlPyCairo
+dotenv
