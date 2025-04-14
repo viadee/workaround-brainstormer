@@ -44,7 +44,6 @@ def check_credentials(username: str, password: str) -> bool:
         bool: True if credentials are valid
     """
 
-    return True
     # Check admin credentials
     if username == ADMIN_USERNAME:
         return check_password_hash(ADMIN_PASSWORD_HASH, password)
