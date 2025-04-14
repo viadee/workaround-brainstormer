@@ -10,7 +10,7 @@ import time
 import uuid
 
 from .prompts import DEFAULT_FEW_SHOT_EXAMPLES
-from .auth import login_required, admin_required, check_credentials
+from .auth import login_required, admin_required, check_credentials, setUserCredentialVariables
 from .utils import save_uploaded_file, process_image, format_workarounds_tree
 from .llm import LLMService, ProcessContext, CostLimitExceeded
 import logging
@@ -38,6 +38,10 @@ def login():
             session['username'] = username
             # Generate a unique session ID
             session['id'] = str(uuid.uuid4())
+            if username == 'admin':
+                session['is_admin'] = True
+            else:
+                session['is_admin'] = False
             current_app.logger.info("Login successful: %s (Session ID: %s)", 
                                   username, session['id'])
             return redirect(url_for('main.index'))
@@ -57,6 +61,27 @@ def logout():
     flash('You have been logged out.', 'info')
     return redirect(url_for('auth.login'))
 
+@auth_bp.route('/setCredentials', methods=['POST'])
+@login_required
+@admin_required
+def setCredentials():
+    if request.method == 'POST':
+
+        try:
+            username = request.form['username']
+            password = request.form['password']
+
+            setUserCredentialVariables(username=username, password=password)
+
+            return redirect(url_for('main.admin'))
+        except Exception as e:
+            current_app.logger.error("Error setting user credentials in environment variable")
+            return jsonify({'error': e}), 500
+    
+    return 405
+
+
+
 # Main routes (including API endpoints)
 @main_bp.route('/')
 @login_required
@@ -68,6 +93,17 @@ def index():
         app_version=current_app.config['APP_VERSION'],
                 default_few_shot_examples=DEFAULT_FEW_SHOT_EXAMPLES
     )
+
+@main_bp.route('/admin', methods=['POST', 'GET'])
+@login_required
+@admin_required
+def admin():
+    return render_template(
+        'admin.html',
+        app_version=current_app.config['APP_VERSION'],
+         default_few_shot_examples=DEFAULT_FEW_SHOT_EXAMPLES
+    )
+
 
 @main_bp.route('/download_logs')
 @login_required

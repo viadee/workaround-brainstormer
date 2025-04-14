@@ -30,6 +30,13 @@
             <a href="https://forms.office.com/e/nqdmjHnUVd" class="feedback-button" target="_blank">
                 <i class="fas fa-comment-dots feedback-icon"></i> Give Feedback
             </a>
+
+            {% if 'is_admin' in session and session['is_admin'] %}
+                    <a href="{{ url_for('main.admin') }}" class="admin-button">
+                        Admin Console
+                    </a>
+            {% endif %}
+
         </div>
     {% endif %}
 
@@ -40,6 +47,8 @@
     <script src="{{ url_for('static', filename='js/fileUpload.js') }}"></script>
     <script src="{{ url_for('static', filename='js/workaroundsList.js') }}"></script>
     <script src="{{ url_for('static', filename='js/nodeContextMenu.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/WorkaroundGenerationSettings.js') }}"></script>
+
 
     <!-- Load main app last -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>

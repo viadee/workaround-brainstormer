@@ -170,6 +170,16 @@ h2 {
   margin-right: 8px;
 }
 
+.admin-button{
+  color: black;
+  border-color: black;
+  background-color: #fff;
+}
+.admin-button:hover {
+  background-color: #aaa;
+}
+
+
 /* Loading Spinner */
 .spinner {
   border: 4px solid #f3f3f3;
