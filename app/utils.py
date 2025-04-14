@@ -10,7 +10,7 @@ from pdf2image import convert_from_path
 from PIL import Image
 import hashlib
 import json
-import cairosvg
+
 logger = logging.getLogger(__name__)
 
 class ImageCache:
@@ -80,9 +80,7 @@ def process_image(file_path: str, original_filename: str) -> str:
         # Process based on file type if not in cache
         extension = original_filename.rsplit('.', 1)[1].lower()
         
-        if extension == 'svg':
-            base64_data = _process_svg(file_path)
-        elif extension == 'pdf':
+        if extension == 'pdf':
             base64_data = _process_pdf(file_path)
         else:  # Regular image files (png, jpg, jpeg)
             base64_data = _process_regular_image(file_path)
@@ -96,19 +94,6 @@ def process_image(file_path: str, original_filename: str) -> str:
     except Exception as e:
         logger.error(f"Error processing file {original_filename}: {str(e)}")
         raise ValueError(f"Failed to process file: {str(e)}")
-
-def _process_svg(file_path: str) -> str:
-    """Convert SVG to base64 encoded PNG."""
-   
-    with open(file_path, 'rb') as f:
-        svg_data = f.read()
-        
-    # Convert SVG to PNG
-    img_data = BytesIO()
-    cairosvg.svg2png(bytestring=svg_data, write_to=img_data)
-    
-    # Get the byte data from the BytesIO buffer and encode it to base64
-    return base64.b64encode(img_data.getvalue()).decode('utf-8')
 
 def _process_pdf(file_path: str) -> str:
     """Convert PDF pages into a single combined image."""

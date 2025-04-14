@@ -102,7 +102,6 @@ class FileUploadManager {
 
         // Define valid MIME types and their extensions
         const validTypes = {
-            "image/svg+xml": ".svg",
             "image/png": ".png", 
             "image/jpeg": ".jpg",
             "application/pdf": ".pdf"
@@ -114,7 +113,7 @@ class FileUploadManager {
                           Object.keys(validTypes).includes(file.type);
 
         if (!isValidType) {
-            this.showAlert("Please upload an SVG, PNG, JPEG, or PDF file.", true);
+            this.showAlert("Please upload an PNG, JPEG, or PDF file.", true);
             return;
         }
 

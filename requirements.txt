@@ -11,4 +11,3 @@ reportlab
 Werkzeug
 rlPyCairo
 dotenv
-cairosvg
