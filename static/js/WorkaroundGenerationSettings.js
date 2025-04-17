@@ -20,10 +20,15 @@ class WorkaroundGenerationSettings{
 
         if(this.undesirableWorkarounds.length > 0){
             context += `
-            Folgende Workarounds sind nicht relevant für den Benutzer und sollten in der Form nicht erneut generiert werden.
-        
-            ${this.undesirableWorkarounds.map(w => { return w.text + `
-                `} )}
+            Für den betrachteten Prozess wurden bereits folgende Workarounds als irrelevant identifiziert:
+            [
+            ${this.undesirableWorkarounds.map(w => { return  `"` + w.text + `",`} )}
+            ]
+            Aus diesem Grund sollten Sie bei der Erstellung eines neuen Workarounds darauf achten, dass
+            dieser  
+            - andere Arten von Problemen adressiert, oder
+            - andere Ressourcen oder Vorgehensweisen nutzt, oder 
+            - andere Vorteile erzielt
         `
         }
         return context;
