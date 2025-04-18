@@ -11,3 +11,6 @@ reportlab
 svglib
 Werkzeug
 rlPyCairo
+qdrant-client
+langchain-qdrant
+langchain-openai

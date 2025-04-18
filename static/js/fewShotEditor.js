@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const addExampleBtn = document.getElementById('add-example-btn');
     const feedbackMessage = document.getElementById('few-shot-feedback');
     const langTabButtons = document.querySelectorAll('.lang-tab');
+    const retreiveBtn = document.getElementById('retreive-similar-few-shot-btn')
+    const description = document.getElementById('process-input')
+    const additionalContext = document.getElementById('additional-context');
 
     // Function to update language tab appearance.
     function updateLangTabs() {
@@ -142,4 +145,73 @@ document.addEventListener('DOMContentLoaded', function() {
             closeModalAndSave();
         }
     });
+
+    // few-shot RAG functionality
+    function retreiveFewShotExamples(){
+
+        if (!description.value) {
+            feedbackMessage.style.display = 'block';
+            feedbackMessage.style.color = '#Ff0000';
+            feedbackMessage.textContent = 'Please insert a process description or a process image!';
+            setTimeout(() => { feedbackMessage.style.opacity = '0'; }, 1500);
+            setTimeout(() => {
+                feedbackMessage.style.display = 'none';
+                feedbackMessage.style.opacity = '1';
+            }, 2000);
+            
+            return
+        }
+
+        const payload = {
+            process_description: description.value + (additionalContext.value ?? "")
+        };
+        fetch('/retreive_similar_few_shot_examples', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+
+                data.data.forEach((ex, index) => {
+                    const row = document.createElement('div');
+                    row.classList.add('few-shot-row');
+                    row.innerHTML = `
+                        <input type="checkbox" class="few-shot-checkbox" data-index="${index}" checked>
+                        <input type="text" class="few-shot-input" data-index="${index}" value="${ex}" placeholder="Enter example">
+                        <button type="button" class="remove-example-btn" data-index="${index}">&times;</button>
+                    `;
+                    editor.appendChild(row);
+                });
+
+                feedbackMessage.style.display = 'block';
+                feedbackMessage.style.color = '#28a745';
+                feedbackMessage.textContent = 'Examples retreived successfully!';
+                setTimeout(() => { feedbackMessage.style.opacity = '0'; }, 1500);
+                setTimeout(() => {
+                    feedbackMessage.style.display = 'none';
+                    feedbackMessage.style.opacity = '1';
+                }, 2000);
+            } else {
+                feedbackMessage.style.display = 'block';
+                feedbackMessage.style.color = '#dc3545';
+                feedbackMessage.textContent = 'Error: ' + data.error;
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            feedbackMessage.style.display = 'block';
+            feedbackMessage.style.color = '#dc3545';
+            feedbackMessage.textContent = 'Error saving examples.';
+        });
+    }
+
+    // Generate similar few shot examples and initialize the editor.
+    retreiveBtn.addEventListener('click', function() {
+        currentLang = "en"
+        updateLangTabs()
+        retreiveFewShotExamples()
+    })
+
 });
