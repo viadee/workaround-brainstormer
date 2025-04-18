@@ -30,6 +30,13 @@ def create_app(testing: bool = False) -> Flask:
         AZURE_API_VERSION=os.getenv('AZUREAPIVERSION', '2023-12-01-preview'),
         AZURE_API_URL=os.getenv('AZUREAPIURL'),
         DAILY_COST_THRESHOLD=float(os.getenv('DAILYCOSTTHRESHOLD', '10.0')),
+        # Q-Drant settings
+        QDRANT_URL = os.getenv('QDRANTURL'),
+        QDRANT_API_KEY = os.getenv('QDRANTAPIKEY'),
+        # RAG settings
+        RAG_AZURE_OPENAI_API_KEY=os.getenv('RAG_AZURE_OPENAI_API_KEY'),
+        RAG_AZURE_OPENAI_ENDPOINT=os.getenv('RAG_AZURE_OPENAI_ENDPOINT'),
+        RAG_AZURE_OPENAI_VERSION = os.getenv('RAG_AZURE_OPENAI_VERSION'),
         # Add logs directory to config
         LOGS_DIR=os.path.join(PROJECT_ROOT, 'logs')
     )

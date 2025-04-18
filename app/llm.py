@@ -10,6 +10,10 @@ import openai
 from flask import current_app
 from .language_service import LanguageService
 from .prompts import PROMPTS, DEFAULT_FEW_SHOT_EXAMPLES
+# RAG dependencies
+from qdrant_client import QdrantClient
+from langchain_qdrant import QdrantVectorStore
+from langchain_openai import AzureOpenAIEmbeddings
 
 # Configure logger
 logger = logging.getLogger('llm_calls')
@@ -334,6 +338,64 @@ def get_node_label_prompt(workaround, other_workarounds):
         """
     return prompt
 
+class RAGService:
+
+    def __init__(self, session_id: Optional[str] = None):
+        """Initialize OpenAI client with Azure configuration.
+        
+        Args:
+            session_id: Optional session ID. If not provided, will try to get from Flask session.
+        """
+
+        self.embeddings_client = AzureOpenAIEmbeddings(
+            model="text-embedding-3-large",
+            api_key = current_app.config['RAG_AZURE_OPENAI_API_KEY'],
+            azure_endpoint = current_app.config['RAG_AZURE_OPENAI_ENDPOINT'],
+            openai_api_version = current_app.config['RAG_AZURE_OPENAI_VERSION']
+        )
+
+        self.qdrant_client = QdrantClient(
+            url=current_app.config['QDRANT_URL'],
+            api_key=current_app.config['QDRANT_API_KEY']
+        )
+
+        self.vector_store = QdrantVectorStore(
+            client = self.qdrant_client,
+            collection_name="workarounds",
+            embedding = self.embeddings_client
+        )
+
+        self.language_service = LanguageService()
+    
+        # If session_id is provided, use it; otherwise try to get from Flask session
+        if session_id:
+            self.session_id = session_id
+        else:
+            from flask import session, has_request_context
+            if has_request_context() and 'id' in session:
+                self.session_id = session['id']
+            else:
+                self.session_id = 'no_session'
+
+    def _log_info(self, message: str) -> None:
+        """Log general information with session ID."""
+        logger = logging.getLogger('rag_calls')
+        logger.info(message, extra={'session_id': self.session_id})
+
+    def retreive_similar_workarounds(self, process_description):
+        
+        try:
+            results = self.vector_store.similarity_search_with_score(process_description,k=5)
+            formated_results = [result[0].page_content for result in results]
+
+            print(formated_results)
+
+            return formated_results
+        
+        except Exception as e:
+            print(f'Error retreiving similar workarounds: {str(e)}')
+    
+        
 
 # Initialize logging when module is imported
 setup_logging()

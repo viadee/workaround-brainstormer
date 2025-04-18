@@ -12,7 +12,7 @@ import uuid
 from .prompts import DEFAULT_FEW_SHOT_EXAMPLES
 from .auth import login_required, admin_required, check_credentials
 from .utils import save_uploaded_file, process_image, format_workarounds_tree
-from .llm import LLMService, ProcessContext, CostLimitExceeded
+from .llm import LLMService, ProcessContext, CostLimitExceeded, RAGService
 import logging
 
 # Create blueprints
@@ -325,4 +325,32 @@ def update_few_shot_examples():
         return jsonify({"status": "success"})
     except Exception as e:
         current_app.logger.exception("Error updating few shot examples: %s", e)
+        return jsonify({"error": str(e)}), 500
+    
+
+@main_bp.route('/retreive_similar_few_shot_examples', methods=['POST'])
+@login_required
+def retreive_similar_few_shot_examples():
+    """Retreive few shot examples based on user input."""
+    try:
+        data = request.get_json()
+        # Expecting data in the form: { "few_shot_examples": { "en": { "start_no_image": [ ... ] } } }
+        process_description = data.get('process_description', {})
+
+        rag_service = RAGService(session_id=session.get('id'))
+        retreived_similar_workarounds = rag_service.retreive_similar_workarounds(process_description=process_description)
+
+        response = jsonify({
+            'status': 'success',
+            'data': retreived_similar_workarounds,
+            'message': 'Retreived similar workarounds successfully.'
+        })
+
+        current_app.logger.info("Similar few shot examples generated.")
+
+        response.status_code = 200
+        return response
+    
+    except Exception as e:
+        current_app.logger.exception("Error generating similar few shot examples: %s", e)
         return jsonify({"error": str(e)}), 500

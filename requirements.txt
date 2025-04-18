@@ -11,3 +11,6 @@ reportlab
 Werkzeug
 rlPyCairo
 dotenv
+qdrant-client
+langchain-qdrant
+langchain-openai

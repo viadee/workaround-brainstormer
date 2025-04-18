@@ -252,6 +252,11 @@ h2 {
   visibility: hidden;
 }
 
+.process-textarea:placeholder-shown ~ .generate-btn {
+  opacity: 0;
+  visibility: hidden;
+}
+
 .upload-instructions {
   color: #999;
   transform: translateY(20px);
