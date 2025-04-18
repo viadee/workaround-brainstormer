@@ -1,3 +1,4 @@
+
 // static/js/main.js
 class App {
     constructor() {
@@ -25,6 +26,8 @@ class App {
                     : 'none';
             });
         }
+
+        this.nodeContextMenu = new window.NodeContextMenu(this.graphManager, () => this.updateUI())
     }
 
     setupEventListeners() {
@@ -46,7 +49,7 @@ class App {
 
         // Node events
         window.addEventListener('nodeClick', (e) => this.expandNode(e.detail.event, e.detail.node));
-        window.addEventListener('nodeContextMenu', (e) => this.collapseNode(e.detail.event, e.detail.node));
+        window.addEventListener('nodeContextMenu', (e) => this.nodeContextMenu.showNodeContextMenu(e.detail.event, e.detail.node));
         window.addEventListener('highlightNode', (e) => this.graphManager.highlightNode(e.detail.nodeId));
     }
 
@@ -220,27 +223,12 @@ class App {
         this.updateUI();
     }
 
-    collapseNode(event, d) {
-        event.preventDefault();
-        if (!d.expanded) return;
-
-        const recursiveRemove = (nodeId) => {
-            const children = this.graphManager.getNodes().filter(n => n.parent === nodeId);
-            children.forEach(child => {
-                recursiveRemove(child.id);
-                this.graphManager.removeNode(child.id);
-            });
-        };
-
-        recursiveRemove(d.id);
-        d.expanded = false;
-        this.updateUI();
-    }
-
     updateUI() {
         this.graphManager.updateGraph();
         this.workaroundsList.updateList(this.graphManager.getNodes());
     }
+
+    
 }
 
 // Initialize everything when the page loads
@@ -251,7 +239,6 @@ window.addEventListener('load', () => {
     window.graphManager = new window.GraphManager();
     window.fileUploadManager = new window.FileUploadManager();
     window.workaroundsList = new window.WorkaroundsList();
-    
     // Initialize the main app
     window.app = new App();
     

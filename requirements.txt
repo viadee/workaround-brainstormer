@@ -8,9 +8,9 @@ Pillow
 pytesseract
 python-dotenv
 reportlab
-svglib
 Werkzeug
 rlPyCairo
+dotenv
 qdrant-client
 langchain-qdrant
 langchain-openai

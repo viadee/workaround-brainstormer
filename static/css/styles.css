@@ -84,6 +84,66 @@ h2 {
   align-items: center;
 }
 
+.node-contextmenu {
+  position: absolute;
+  width: auto;
+  height: auto;
+  display: flex;
+  flex-direction:column
+}
+.node-contextmenu > button{
+    color: black;
+}
+.node-contextmenu > button:hover{
+  cursor: pointer;
+}
+.addnode-dialog{
+  z-index: 1002;
+  position:absolute;
+  top: 50%; /* 50% from the top */
+  left: 50%; /* 50% from the left */
+  transform: translate(-50%, -50%); /* Center the element */
+  padding: 20px; /* Optional padding */
+  background-color: #f8f8f8;
+  color: black;
+  width: auto;
+  height: auto
+}
+
+.addnode-textarea{
+  min-width: 600px;
+  min-height: 150px;
+  position: relative;
+  margin-bottom: 10px
+}
+.addnode-submit-btn{
+  position: absolute;
+  bottom: 0;
+  right: 95px;
+  background-color: #4CAF50;
+  border-color:#4CAF50;
+  border-radius: 4px;
+  color:white;
+  height: 25px;
+  width: 70px;
+}
+.addnode-submit-btn:hover{
+  cursor: pointer;
+}
+.addnode-cancel-btn:hover{
+  cursor: pointer;
+}
+.addnode-cancel-btn{
+  position: absolute;
+  bottom: 0;
+  right: 20px;
+  color:white;
+  border-radius: 4px;
+  background-color: red;
+  height: 25px;
+  border-color: red;
+  width: 70px;
+}
 .logout-button {
   color: #007bff;
   border-color: #007bff;

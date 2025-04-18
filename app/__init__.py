@@ -22,7 +22,7 @@ def create_app(testing: bool = False) -> Flask:
     app.config.update(
         UPLOAD_FOLDER=os.path.join(PROJECT_ROOT, 'temp_uploads'),
         MAX_CONTENT_LENGTH=5 * 1024 * 1024,  # 5MB limit
-        ALLOWED_EXTENSIONS={'svg', 'png', 'jpg', 'jpeg', 'pdf'},
+        ALLOWED_EXTENSIONS={'png', 'jpg', 'jpeg', 'pdf'},
         APP_VERSION=APP_VERSION,
         TESTING=testing,
         # OpenAI settings
