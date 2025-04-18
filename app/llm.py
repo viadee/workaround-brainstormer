@@ -377,18 +377,11 @@ class RAGService:
             else:
                 self.session_id = 'no_session'
 
-    def _log_info(self, message: str) -> None:
-        """Log general information with session ID."""
-        logger = logging.getLogger('rag_calls')
-        logger.info(message, extra={'session_id': self.session_id})
-
     def retreive_similar_workarounds(self, process_description):
         
         try:
             results = self.vector_store.similarity_search_with_score(process_description,k=5)
             formated_results = [result[0].page_content for result in results]
-
-            print(formated_results)
 
             return formated_results
         
