@@ -1,13 +1,25 @@
 /* Basic Resets */
+html{
+  height:100%;
+}
+
 body {
+  display:flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  height:100%;
+  background-color: #f0f0f0;
+  font-weight: 100;
+  color: black;
+}
+
+.brainstormer-content{
   display: flex;
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
   height: 100vh;
-  background-color: #f0f0f0;
 }
-
 /* Layout Components */
 #map-container {
   flex: 2;
@@ -844,3 +856,4 @@ h2 {
   text-align: center;
   transition: opacity 0.5s ease;
 }
+

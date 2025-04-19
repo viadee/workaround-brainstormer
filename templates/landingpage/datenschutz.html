@@ -1,11 +1,20 @@
 <!-- templates/base.html -->
-{% extends "base.html" %}
+{% extends "landingpage/base.html" %}
 
 {% block title %}Node Map Web App{% endblock %}
 
 {% block content %}
 
-    <h1>Datenschutzerklärung</h1>
+<div class="top-buttons">
+    <a href="{{ url_for('main.index') }}" class="back-button" style="">
+        <i class="fa fa-arrow-left" aria-hidden="true"></i> Zum Index
+    </a>
+
+</div>
+
+
+<div class="datenschutz">
+    <h1 class="landingpage-headline">Datenschutzerklärung</h1>
         
     <h2>1. Einleitung</h2>
     <p>Der Schutz Ihrer personenbezogenen Daten ist uns sehr wichtig. Diese Datenschutzerklärung informiert Sie darüber, welche Daten während Ihres Besuchs auf unserer Webseite erfasst werden und wie diese verarbeitet werden. Außerdem erfahren Sie, welche Rechte Sie in Bezug auf Ihre Daten haben.</p>
@@ -29,6 +38,6 @@
     <p>Für Fragen zur Datenschutzerklärung oder zu Datenschutzthemen können Sie uns jederzeit kontaktieren. Die Kontaktdaten finden Sie auf unserer Webseite.</p>
 
     <p>Durch die Nutzung unserer Webseite stimmen Sie den hier aufgeführten Bedingungen zu. Wir danken Ihnen für Ihr Vertrauen und versichern Ihnen, dass wir Ihre Privatsphäre schützen.</p>
-
+</div>
 
 {% endblock %}

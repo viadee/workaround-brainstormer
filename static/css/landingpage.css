@@ -1,0 +1,114 @@
+.page-content{
+    flex:1;
+}
+.footer{
+    min-height: 60px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    width: 100%;
+    border-top: 1px solid #ccc;
+}
+
+.footer-link{
+    color: black;
+    text-decoration: none;
+    margin: 5px;
+}
+
+.footer-link:hover{
+    color: blue;
+    text-decoration: underline;
+}
+
+.centered-content{
+    margin:auto;
+    padding: 15px;
+    max-width: 1100px;
+    margin-top: 60px;
+    margin-bottom: 60px;
+}
+
+
+
+/* Grundfügungen für den Body */
+body {
+    font-family: Arial, sans-serif; /* Schriftart */
+    color: #4b3c77; /* Dunkelviolett für Text */
+    background-color: #ffffff; /* Weiße Hintergrundfarbe */
+    margin: 0; /* Kein äußerer Abstand */
+    padding: 0; /* Kein innerer Abstand */
+}
+
+.landingpage-headline{
+    color: #333333;
+    font-weight: bold;
+}
+
+.landingpage-headline .child{
+    color: black;
+    font-weight:unset;
+}
+.impressum{
+    font-size:medium;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.impressum-flex{
+    display:flex;
+    flex-direction: row;
+   
+    flex-wrap: wrap;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    
+}
+.impressum-flex-item{
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    align-content: center;
+    justify-content: center;
+    flex-basis: 48%;
+    flex-grow: 1;
+    flex-shrink: 1;
+    width: 200px;
+    text-align: center;
+    padding-top:50px;
+    padding-bottom: 50px;
+    height: 180px;
+    position: relative;
+    
+}
+
+.impressum-flex-bottom{
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+.impressum-flex-top{
+    border-top: 1px solid #ccc;
+}
+.impressum-item-pseudo-border-right{
+    content: ''; /* Required for pseudo-elements */
+    position: absolute;
+    right: 0;
+    top: 20%; /* Adjust as needed */
+    bottom: 20%; /* Adjust as needed */
+    width: 1px; /* The thickness of the border */
+    background-color: #ccc; /* The color of the border */
+}
+
+
+.datenschutz{
+    width: 100%;
+    margin:auto;
+    padding: 15px;
+    max-width: 1100px;
+    margin-top: 90px;
+    margin-bottom: 90px;
+}
