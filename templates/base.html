@@ -31,7 +31,9 @@
             <a href="https://forms.office.com/e/nqdmjHnUVd" class="feedback-button" target="_blank">
                 <i class="fas fa-comment-dots feedback-icon"></i> Give Feedback
             </a>
-
+            <a href="{{ url_for('main.index') }}" class="">
+                <i class="fas"></i> Documentation
+            </a>
             {% if 'is_admin' in session and session['is_admin'] %}
                     <a href="{{ url_for('main.admin') }}" class="admin-button">
                         Admin Console
