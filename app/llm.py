@@ -356,7 +356,7 @@ class RAGService:
 
         self.qdrant_client = QdrantClient(
             url=current_app.config['QDRANT_URL'],
-            api_key=current_app.config['QDRANT_API_KEY']
+            api_key=current_app.config['QDRANT_WORKAROUNDS_READ_KEY']
         )
 
         self.vector_store = QdrantVectorStore(

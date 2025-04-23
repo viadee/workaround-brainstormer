@@ -31,8 +31,8 @@ def create_app(testing: bool = False) -> Flask:
         AZURE_API_URL=os.getenv('AZUREAPIURL'),
         DAILY_COST_THRESHOLD=float(os.getenv('DAILYCOSTTHRESHOLD', '10.0')),
         # Q-Drant settings
-        QDRANT_URL = os.getenv('QDRANTURL'),
-        QDRANT_API_KEY = os.getenv('QDRANTAPIKEY'),
+        QDRANT_URL = os.getenv('QDRANT_URL'),
+        QDRANT_WORKAROUNDS_READ_KEY = os.getenv('QDRANT_WORKAROUNDS_READ_KEY'),
         # RAG settings
         RAG_AZURE_OPENAI_API_KEY=os.getenv('RAG_AZURE_OPENAI_API_KEY'),
         RAG_AZURE_OPENAI_ENDPOINT=os.getenv('RAG_AZURE_OPENAI_ENDPOINT'),
