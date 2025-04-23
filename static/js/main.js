@@ -14,6 +14,7 @@ class App {
         this.graphManager = window.graphManager;
         this.fileUploadManager = window.fileUploadManager;
         this.workaroundsList = window.workaroundsList;
+        this.fewShotEditor = window.fewShotEditor;
         this.spinner = document.getElementById("map-spinner");
         
         // Expert panel toggle
@@ -59,6 +60,16 @@ class App {
 
         const description = document.getElementById('process-input').value;
         const additionalContext = document.getElementById('additional-context')?.value || '';
+
+        try{
+            this.fewShotEditor.currentLang = "en";
+            await this.fewShotEditor.updateLangTabs();
+            await this.fewShotEditor.retreiveFewShotExamples();
+            await this.fewShotEditor.updateCurrentLanguageExamples();
+            await this.fewShotEditor.autoSave();
+        } catch (error) {
+            console.error('Error loading similar few-shot examples:', error);
+        }
 
         // Create root node with description and filename if available
         const rootNode = { 
@@ -239,6 +250,7 @@ window.addEventListener('load', () => {
     window.graphManager = new window.GraphManager();
     window.fileUploadManager = new window.FileUploadManager();
     window.workaroundsList = new window.WorkaroundsList();
+    window.fewShotEditor = new window.FewShotEditor();
     // Initialize the main app
     window.app = new App();
     
