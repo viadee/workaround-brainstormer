@@ -52,6 +52,7 @@
     color: black;
     text-decoration: none;
     margin: 5px;
+    z-index: 1;
 }
 
 .footer-link:hover{
@@ -74,7 +75,7 @@
 }
 
 .landingpage-content{
-    
+    margin:auto;
     padding: 15px;
     max-width: 1600px;
     margin-top: 60px;
@@ -85,6 +86,7 @@
 .landingpage-sidebar{
     height: 100%;
     width: 250px;
+    display:none;
 }
 
 /* Grundfügungen für den Body */
