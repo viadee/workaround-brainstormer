@@ -17,8 +17,8 @@ embeddings = AzureOpenAIEmbeddings(
 )
 
 # Initialize Qdrant Client
-qdrant_url = os.getenv('QDRANTURL')
-qdrant_api_key = os.getenv('QDRANTAPIKEY')
+qdrant_url = os.getenv('QDRANT_URL')
+qdrant_api_key = os.getenv('QDRANT_FULL_ACCESS_KEY')
 client = QdrantClient(
     url=qdrant_url,
     api_key=qdrant_api_key
