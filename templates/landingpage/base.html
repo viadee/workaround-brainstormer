@@ -9,7 +9,7 @@
     <!-- Styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/landingpage.css') }}">
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/variables.css') }}">
     <!-- External Dependencies -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://kit.fontawesome.com/441def4347.js" crossorigin="anonymous"></script>
@@ -17,8 +17,13 @@
 </head>
 
 <body>
+
+    
   
     <div class="page-content">
+        <div class="main-header">
+           
+        </div>
         {% block content %}{% endblock %}
     </div>
 
@@ -29,14 +34,37 @@
         {% block footer %}{% endblock %}
 
         <div class="footer">
-            (viadee logo)
-            <a href="{{ url_for('info.impressum') }}" class="footer-link" style="">
-                <i class=" " aria-hidden="true"></i> Impressum
-            </a>
-        
-            <a href="{{ url_for('info.datenschutz') }}" class="footer-link" style="">
-                <i class="" aria-hidden="true"></i> Datenschutz
-            </a>
+            <div class="footer-container">
+                <div class="footer-partners">
+                    <h3>Partner</h3>
+                    <div class="footer-partners-logo-container">
+                        <div class="footer-partners-left-section">
+                            <img class="footer-partner-logo" src="{{ url_for('static', filename='images/SICP_Paderborn_logo.png') }}" > </img>
+                            <img class="footer-partner-logo" src="{{ url_for('static', filename='images/viadee_Logo_rot.png') }}" > </img>
+                        </div>
+                        <img class="footer-partner-ecis-logo" src="{{ url_for('static', filename='images/ERCIS_Logo.png') }}" > </img>
+                    </div>
+                </div>
+
+
+                <div class="footer-legal">
+                    <h3>Rechtliches</h3>
+                    <a href="{{ url_for('info.impressum') }}" class="footer-link" style="">
+                        <i class=" " aria-hidden="true"></i> Impressum
+                    </a>
+                
+                    <a href="{{ url_for('info.datenschutz') }}" class="footer-link" style="">
+                        <i class="" aria-hidden="true"></i> Datenschutz
+                    </a>
+
+                    <a href="{{ url_for('info.datenschutz') }}" class="footer-link" style="">
+                        <i class="" aria-hidden="true"></i> Nutzungsbedingungen
+                    </a>
+                </div>
+                <div class="footer-links">
+                    <h3>Links</h3>
+                </div>
+            </div>
         </div>
   
 
