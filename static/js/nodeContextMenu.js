@@ -2,10 +2,15 @@ class NodeContextMenu{
 
     graphManager
     updateUIHook
+    settings
 
-    constructor(graphManager, updateUIHook){
+    constructor(
+        graphManager, 
+        updateUIHook,
+        workaroundGenerationSettings){
         this.graphManager = graphManager;
         this.updateUIHook = updateUIHook;
+        this.settings = workaroundGenerationSettings
     }
 
     showNodeContextMenu(event, d){
@@ -109,6 +114,7 @@ class NodeContextMenu{
             return;
         // collapse node without children
         else if(!d.expanded){
+            this.settings.addUndesirableWorkaround(this.graphManager.getNodes().find(n => n.id == d.id))
             this.graphManager.removeNode(d.id)
 
             const parent = this.graphManager.getNodes().find(n => n.id == d.parent)
@@ -121,6 +127,10 @@ class NodeContextMenu{
             this.updateUIHook()
         // recursive remove children
         }else{
+            const undesirableNodes = this.graphManager.getNodes().filter(n => n.id == d.id || n.parent == d.id)
+            for(const node of undesirableNodes){
+                this.settings.addUndesirableWorkaround(node)
+            }
             const recursiveRemove = (nodeId) => {
                 const children = this.graphManager.getNodes().filter(n => n.parent === nodeId);
                 children.forEach(child => {

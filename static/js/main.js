@@ -15,6 +15,8 @@ class App {
         this.fileUploadManager = window.fileUploadManager;
         this.workaroundsList = window.workaroundsList;
         this.fewShotEditor = window.fewShotEditor;
+        this.workaroundGenerationSettings = window.workaroundGenerationSettings
+
         this.spinner = document.getElementById("map-spinner");
         
         // Expert panel toggle
@@ -28,7 +30,7 @@ class App {
             });
         }
 
-        this.nodeContextMenu = new window.NodeContextMenu(this.graphManager, () => this.updateUI())
+        this.nodeContextMenu = new window.NodeContextMenu(this.graphManager, () => this.updateUI(), this.workaroundGenerationSettings)
     }
 
     setupEventListeners() {
@@ -135,7 +137,7 @@ class App {
             // Build data object
             const requestData = {
                 process_description: document.getElementById('process-input').value,
-                additional_context: document.getElementById('additional-context')?.value || '',
+                additional_context: this.workaroundGenerationSettings.getAdditionalPromptContext(),
                 similar_workaround: d.text,
                 other_workarounds: this.graphManager.getNodes()
                     .filter(n => n.id !== 0 && n.id !== d.id)
@@ -250,6 +252,7 @@ window.addEventListener('load', () => {
     window.graphManager = new window.GraphManager();
     window.fileUploadManager = new window.FileUploadManager();
     window.workaroundsList = new window.WorkaroundsList();
+    window.workaroundGenerationSettings = new window.WorkaroundGenerationSettings()
     window.fewShotEditor = new window.FewShotEditor();
     // Initialize the main app
     window.app = new App();
