@@ -21,9 +21,6 @@
     
   
     <div class="page-content">
-        <div class="main-header">
-           
-        </div>
         {% block content %}{% endblock %}
     </div>
 
@@ -39,10 +36,15 @@
                     <h3>Partner</h3>
                     <div class="footer-partners-logo-container">
                         <div class="footer-partners-left-section">
-                            <img class="footer-partner-logo" src="{{ url_for('static', filename='images/SICP_Paderborn_logo.png') }}" > </img>
-                            <img class="footer-partner-logo" src="{{ url_for('static', filename='images/viadee_Logo_rot.png') }}" > </img>
+                            <a href="https://www.sicp.de/" target="_blank">
+                                <img class="footer-partner-logo" src="{{ url_for('static', filename='images/SICP_Paderborn_logo.png') }}" > </img>
+                            <a href="https://www.viadee.de/" target="_blank">
+                                <img class="footer-partner-logo" src="{{ url_for('static', filename='images/viadee_Logo_rot.png') }}" > </img>
+                            </a>
                         </div>
-                        <img class="footer-partner-ecis-logo" src="{{ url_for('static', filename='images/ERCIS_Logo.png') }}" > </img>
+                        <a target="_blank" href="https://www.ercis.org/">
+                            <img class="footer-partner-ecis-logo" src="{{ url_for('static', filename='images/ERCIS_logo_ohne_punkt_ohne_text.png') }}" > </img>
+                        </a>
                     </div>
                 </div>
 
@@ -63,6 +65,9 @@
                 </div>
                 <div class="footer-links">
                     <h3>Links</h3>
+                    <a href="https://github.com/viadee/workaround-brainstormer" target="_blank" class="footer-link">
+                        <img class="footer-link-github" src="{{ url_for('static', filename='images/github-mark.png') }}"></img>
+                    </a>
                 </div>
             </div>
         </div>
