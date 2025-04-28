@@ -10,10 +10,10 @@ load_dotenv(find_dotenv())
 
 # Initialize AzureOpenAIEmbeddings
 embeddings = AzureOpenAIEmbeddings(
-    model="text-embedding-3-large",
-    api_key=os.getenv('RAG_AZURE_OPENAI_API_KEY'),
-    azure_endpoint=os.getenv('RAG_AZURE_OPENAI_ENDPOINT'),
-    openai_api_version=os.getenv('RAG_AZURE_OPENAI_VERSION')
+    model="text-embedding-3-small",
+    api_key=os.getenv('AZURE_OPENAI_API_KEY'),
+    azure_endpoint=os.getenv('AZURE_OPENAI_API_URL'),
+    openai_api_version=os.getenv('AZURE_OPENAI_API_VERSION')
 )
 
 # Initialize Qdrant Client
@@ -32,7 +32,7 @@ corpus = pd.read_csv('workarounds_corpus.csv')
 try:
     client.create_collection(
         collection_name=collection_name,
-        vectors_config=VectorParams(size=3072, distance=Distance.COSINE),
+        vectors_config=VectorParams(size=1536, distance=Distance.COSINE),
     )
 except Exception as e:
     print(f"Collection may already exist: {e}")
