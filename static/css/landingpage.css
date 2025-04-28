@@ -97,13 +97,42 @@ body {
     padding: 0; /* Kein innerer Abstand */
 }
 
+.landingpage-table-of-contents-container{
+    top: 40px;
+    left:0px;
+    position: fixed;
+    max-width: 400px;
+    margin: 20px;
+}
 .landingpage-table-of-contents{
-     top: 90px;
-     left:0px;
-     position: fixed;
+     
+}
+
+.toc-ul-nested{
+    display:none;
 }
 .landingpage-table-of-contents ul{
     list-style-type: none;
+    text-decoration: none;
+    color: black;
+}
+.landingpage-table-of-contents a{
+    list-style-type: none;
+    text-decoration: none;
+    color: black;
+}
+.landingpage-table-of-contents a:hover{
+    color:#45a049;
+}
+.landingpage-table-of-contents div{
+    cursor: pointer;
+    color: black;
+}
+.landingpage-table-of-contents div:hover{
+    color:#45a049;
+}
+.landingpage-table-of-contents li{
+    padding-top: 3px;
 }
 .landingpage-headline{
     color: #333333;
@@ -216,8 +245,11 @@ h1, h2, h3 {
 }
 
 .cta-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: #4CAF50;
-    color: white;
+    color: white!important;
     border: none;
     padding: 0.5rem 1rem;
     border-radius: 4px;
@@ -226,12 +258,29 @@ h1, h2, h3 {
     cursor: pointer;
     font-size: 1rem;
     margin-top: 1rem;
+    text-decoration: none;
 }
 
 .cta-button:hover {
     background-color: #45a049;
+    color:white!important;
 }
 
+.cta-button-small {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #4CAF50;
+    color: white!important;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 200px;
+    font-size: 1rem;
+    margin-top: 1rem;
+    text-decoration: none;
+}
 
 
 .toc {
@@ -246,7 +295,9 @@ h1, h2, h3 {
     height: 100%;
     overflow-y: auto;
 }
-
+.toc-active{
+    color:#45a049!important;
+}
 .toc h2 {
     color: #4CAF50;
     margin-top: 0;

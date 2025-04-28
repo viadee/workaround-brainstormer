@@ -85,7 +85,6 @@ def setCredentials():
 
 # Main routes (including API endpoints)
 @main_bp.route('/')
-@login_required
 def index():
     """Render main application page."""
     current_app.logger.info("Rendering index for: %s", session.get('username'))

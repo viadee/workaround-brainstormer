@@ -9,27 +9,108 @@
 
 <div class="landingpage-container">
 <div class="landingpage-content">
-    
-    <div id="landingpage-table-of-contents-container">
+    <div class="landingpage-table-of-contents-container">
+        <div class="landingpage-table-of-contents">
+        <h3>Inhaltsverzeichnis</h3>
+        <ul>
+            <li>
+                <a href="#intro"> Einführung </a>
+            </li>
+            <li>
+                <a href="#Mini-entwickler-Kaffee-Beispiel">Beispiel Zusammenfassung</a>
+            </li>
+            <li>
+                <div class="toc-header">  Forschungskontext</div>
+                <ul class="toc-ul-nested">
+                    <li>
+                        <a href="#Workarounds als Mittel für Wettbewerbsfähigkeit">Workarounds als Mittel für Wettbewerbsfähigkeit</a>
+                    </li>
+                    <li>
+                        <a href="#Wie Workarounds finden?">Wie Workarounds finden?</a>
+                    </li>
+                    <li>
+                        <a href="#Lösungsansatz: Latente Workarounds und erste Erfahrungen">Lösungsansatz: Latente Workarounds und erste Erfahrungen</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <div class="toc-header">Beispiel in einer Pizzeria</div>
+                <ul class="toc-ul-nested">
+                    <li>
+                        <a href="#Ausgangssituation">Ausgangssituation</a>
+                    </li>
+                    <li>
+                        <a href="#In drei Schritten zu Möglichkeiten der Prozessverbesserung">In drei Schritten zu Möglichkeiten der Prozessverbesserung</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#Ausblick – Weiterentwicklung des Brainstormers">
+                    Ausblick - Weiterentwicklung des Brainstormers
+                </a>
+            </li>
+            <li>
+                <div class="toc-header">
+                    Benutzerhandbuch
+                </div>
+                <ul class="toc-ul-nested">
+                    <li>
+                        <a href="#Primäre Komponenten der Benutzeroberfläche">Primäre Komponenten der Benutzeroberfläche</a>
+                    </li>
+                    <li>
+                        <div class="toc-header">Workarounds generieren</div>
+
+                        <ul class="toc-ul-nested">
+                            <li>
+                                <a href="#Initiale Workarounds generieren">Initiale Workarounds generieren</a>
+                            </li>
+                            <li>
+                                <a href="#Kind-Workarounds generieren">Kind-Workarounds generieren</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#Workarounds entfernen">Workarounds entfernen</a>
+                    </li>
+                    <li>
+                        <a href="#Zusätzlichen Kontext hinzufügen">Zusätzlichen Kontext hinzufügen</a>
+                    </li>
+                    <li>
+                        <a href="#Few-shot Examples bearbeiten">Few-shot Examples bearbeiten</a>
+                    </li>
+                    <li>
+                        <a href="#Eingebettete Workaround-Beispiele hinzufügen">Eingebettete Workaround-Beispiele hinzufügen</a>
+                    </li>
+                </ul>
+                
+            </li>
+            <li>
+                <a href="#FAQ">FAQ</a>
+            </li>
+        </ul>
+        </div>
+        <a class="cta-button-small" target="_blank" href="/brainstormer">Jetzt Workarounds finden</a>
+    </div>
+    <div  id="landingpage-table-of-contents-container">
         <section class="intro">
-            <h1>Workaround Brainstormer</h1>
+            <h1 id="intro">Workaround Brainstormer</h1>
             <p>"Dass Workarounds in Unternehmen stattfinden, steht fest." Doch wie kann der Umgang mit diesen sinnvoll gestaltet werden? Im ersten Schritt empfiehlt sich eine geordnete Identifizierung. Um „latente“ Workarounds, also dem Process Owner oder anderen Stakeholdern unbekannte, zielgerichtete Abweichungen eines Prozesses, aufzudecken, können LLMs helfen. Der Workaround Brainstormer ist genau für solche Situationen entwickelt worden. Um das Tool auszuprobieren, können Sie auf den folgenden Button klicken. Zur zielgerichteten Nutzung des Tools empfehlen wir einen Blick auf den im Folgenden erläuterten Hintergrund und auf die Anleitung.</p>
-            <button class="cta-button">Jetzt Workarounds finden</button>
+            <a class="cta-button" target="_blank" href="/brainstormer">Jetzt Workarounds finden</a>
         </section>
         <section class="developer-example">
-            <h2>Mini-entwickler-Kaffee-Beispiel</h2>
+            <h2 id="Mini-entwickler-Kaffee-Beispiel">Mini-entwickler-Kaffee-Beispiel</h2>
             <p>Stellen Sie sich vor, Sie sind der Inhaber einer Pizzeria und bemerken, dass Ihre Kundenzufriedenheit und Gewinne sinken. Mit dem Workaround Brainstormer können Sie schnell und einfach kreative Lösungen generieren, um Ihre Prozesse zu verbessern. Geben Sie einfach Ihre Prozessbeschreibung ein, und das Tool liefert Ihnen innerhalb weniger Sekunden praktische Workarounds, die Ihnen helfen, die Herausforderungen in Ihrem Betrieb zu identifizieren und zu lösen. So können Sie gezielt Maßnahmen ergreifen, um die Zufriedenheit Ihrer Kunden zu steigern und Ihre Gewinne zu erhöhen.</p>
         </section>
         <section class="research-context">
-            <h2>Forschungskontext</h2>
-            <h3>Workarounds als Mittel für Wettbewerbsfähigkeit</h3>
+            <h2 id="Forschungskontext">Forschungskontext</h2>
+            <h3 id="Workarounds als Mittel für Wettbewerbsfähigkeit">Workarounds als Mittel für Wettbewerbsfähigkeit</h3>
             <p>Der Workaround Brainstormer ist ein Zwischenergebnis des Projektes Change.WorkAROUND, einem vom Bundesministerium für Bildung und Forschung (BMBF) geförderten Projekt. Das Projekt adressiert den wachsenden Bedarf nach Wandlungsfähigkeit in der Industrie, welche mit kürzeren Innovationszyklen und disruptiven globalen Ereignissen wie der COVID-19 Pandemie und der Energiewende konfrontiert wird. Oft finden operative Mitarbeitende kreative Lösungen, die Grundlage von Prozessinnovationen werden können, wenn der Soll-Prozess (rechtzeitig) davon erfährt.</p>
             <p>Das Projekt zielt auf neue Methoden, Werkzeuge und Organisationskonzepte, um diese Workarounds zu erkennen, zu bewerten und in Prozessinnovationen umzusetzen.</p>
-            <h3>Wie Workarounds finden?</h3>
+            <h3 id="Wie Workarounds finden?">Wie Workarounds finden?</h3>
             <p>Trotz ihres potenziellen Werts bleiben Workarounds häufig in den Arbeitsabläufen des Unternehmens verborgen oder unentdeckt. In der Regel sind sie undokumentiert, informell und entgehen der Aufmerksamkeit der Prozessverantwortlichen.</p>
             <p>Mit geeigneter Datengrundlage können solche Prozessveränderungen per Process Mining gefunden werden – oft gibt es eine solche Grundlage aber nicht, da Workarounds außerhalb von IT-Systemen auftreten oder informelle Kommunikationskanäle nutzen. Die Identifizierung dieser latenten Umgehungslösungen stellt deshalb eine große Herausforderung dar. So kann ein Mitarbeiter beispielsweise persönliche Messaging-Apps verwenden. Mitarbeiterbefragungen sind zwar wertvoll, liefern aber ein unvollständiges Bild, da Mitarbeitende oft nicht bereit sind, ihr nicht standardgemäßes Verhalten offenzulegen (sei es aus Angst, Zeitmangel oder fehlender Initiative).</p>
             <p>Können moderne LLMs vielleicht helfen, für einen Geschäftsprozess gezielt Hypothesen zu bilden – abzuschätzen, welche Workarounds es vermutlich geben wird?</p>
-            <h3>Lösungsansatz: Latente Workarounds und erste Erfahrungen</h3>
+            <h3 id="Lösungsansatz: Latente Workarounds und erste Erfahrungen">Lösungsansatz: Latente Workarounds und erste Erfahrungen</h3>
             <p>Erstaunlich oft gelingt das. Der Workaround Brainstormer ist ein Werkzeug, das diesen kreativen Prozess leicht und interaktiv macht.</p>
             <p>Anhand einer textuellen Prozessbeschreibung oder eines BPMN-Diagramms bietet er die Möglichkeit, individuelle und domänenspezifische Workarounds mit nur wenigen Mausklicks zu generieren. Der Ansatz ist hierbei wie folgt: Die Prozessbeschreibung und (optional) weiterer Kontext werden in einen speziellen Prompt eingefügt, welcher das LLM instruiert, systematisch Workarounds zu identifizieren. Der Prompt enthält zusätzlich mehrere Workaround-Beispiele (few-shot-examples), um die Ergebnisse des LLM zu verbessern. Diese Beispiele können mithilfe eines RAG-Systems, welches auf eine Wissensdatenbank mit knapp 83 von Unternehmen validierten Workarounds zugreift, erweitert werden.</p>
             <p>In der aktuellen Version des Werkzeugs werden Ihre Dateien nicht gespeichert, d.h. Ihre Prozessbeschreibung sowie die generierten Workarounds durchlaufen den Zyklus von Ihrem Webbrowser bis zu dem von uns gehosteten LLM in Azure.</p>
@@ -37,12 +118,12 @@
             <p>Folgend sollte der Workaround Brainstormer nicht als isoliertes Tool, sondern als ein Kreativitätswerkzeug betrachtet werden, welches in Verbesserungsinitiativen wertvolle Impulse gibt, die anschließend in Expertengruppen bewertet und diskutiert werden.</p>
         </section>
         <section class="example-usage">
-            <h2>Beispielhafte Nutzung des Workaround Brainstormers zur Verbesserung der Kundenzufriedenheit in einer Pizzeria</h2>
-            <h3>Ausgangssituation</h3>
+            <h2 id="Beispielhafte Nutzung des Workaround Brainstormers zur Verbesserung der Kundenzufriedenheit in einer Pizzeria">Beispielhafte Nutzung des Workaround Brainstormers zur Verbesserung der Kundenzufriedenheit in einer Pizzeria</h2>
+            <h3 id="Ausgangssituation">Ausgangssituation</h3>
             <p>Stellen Sie sich folgendes Beispiel vor: Sie sind der Inhaber einer Pizzeria und haben in den letzten Wochen weniger Gewinn erzielt als im letzten Quartal. Da Ihnen aufgefallen ist, dass sich Ihre Onlinebewertungen verschlechtert haben, suchen Sie nach Möglichkeiten, die Kundenzufriedenheit zu verbessern.</p>
             <p>Um die kostbare Zeit Ihres Teams sinnvoll zu nutzen, möchten Sie im Voraus kreativ werden und Verbesserungsvorschläge sammeln. Mit dem Workaround Brainstormer können Sie mit nur zwei Schritten erste Impulse erhalten, die Sie in die Diskussion mit Ihrem Team einbringen können.</p>
             <p>Im ersten Schritt erklären wir dem Brainstormer unsere Situation: „In meiner Pizzeria beginnt der Prozess mit dem Eingang einer Bestellung. Sobald die Bestellung bestätigt wurde, beginnen wir mit der Zubereitung der Pizza und liefern sie anschließend schnellstmöglich aus. Sobald die Pizza beim Kunden angekommen ist, kann dieser sie genießen. Falls der Kunde diese allerdings nach 40 Minuten noch nicht erhalten hat, erhalten wir häufig Beschwerden oder Nachfragen über das Telefon. Wir versuchen dann das Problem zu beheben und noch schnell zu liefern. Wurde die Bestellung auch nach 80 Minuten noch nicht geliefert, kann der Kunde sein Geld zurückbekommen.“</p>
-            <h3>In drei Schritten zu Möglichkeiten der Prozessverbesserung in Ihrer Pizzeria</h3>
+            <h3 id="In drei Schritten zu Möglichkeiten der Prozessverbesserung">In drei Schritten zu Möglichkeiten der Prozessverbesserung</h3>
             <p>Und erhalten fünf Vorschläge für Workarounds, die uns als Graph sowie als Liste präsentiert werden:</p>
             <ul>
                 <li>Als Pizzabote, wenn ich feststelle, dass ich mehrere Lieferungen gleichzeitig habe, plane ich meine Route effizienter und priorisiere die Kunden, um die Lieferzeiten insgesamt zu verkürzen.</li>
@@ -57,37 +138,37 @@
             <p>Im dritten Schritt können Sie die Vorschläge des Brainstormers mit Ihrer langen Erfahrung als Pizzeria-Inhaber kombinieren und evaluieren und so eine aufschlussreiche Diskussion mit Ihrem Team anregen.</p>
         </section>
         <section class="outlook">
-            <h2>Ausblick – Weiterentwicklung des Brainstormers</h2>
+            <h2 id="Ausblick – Weiterentwicklung des Brainstormers">Ausblick – Weiterentwicklung des Brainstormers</h2>
             <p>Der Brainstormer ist ein Ergebnis der in den letzten drei Jahren im Rahmen des Projektes Change.WorkAROUND geleisteten Forschungsarbeit. Da allerdings die Forschung noch nicht abgeschlossen ist und bei der Weiterentwicklung des Brainstormers noch viel Gestaltungsspielraum besteht, möchten wir für die Nutzung des Tools einschließlich für das Geben von Feedback appellieren. Mit Ihrem Feedback (Feedbacklink) können Sie uns helfen, das Werkzeug weiter zu verfeinern und im Idealfall mehr Prozessinnovationen zu schaffen.</p>
             <p>Ein zentraler Baustein des Werkzeugs ist unsere Wissensdatenbank von in Geschäftsprozessen beobachteten Workarounds und die Erkenntnis, dass ähnliche Workarounds unternehmensübergreifend immer wieder auftauchen. Diese Sammlung von Workarounds darf daher gern wachsen. Wir freuen uns über Ihre Workarounds – gern als Beitrag im GitHub (Link) oder sprechen Sie uns an: Frank.Koehne@viadee.de / <a href="https://www.linkedin.com/in/frank-köhne-9b586395">LinkedIn</a>.</p>
         </section>
         <section class="user-guide">
-            <h2>Benutzerhandbuch</h2>
+            <h2 id="Benutzerhandbuch">Benutzerhandbuch</h2>
             <p>Folgendes Handbuch beschreibt die Funktionalitäten des Brainstormers zur Generierung und Löschung von Workarounds sowie zur Anpassung des dem LLM übergebenden Prompts.</p>
-            <h3>Primäre Komponenten der Benutzeroberfläche</h3>
+            <h3 id="Primäre Komponenten der Benutzeroberfläche">Primäre Komponenten der Benutzeroberfläche</h3>
             <p>Die Workarounds werden grundsätzlich mithilfe eines gerichteten Graphs zentral auf der Benutzeroberfläche visualisiert. Dieser Graph dient als zentrale Erkundungsschnittstelle der Workarounds und kann während der Nutzung erweitert werden.</p>
             <p>Das Prozesseingabefeld, oben rechts dargestellt, verwaltet die textuelle sowie visuelle Prozessbeschreibung, wobei letzteres mit einem Klick auf „click to browse“ als auch mit dem Ziehen und Ablegen des Bildes hochgeladen werden kann.</p>
             <p>Die Workaround-Liste stellt die dritte Komponente unten rechts auf der Oberfläche dar. Hier werden die generierten Workarounds geschachtelt dargestellt. Rechts neben der Überschrift befindet sich außerdem ein Button für das Exportieren der Workarounds.</p>
             <h3>Workarounds generieren</h3>
-            <h4>Initiale Workarounds generieren</h4>
+            <h4 id="Initiale Workarounds generieren">Initiale Workarounds generieren</h4>
             <p>Nachdem Sie Ihre Prozessbeschreibung oben rechts textuell eingegeben oder als BPMN-Diagramm hochgeladen haben, können Sie mit einem Klick auf den grünen Button „Generate Workarounds“ die initialen fünf Workarounds generieren.</p>
-            <h4>Kind-Workarounds generieren</h4>
+            <h4 id="Kind-Workarounds generieren">Kind-Workarounds generieren</h4>
             <p>Nachdem die ersten Workarounds generiert wurden, können mit einem Linksklick fünf weitere Kind-Workarounds erzeugt werden. Mittels eines zweiten Prompts werden hierbei ähnliche Workarounds erzeugt, welche dieselbe Praktikabilität des Vaters beibehalten, ähnliche Problemtypen adressieren und ähnliche Vorteile erzielen, allerdings Variationen in die betrachteten Rollen sowie in die verwendeten Ressourcen und Vorgehensweisen bringen.</p>
-            <h3>Workarounds entfernen</h3>
+            <h3 id="Workarounds entfernen">Workarounds entfernen</h3>
             <p>Mit einem Rechtsklick auf einen Knoten im Graph wird das Kontextmenü geöffnet – hier können Knoten und Unterknoten entfernt werden.</p>
-            <h3>Zusätzlichen Kontext hinzufügen</h3>
+            <h3 id="Zusätzlichen Kontext hinzufügen">Zusätzlichen Kontext hinzufügen</h3>
             <p>Die Prompts können neben der Prozessbeschreibung mit zusätzlichen Informationen angereichert werden, welche für die Workaround-Generierung relevant sein könnte. Dies kann zusätzliche Informationen über das Unternehmen, die im Prozess involvierten Rollen, Umstände oder bestimmte, für den Nutzer besonders interessante Themen sein.</p>
             <p>Der Button oben rechts neben der Überschrift „Process Description“ zeigt hierfür bei einem Rechtsklick ein zusätzliches Eingabefeld „Additional Context“ an, in dem die Informationen eingegeben werden können.</p>
-            <h3>Few-shot Examples bearbeiten</h3>
+            <h3 id="Few-shot Examples bearbeiten">Few-shot Examples bearbeiten</h3>
             <p>Unter dem im vorherigen Punkt beschriebenen Eingabefeld befindet sich ein Button „Edit Few Shot Examples“. In diesem Dialog können die dem Prompt übergebenden Beispiele bearbeitet, entfernt und neue hinzugefügt werden.</p>
-            <h3>Eingebettete Workaround-Beispiele hinzufügen</h3>
+            <h3 id="Eingebettete Workaround-Beispiele hinzufügen">Eingebettete Workaround-Beispiele hinzufügen</h3>
             <p>Der Brainstormer bietet die Möglichkeit, basierend auf der Prozessbeschreibung, den Prompt um weitere Workaround-Beispiele zu ergänzen. Mit einem Klick auf den Button „Retrieve similar Few Shot Examples“ werden aus in einer Vektordatenbank eingebetteten Workarounds ähnliche abgerufen und dem Prompt beigefügt.</p>
         </section>
         <section class="faq">
-            <h2>FAQ</h2>
-            <h3>Was genau ist ein Workaround?</h3>
+            <h2 id="FAQ">FAQ</h2>
+            <h3 id="Was genau ist ein Workaround?">Was genau ist ein Workaround?</h3>
             <p>Ein Workaround ist eine zielgerichtete Anpassung, Improvisation oder sonstige Änderung eines oder mehrerer Aspekte eines bestehenden Arbeitssystems, um Hindernisse, Ausnahmen, Anomalien, Pannen, etablierte Praktiken, Managementerwartungen oder strukturelle Einschränkungen zu überwinden, zu umgehen oder zu minimieren, die das Arbeitssystem oder seine Teilnehmer daran hindern, ein gewünschtes Maß an Effizienz, Effektivität oder andere organisatorische oder persönliche Ziele zu erreichen.</p>
-            <h3>Was sind Workaround-Storys?</h3>
+            <h3 id="Was sind Workaround-Storys?">Was sind Workaround-Storys?</h3>
             <p>Workaround-Storys fassen die vier Schlüsselelemente Actor and Context, Challenge or Misfit, Adaptive Action sowie Intended Outcome in einer einzigen, kohärenten Aussage zusammen und vermitteln gleichzeitig ausreichend Informationen für Analysezwecke. Dies ermöglicht den effizienten Austausch von Workarounds zwischen Mensch und Maschine (LLMs).</p>
         </section>
         </div>
@@ -96,187 +177,77 @@
 </div>
 
 
-<script>/*! tableOfContents.js v1.0.0 | (c) 2020 Chris Ferdinandi | MIT License | http://github.com/cferdinandi/table-of-contents */
+<script>
+    
+    document.addEventListener("DOMContentLoaded", () => {
+        var els = document.querySelectorAll('.toc-header')
 
-    /*
-     * Automatically generate a table of contents from the headings on the page
-     * @param  {String} content A selector for the element that the content is in
-     * @param  {String} target  The selector for the container to render the table of contents into
-     * @param  {Object} options An object of user options [optional]
-     */
-    var tableOfContents = function (content, target, options) {
-    
-        //
-        // Variables
-        //
-    
-        // Get content
-        var contentWrap = document.querySelector(content);
-        var toc = document.querySelector(target);
-        if (!contentWrap || !toc) return;
-    
-        // Settings & Defaults
-        var defaults = {
-            levels: 'h2, h3, h4, h5, h6',
-            heading: 'Table of Contents',
-            headingLevel: 'h2',
-            listType: 'ul'
-        };
-        var settings = {};
-    
-        // Placeholder for headings
-        var headings;
-    
-    
-        //
-        // Methods
-        //
-    
-        /**
-         * Merge user options into defaults
-         * @param  {Object} obj The user options
-         */
-        var merge = function (obj) {
-            for (var key in defaults) {
-                if (Object.prototype.hasOwnProperty.call(defaults, key)) {
-                    settings[key] = Object.prototype.hasOwnProperty.call(obj, key) ? obj[key] : defaults[key];
+        els.forEach((el) => {
+            el.addEventListener('click', changeHandleVis)
+        })
+
+        function changeHandleVis(e){
+            var clas = e.target.nextElementSibling.getAttribute('class')
+            if(clas == 'toc-ul-nested'){
+                e.target.nextElementSibling.setAttribute('class', '')
+            }else{
+                e.target.nextElementSibling.setAttribute('class', 'toc-ul-nested')
+            }
+        }
+
+
+        document.querySelectorAll('.landingpage-table-of-contents a').forEach(link => {
+            link.addEventListener('click', (event) => {
+                event.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                console.log("target", targetElement)
+                if (targetElement) {
+                    // Adjust the scroll position to add 100px distance from the top
+                    window.scrollBy(0, targetElement.getBoundingClientRect().top - 25)
                 }
+            });
+        });
+    })
+
+    document.addEventListener("scroll", () => {
+        const sections = document.querySelectorAll("h1, h2, h3, h4");
+        const links = document.querySelectorAll(".landingpage-table-of-contents a");
+        let smallestTop = Infinity;
+        let selectedSection = null;
+
+        sections.forEach(section => {
+            const rect = section.getBoundingClientRect();
+            const isVisible = rect.top >= 0 && rect.bottom <= window.innerHeight;
+            
+            if (isVisible && rect.top < smallestTop) {
+                smallestTop = rect.top;
+                selectedSection = section;
             }
-        };
-    
-        /**
-         * Create an ID for a heading if one does not exist
-         * @param  {Node} heading The heading element
-         */
-        var createID = function (heading) {
-            if (heading.id.length) return;
-            heading.id = 'toc_' + heading.textContent.replace(/[^A-Za-z0-9]/g, '-');
-        };
-    
-        /**
-         * Get the HTML to indent a list a specific number of levels
-         * @param  {Integer} count The number of times to indent the list
-         * @return {String}        The HTML
-         */
-        var getIndent = function (count) {
-            var html = '';
-            for (var i = 0; i < count; i++) {
-                html += '<' + settings.listType + '>';
+        });
+
+        links.forEach(link => {
+            link.classList.remove("toc-active");
+        });
+
+        if (selectedSection) {
+            const id = selectedSection.id;
+            const link = document.querySelector(`.landingpage-table-of-contents a[href="#${id}"]`);
+
+            if (link) {
+                link.classList.add("toc-active");
+            }else{
+                const link = document.querySelector(`.landingpage-table-of-contents div[href="#${id}"]`);
+            
             }
-            return html;
-        };
+        }
     
-        /**
-         * Get the HTML to close an indented list a specific number of levels
-         * @param  {Integer} count The number of times to "outdent" the list
-         * @return {String}        The HTML
-         */
-        var getOutdent = function (count) {
-            var html = '';
-            for (var i = 0; i < count; i++) {
-                html += '</' + settings.listType + '></li>';
-            }
-            return html;
-        };
-    
-        /**
-         * Get the HTML string to start a new list of headings
-         * @param  {Integer} diff  The number of levels in or out from the current level the list is
-         * @param  {Integer} index The index of the heading in the "headings" NodeList
-         * @return {String}        The HTML
-         */
-        var getStartingHTML = function (diff, index) {
-    
-            // If indenting
-            if (diff > 0) {
-                return getIndent(diff);
-            }
-    
-            // If outdenting
-            if (diff < 0) {
-                return getOutdent(Math.abs(diff));
-            }
-    
-            // If it's not the first item and there's no difference
-            if (index && !diff) {
-                return '</li>';
-            }
-    
-            return '';
-    
-        };
-    
-        /**
-         * Inject the table of contents into the DOM
-         */
-        var injectTOC = function () {
-    
-            // Track the current heading level
-            var level = headings[0].tagName.slice(1);
-            var startingLevel = level;
-    
-            // Cache the number of headings
-            var len = headings.length - 1;
-    
-            // Inject the HTML into the DOM
-            toc.innerHTML =
-                '<' + settings.headingLevel + '>' + settings.heading + '</' + settings.headingLevel + '>' +
-                '<' + settings.listType + '>' +
-                    Array.prototype.map.call(headings, function (heading, index) {
-    
-                        // Add an ID if one is missing
-                        createID(heading);
-    
-                        // Check the heading level vs. the current list
-                        var currentLevel = heading.tagName.slice(1);
-                        var levelDifference = currentLevel - level;
-                        level = currentLevel;
-                        var html = getStartingHTML(levelDifference, index);
-    
-                        // Generate the HTML
-                        html +=
-                            '<li>' +
-                                '<a href="#' + heading.id + '">' +
-                                    heading.innerHTML.trim() +
-                                '</a>';
-    
-                        // If the last item, close it all out
-                        if (index === len) {
-                            html += getOutdent(Math.abs(startingLevel - currentLevel));
-                        }
-    
-                        return html;
-    
-                    }).join('') +
-                '</' + settings.listType + '>';
-        };
-    
-        /**
-         * Initialize the script
-         */
-        var init = function () {
-    
-            // Merge any user settings into the defaults
-            merge(options || {});
-    
-            // Get the headings
-            // If none are found, don't render a list
-            headings = contentWrap.querySelectorAll(settings.levels);
-            if (!headings.length) return;
-    
-            // Inject the table of contents
-            injectTOC();
-    
-        };
-    
-    
-        //
-        // Initialize the script
-        //
-    
-        init();
-    
-    };
+
+    });
+
+
+
+
 </script>
 
 {% endblock %}
