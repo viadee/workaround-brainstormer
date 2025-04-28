@@ -3,12 +3,6 @@
     position: relative;
 }
 
-.main-header{
-    width: 100%;
-    height: 80px;
-    position: relative;
-    border-bottom: 1px solid var(--border-color-grey);
-}
 .footer {
     width: calc(100% - 60px);
     border-top: 1px solid var(--border-color-grey);
@@ -20,6 +14,7 @@
     justify-content:space-evenly;
     flex-direction: row;
     flex-wrap: wrap;
+    margin: auto;
 }
 .footer-legal{
    display: flex;
@@ -81,19 +76,16 @@
     margin-bottom: 60px;
 }
 
+.landingpage-container{
+    
+}
 .landingpage-content{
     margin:auto;
     padding: 15px;
     max-width: 1500px;
     margin-top: 60px;
     margin-bottom: 60px;
-    display:flex;
     height:100%;
-}
-.landingpage-sidebar{
-    height: 100%;
-    width: 250px;
-    display:none;
 }
 
 /* Grundfügungen für den Body */
@@ -193,4 +185,92 @@ body {
 }
 .tool-usage-illustration-image{
     max-width: 800px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+section {
+    margin-bottom: 2rem;
+    
+}
+
+.intro, .developer-example, .research-context, .example-usage, .outlook, .user-guide, .faq {
+    background-color:  #F0F0F0;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2, h3 {
+    color: #4CAF50;
+}
+
+.cta-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    width: 300px;
+    height: 70px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 1rem;
+}
+
+.cta-button:hover {
+    background-color: #45a049;
+}
+
+
+
+.toc {
+    width: 250px;
+    background-color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.toc h2 {
+    color: #4CAF50;
+    margin-top: 0;
+}
+
+.toc ol {
+    list-style-type: decimal;
+    padding-left: 1rem;
+}
+
+.toc li {
+    margin: 0.5rem 0;
+}
+
+.toc a {
+    text-decoration: none;
+    color: #333;
+}
+
+.toc a:hover {
+    text-decoration: underline;
+}
+
+.content {
+    margin-left: 260px;
+    padding: 2rem;
 }
