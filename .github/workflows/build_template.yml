@@ -1,0 +1,73 @@
+name: Reusable Build Workflow
+
+on:
+  workflow_call:
+    inputs:
+      image_name:
+        required: true
+        type: string
+      dockerfile_path:
+        required: true
+        type: string
+      context_path:
+        required: true
+        type: string
+      tag:
+        required: true
+        type: string
+      environment:
+        required: true
+        type: string
+    # We need to define these here or otherwise, the environment secrets
+    # will not be available to the job.
+    # https://github.com/actions/runner/issues/1490#issuecomment-1872256710
+    secrets:
+      ACR_LOGIN_SERVER:
+        required: false
+      AZURE_CREDENTIALS:
+        required: false
+      RESOURCE_GROUP:
+        required: false
+      ACR_NAME:
+        required: false
+      ACR_USERNAME:
+        required: false
+
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build and Push Image to local registry
+        uses: docker/build-push-action@v6
+        if: ${{ inputs.environment == '' }}
+        env:
+          LOGIN_SERVER: 'dev.local'
+        with:
+          push: ${{ inputs.environment != '' }}
+          tags: '${{ env.LOGIN_SERVER }}/${{ inputs.image_name }}:${{ inputs.tag }}'
+          file: ${{ inputs.dockerfile_path }}
+          context: ${{ inputs.context_path }}
+
+      - name: Log in to Azure
+        uses: azure/login@v1
+        if: ${{ inputs.environment != '' }}
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Build and deploy to Container App
+        uses: azure/container-apps-deploy-action@v1
+        if: ${{ inputs.environment != '' }}
+        with:
+          appSourcePath: ${{ inputs.context_path }}
+          acrName: ${{ vars.ACR_NAME }}
+          containerAppName: ${{ vars.CONTAINER_APP_NAME }}
+          resourceGroup: ${{ vars.RESOURCE_GROUP }}
+          imageToBuild: '${{ vars.ACR_LOGIN_SERVER }}/${{ inputs.image_name }}:${{ inputs.tag }}'
+          dockerfilePath: ${{ inputs.dockerfile_path }}

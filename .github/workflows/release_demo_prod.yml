@@ -1,0 +1,31 @@
+name: Release to Production
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        type: string
+        required: true
+  # release:
+  #   types: [published]
+
+jobs:
+
+  build-and-deploy-demo:
+    uses: ./.github/workflows/build_template.yml
+    secrets: inherit
+    with:
+      image_name: demo/brainstormer
+      dockerfile_path: Dockerfile
+      context_path: .
+      tag: ${{ github.event_name == 'release' && github.event.release.tag_name || github.event.inputs.tag }}
+      environment: demo
+  build-and-deploy-prod:
+    uses: ./.github/workflows/build_template.yml
+    secrets: inherit
+    with:
+      image_name: prod/brainstormer
+      dockerfile_path: Dockerfile
+      context_path: .
+      tag: ${{ github.event_name == 'release' && github.event.release.tag_name || github.event.inputs.tag }}
+      environment: prod

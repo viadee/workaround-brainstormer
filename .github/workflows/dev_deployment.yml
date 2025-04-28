@@ -1,0 +1,36 @@
+name: Deployment of dev App to Azure Container App
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'The tag name for the release'
+        required: true
+  pull_request:
+    types: [opened, synchronize]
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    if: github.event_name == 'pull_request'
+    uses: ./.github/workflows/build_template.yml
+    secrets: inherit
+    with:
+      image_name: dev/brainstormer
+      dockerfile_path: Dockerfile
+      context_path: .
+      tag: ${{ github.sha }}
+      environment: ''
+
+  deploy:
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'workflow_dispatch'
+    uses: ./.github/workflows/build_template.yml
+    secrets: inherit
+    with:
+      image_name: dev/brainstormer
+      dockerfile_path: Dockerfile
+      context_path: .
+      tag: ${{ github.event_name == 'push' && github.sha || github.event.inputs.tag }}
+      environment: dev

@@ -1,0 +1,17 @@
+name: Create Productive Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'The tag name for the release'
+        required: true
+        default: v0.0.0
+
+jobs:
+  build-and-deploy:
+      name: Trigger release_demo_prod
+      uses: ./.github/workflows/release_demo_prod.yml
+      secrets: inherit
+      with:
+        tag: ${{ github.event.inputs.tag }}

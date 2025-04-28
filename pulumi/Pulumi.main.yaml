@@ -1,0 +1,20 @@
+encryptionsalt: v1:Ua9k55hqma4=:v1:oSrVcNbOxwlbTfgD:vkco2LWn9sibE6JN+wUJ4sj2+X6EHw==
+config:
+  azure-native:location: westeurope
+  brainstormer:analytics_workspace_name: wa-brainstormer-analytics
+  brainstormer:project_name: wa-brainstormer
+  brainstormer:rg_name_dev: change-work-around-dev
+  brainstormer:rg_name_prod: change-work-around-prod
+  brainstormer:AZURE-API-URL: https://aoi-viadee-sweden.openai.azure.com/
+  brainstormer:APP-SECRET-KEY:
+    secure: v1:1YU2t3uhyX3J0fNi:STwX2YmV7tbW+FSEm5RR8s0i/GVqgP1fQfTt+s3MO2I9GJosCzhDY0YxjilnXAL066RDcfQZ
+  brainstormer:WA-PASSWORD-HASH:
+    secure: v1:4614qiWlzfbBajLv:gaJVgSLpKtnpv3PCDlw5aYBTFlJuhXqaBMu7zvmaPck=
+  brainstormer:WA-USERNAME: process_owner
+  brainstormer:ADMIN-PASSWORD-HASH:
+    secure: v1:lYymqbiAhkNNNs7Z:MMLwSi2hfDfmV3hZjn1zNDOrb4GkcBzrfT6kT2cZ8JU=
+  brainstormer:DAILY-COST-THRESHOLD: "28"
+  brainstormer:AZURE-API-KEY:
+    secure: v1:Mqq8O4WjlsIcmL/r:s3Tj9W5qxYErutylkZoaVNt5H87e7Q50dR48Mv1UFSvpxCti8m5c7tydUuCXadFp
+  brainstormer:subscription_id_dev: 884a05db-4240-4cd7-8077-005ed2d11c35
+  brainstormer:subscription_id_prod: c831f919-0183-4e77-8f7b-70e03074768f
