@@ -1,5 +1,6 @@
 import pulumi
 from analytics_workspace.workspace import AnalyticsWorkspace
+from application.application_registration import ApplicationRegistration
 from container_apps.container_app import ContainerApp
 from container_apps.environment import ContainerAppEnvironment
 from container_registry.acr import ContainerRegistry
@@ -34,6 +35,12 @@ class ProdDeployment:
         wa_username = config.require("WA-USERNAME")
         admin_password_hash = config.require("ADMIN-PASSWORD-HASH")
         daily_cost_threshold = config.require("DAILY-COST-THRESHOLD")
+
+        ApplicationRegistration(
+            name=f"{self.project_name}-{self.environment}",
+            project_name=self.project_name,
+            opts=self.opts,
+        )
 
         managed_identity = Identity(
             name=f"{self.environment}-identity",
