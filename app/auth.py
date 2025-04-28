@@ -3,6 +3,8 @@ from functools import wraps
 from flask import session, redirect, url_for, flash
 import os
 from werkzeug.security import check_password_hash
+from werkzeug.security import generate_password_hash
+import os
 
 # Authentication configuration
 ADMIN_USERNAME = "admin"
@@ -52,3 +54,15 @@ def check_credentials(username: str, password: str) -> bool:
     user = os.getenv('WAUSERNAME')
     pass_hash = os.getenv('WAPASSWORDHASH')
     return user == username and check_password_hash(pass_hash, password)
+
+def setUserCredentialVariables(username: str, password: str) -> bool:
+
+    if username is None or username == "" or password is None or password == "":
+        raise ValueError('Username and password cannot be None or ""')
+    
+    hashed_pwd =  generate_password_hash(password)
+
+    os.environ['WAPASSWORDHASH'] = hashed_pwd
+    os.environ['WAUSERNAME'] = username
+
+    return True

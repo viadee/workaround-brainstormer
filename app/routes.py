@@ -10,7 +10,7 @@ import time
 import uuid
 
 from .prompts import DEFAULT_FEW_SHOT_EXAMPLES
-from .auth import login_required, admin_required, check_credentials
+from .auth import login_required, admin_required, check_credentials, setUserCredentialVariables
 from .utils import save_uploaded_file, process_image, format_workarounds_tree
 from .llm import LLMService, ProcessContext, CostLimitExceeded, RAGService
 import logging
@@ -18,6 +18,7 @@ import logging
 # Create blueprints
 auth_bp = Blueprint('auth', __name__)
 main_bp = Blueprint('main', __name__)
+info_bp = Blueprint('info', __name__)
 
 def add_timing_headers(response, **kwargs):
     """Add timing information to response headers."""
@@ -38,9 +39,13 @@ def login():
             session['username'] = username
             # Generate a unique session ID
             session['id'] = str(uuid.uuid4())
+            if username == 'admin':
+                session['is_admin'] = True
+            else:
+                session['is_admin'] = False
             current_app.logger.info("Login successful: %s (Session ID: %s)", 
                                   username, session['id'])
-            return redirect(url_for('main.index'))
+            return redirect(url_for('main.brainstormer'))
 
         current_app.logger.warning("Invalid login attempt: %s", username)
         flash('Invalid username or password.', 'danger')
@@ -57,6 +62,27 @@ def logout():
     flash('You have been logged out.', 'info')
     return redirect(url_for('auth.login'))
 
+@auth_bp.route('/setCredentials', methods=['POST'])
+@login_required
+@admin_required
+def setCredentials():
+    if request.method == 'POST':
+
+        try:
+            username = request.form['username']
+            password = request.form['password']
+
+            setUserCredentialVariables(username=username, password=password)
+
+            return redirect(url_for('main.admin'))
+        except Exception as e:
+            current_app.logger.error("Error setting user credentials in environment variable")
+            return jsonify({'error': e}), 500
+    
+    return 405
+
+
+
 # Main routes (including API endpoints)
 @main_bp.route('/')
 @login_required
@@ -64,10 +90,35 @@ def index():
     """Render main application page."""
     current_app.logger.info("Rendering index for: %s", session.get('username'))
     return render_template(
+        'landingpage/landingpage.html',
+        app_version=current_app.config['APP_VERSION'],
+                default_few_shot_examples=DEFAULT_FEW_SHOT_EXAMPLES
+    )
+
+@main_bp.route('/brainstormer')
+@login_required
+def brainstormer():
+    """Render main application page."""
+    current_app.logger.info("Rendering index for: %s", session.get('username'))
+    return render_template(
         'index.html',
         app_version=current_app.config['APP_VERSION'],
                 default_few_shot_examples=DEFAULT_FEW_SHOT_EXAMPLES
     )
+
+
+
+
+@main_bp.route('/admin', methods=['POST', 'GET'])
+@login_required
+@admin_required
+def admin():
+    return render_template(
+        'admin.html',
+        app_version=current_app.config['APP_VERSION'],
+         default_few_shot_examples=DEFAULT_FEW_SHOT_EXAMPLES
+    )
+
 
 @main_bp.route('/download_logs')
 @login_required
@@ -79,7 +130,7 @@ def download_logs():
         if not os.path.exists(log_path):
             current_app.logger.error("Log file not found at: %s", log_path)
             flash('Log file not found.', 'error')
-            return redirect(url_for('main.index'))
+            return redirect(url_for('main.brainstormer'))
             
         return send_file(
             log_path,
@@ -90,7 +141,7 @@ def download_logs():
     except Exception as e:
         current_app.logger.exception("Error downloading logs: %s", e)
         flash('Error downloading log file.', 'error')
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.brainstormer'))
 
 @main_bp.route('/start_map', methods=['POST'])
 @login_required
@@ -291,7 +342,7 @@ def download_workarounds():
     except Exception as e:
         current_app.logger.exception("Error downloading workarounds: %s", e)
         flash('Error downloading workarounds file.', 'error')
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.brainstormer'))
     
 @main_bp.route('/test_logging')
 @login_required
@@ -326,6 +377,22 @@ def update_few_shot_examples():
     except Exception as e:
         current_app.logger.exception("Error updating few shot examples: %s", e)
         return jsonify({"error": str(e)}), 500
+    
+
+@info_bp.route('/impressum')
+def impressum():
+
+    return render_template(
+        '/landingpage/impressum.html'
+    )
+
+
+@info_bp.route('/datenschutz')
+def datenschutz():
+
+    return render_template(
+        '/landingpage/datenschutz.html'
+    )
     
 
 @main_bp.route('/retreive_similar_few_shot_examples', methods=['POST'])

@@ -8,7 +8,7 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/variables.css') }}">
     <!-- External Dependencies -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://kit.fontawesome.com/441def4347.js" crossorigin="anonymous"></script>
@@ -21,6 +21,7 @@
     {% block head %}{% endblock %}
 </head>
 <body>
+    <div class="brainstormer-content">
     {% if 'username' in session %}
         <!-- Navigation buttons (formerly in header.html) -->
         <div class="top-buttons">
@@ -30,11 +31,20 @@
             <a href="https://forms.office.com/e/nqdmjHnUVd" class="feedback-button" target="_blank">
                 <i class="fas fa-comment-dots feedback-icon"></i> Give Feedback
             </a>
+            <a href="{{ url_for('main.index') }}" class="">
+                <i class="fas"></i> Documentation
+            </a>
+            {% if 'is_admin' in session and session['is_admin'] %}
+                    <a href="{{ url_for('main.admin') }}" class="admin-button">
+                        Admin Console
+                    </a>
+            {% endif %}
+
         </div>
     {% endif %}
 
     {% block content %}{% endblock %}
-    
+    </div>
     <!-- Load dependencies first -->
     <script src="{{ url_for('static', filename='js/graphManager.js') }}"></script>
     <script src="{{ url_for('static', filename='js/fileUpload.js') }}"></script>

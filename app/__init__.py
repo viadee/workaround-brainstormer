@@ -50,9 +50,10 @@ def create_app(testing: bool = False) -> Flask:
         configure_logging(app)
 
     # Register blueprints
-    from .routes import auth_bp, main_bp
+    from .routes import auth_bp, main_bp, info_bp
     app.register_blueprint(auth_bp)
     app.register_blueprint(main_bp)
+    app.register_blueprint(info_bp)
 
     return app
 

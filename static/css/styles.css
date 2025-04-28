@@ -1,18 +1,30 @@
 /* Basic Resets */
+html{
+  height:100%;
+}
+
 body {
+  display:flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  height:100%;
+  background-color: #f0f0f0;
+  font-weight: 100;
+  color: black;
+}
+
+.brainstormer-content{
   display: flex;
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
   height: 100vh;
-  background-color: #f0f0f0;
 }
-
 /* Layout Components */
 #map-container {
   flex: 2;
   height: 100%;
-  border-right: 1px solid #ccc;
+  border-right: 1px solid var(--border-color-grey);
   position: relative;
   overflow: hidden;
   background-color: white;
@@ -169,6 +181,16 @@ h2 {
 .feedback-button .feedback-icon {
   margin-right: 8px;
 }
+
+.admin-button{
+  color: black;
+  border-color: black;
+  background-color: #fff;
+}
+.admin-button:hover {
+  background-color: #aaa;
+}
+
 
 /* Loading Spinner */
 .spinner {
@@ -377,7 +399,7 @@ h2 {
   padding: 10px;
   font-size: 12px;
   background: rgba(255, 255, 255, 0.9);
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color-grey);
   border-radius: 5px;
   pointer-events: none;
   z-index: 10;
@@ -720,7 +742,7 @@ h2 {
 
 .edit-btn {
   background-color: #f0f0f0;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color-grey);
   color: #333;
   padding: 4px 8px;
   font-size: 12px;
@@ -765,7 +787,7 @@ h2 {
 .lang-tab {
   margin: 0 3px;
   padding: 4px 6px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color-grey);
   border-radius: 4px;
   background: #fff;
   cursor: pointer;
@@ -839,3 +861,4 @@ h2 {
   text-align: center;
   transition: opacity 0.5s ease;
 }
+
