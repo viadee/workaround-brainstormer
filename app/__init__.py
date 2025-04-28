@@ -26,17 +26,13 @@ def create_app(testing: bool = False) -> Flask:
         APP_VERSION=APP_VERSION,
         TESTING=testing,
         # OpenAI settings
-        AZURE_API_KEY=os.getenv('AZUREAPIKEY'),
-        AZURE_API_VERSION=os.getenv('AZUREAPIVERSION', '2023-12-01-preview'),
-        AZURE_API_URL=os.getenv('AZUREAPIURL'),
+        AZURE_API_KEY=os.getenv('AZURE_OPENAI_API_KEY'),
+        AZURE_API_VERSION=os.getenv('AZURE_OPENAI_API_VERSION', '2023-12-01-preview'),
+        AZURE_API_URL=os.getenv('AZURE_OPENAI_API_URL'),
         DAILY_COST_THRESHOLD=float(os.getenv('DAILYCOSTTHRESHOLD', '10.0')),
         # Q-Drant settings
         QDRANT_URL = os.getenv('QDRANT_URL'),
         QDRANT_WORKAROUNDS_READ_KEY = os.getenv('QDRANT_WORKAROUNDS_READ_KEY'),
-        # RAG settings
-        RAG_AZURE_OPENAI_API_KEY=os.getenv('RAG_AZURE_OPENAI_API_KEY'),
-        RAG_AZURE_OPENAI_ENDPOINT=os.getenv('RAG_AZURE_OPENAI_ENDPOINT'),
-        RAG_AZURE_OPENAI_VERSION = os.getenv('RAG_AZURE_OPENAI_VERSION'),
         # Add logs directory to config
         LOGS_DIR=os.path.join(PROJECT_ROOT, 'logs')
     )

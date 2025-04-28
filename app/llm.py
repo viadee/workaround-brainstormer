@@ -200,7 +200,7 @@ class LLMService:
         messages = self._create_messages(prompt, process)
         
         completion = self.client.beta.chat.completions.parse(
-            model="gpt-4o-low-sensitivity-filter",
+            model="gpt-4.1-mini",
             messages=messages,
             response_format={"type": "json_object"},
         )
@@ -229,7 +229,7 @@ class LLMService:
         messages = self._create_messages(prompt, process)
         
         completion = self.client.beta.chat.completions.parse(
-            model="gpt-4o-low-sensitivity-filter",
+            model="gpt-4.1-mini",
             messages=messages,
             response_format={"type": "json_object"},
         )
@@ -255,7 +255,7 @@ class LLMService:
         prompt = get_node_label_prompt(workaround, other_workarounds)
 
         completion = self.client.chat.completions.create(
-            model="gpt-4o-low-sensitivity-filter",
+            model="gpt-4.1-mini",
             messages=[{"role": "user", "content": prompt}]
         )
 
@@ -348,10 +348,10 @@ class RAGService:
         """
 
         self.embeddings_client = AzureOpenAIEmbeddings(
-            model="text-embedding-3-large",
-            api_key = current_app.config['RAG_AZURE_OPENAI_API_KEY'],
-            azure_endpoint = current_app.config['RAG_AZURE_OPENAI_ENDPOINT'],
-            openai_api_version = current_app.config['RAG_AZURE_OPENAI_VERSION']
+            model="text-embedding-3-small",
+            api_key = current_app.config['AZURE_API_KEY'],
+            azure_endpoint = current_app.config['AZURE_API_URL'],
+            openai_api_version = current_app.config['AZURE_API_VERSION']
         )
 
         self.qdrant_client = QdrantClient(
