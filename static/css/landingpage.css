@@ -113,10 +113,8 @@ body {
     list-style-type: none;
     text-decoration: none;
     color: black;
-  
 }
 .landingpage-table-of-contents a{
-    list-style-type: none;
     text-decoration: none;
     color: black;
 }
@@ -267,6 +265,8 @@ h1, h2, h3 {
     width: 200px;
     font-size: 1rem;
     margin-top: 1rem;
+    margin-left: -25px;
+    z-index:99999;
     text-decoration: none;
 }
 

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Node Map Web App{% endblock %}</title>
+    <title>{% block title %}Workaround Brainstormer{% endblock %}</title>
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
@@ -36,15 +36,17 @@
                     <h3>Partner</h3>
                     <div class="footer-partners-logo-container">
                         <div class="footer-partners-left-section">
-                            <a href="https://www.sicp.de/" target="_blank">
-                                <img class="footer-partner-logo" src="{{ url_for('static', filename='images/SICP_Paderborn_logo.png') }}" > </img>
                             <a href="https://www.viadee.de/" target="_blank">
                                 <img class="footer-partner-logo" src="{{ url_for('static', filename='images/viadee_Logo_rot.png') }}" > </img>
+                            </a>
+                            <a href="https://www.sicp.de/" target="_blank">
+                                <img class="footer-partner-logo" src="{{ url_for('static', filename='images/SICP_Paderborn_logo.png') }}" > </img>
                             </a>
                         </div>
                         <a target="_blank" href="https://www.ercis.org/">
                             <img class="footer-partner-ecis-logo" src="{{ url_for('static', filename='images/ERCIS_logo_ohne_punkt_ohne_text.png') }}" > </img>
                         </a>
+
                     </div>
                 </div>
 
@@ -67,6 +69,9 @@
                     <h3>Links</h3>
                     <a href="https://github.com/viadee/workaround-brainstormer" target="_blank" class="footer-link">
                         <img class="footer-link-github" src="{{ url_for('static', filename='images/github-mark.png') }}"></img>
+                    </a>
+                    <a target="_blank" href="https://qdrant.tech/">
+                        <img style="width:150px" src="{{ url_for('static', filename='images/qdrant-logo.svg') }}" > </img>
                     </a>
                 </div>
             </div>

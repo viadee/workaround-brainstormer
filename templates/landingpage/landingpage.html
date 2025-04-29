@@ -2,7 +2,7 @@
 
 {% extends "landingpage/base.html" %}
 
-{% block title %}Node Map Web App{% endblock %}
+{% block title %}Workaround Brainstormer{% endblock %}
 
 {% block content %}
 
@@ -11,35 +11,36 @@
 <div class="landingpage-content">
     <div class="landingpage-table-of-contents-container">
         <div class="landingpage-table-of-contents">
-        <h3>Inhalt</h3>
-        <ul>
-            <li>
-                <a href="#intro"> Einführung </a>
-            </li>
-            <li>
-                <a href="#Beispiel">Beispiel</a>
-            </li>
-            <li>
-                <a href="#Forschungskontext" class="toc-header">Forschungskontext</a>
-            </li>
-            <li>
-                <a href="#Nutzungszenarien" class="toc-header">Nutzungszenarien</a>
-            </li>
-            <li>
-                <a href="#Ausblick – Weiterentwicklung des Brainstormers">
-                    Ausblick
-                </a>
-            </li>
-            <li>
-                <a href="#Benutzerhandbuch" class="toc-header">
-                    Benutzerhandbuch
-                </a>
-                
-            </li>
-            <li>
-                <a href="#FAQ">FAQ</a>
-            </li>
-        </ul>
+            <h3>Inhalt</h3>
+            <ul>
+                <li>
+                    <a href="#intro" class="toc-header"> Einführung </a>
+                </li>
+                <li>
+                    <a href="#Beispiel" class="toc-header">Beispiel</a>
+                </li>
+                <li>
+                    <a href="#Forschungskontext" class="toc-header">Forschungskontext</a>
+                </li>
+                <li>
+                    <a href="#Nutzungszenarien" class="toc-header">Nutzungszenarien</a>
+                </li>
+                <li>
+                    <a href="#Ausblick – Weiterentwicklung des Brainstormers" class="toc-header">
+                        Ausblick
+                    </a>
+                </li>
+                <li>
+                    <a href="#Benutzerhandbuch" class="toc-header">
+                        Benutzerhandbuch
+                    </a>
+                    
+                </li>
+                <li>
+                    <a class="toc-header" href="#FAQ">FAQ</a>
+                </li>
+            </ul>
+            <a class="cta-button-small" target="_blank" href="/brainstormer">Jetzts Workarounds finden</a>
         </div>
         
     </div>
@@ -176,6 +177,9 @@
 
 
         document.querySelectorAll('.landingpage-table-of-contents a').forEach(link => {
+            if(!link.classList.contains("toc-header")){
+                return;
+            }
             link.addEventListener('click', (event) => {
                 event.preventDefault();
                 const targetId = link.getAttribute('href').substring(1);
