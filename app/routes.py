@@ -394,7 +394,7 @@ def datenschutz():
     )
 
 @info_bp.route('/nutzungsbedingungen')
-def datenschutz():
+def nutzungsbedingungen():
 
     return render_template(
         '/landingpage/nutzungsbedingungen.html'
