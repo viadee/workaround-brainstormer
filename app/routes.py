@@ -392,6 +392,13 @@ def datenschutz():
     return render_template(
         '/landingpage/datenschutz.html'
     )
+
+@info_bp.route('/nutzungsbedingungen')
+def datenschutz():
+
+    return render_template(
+        '/landingpage/nutzungsbedingungen.html'
+    )
     
 
 @main_bp.route('/retreive_similar_few_shot_examples', methods=['POST'])
