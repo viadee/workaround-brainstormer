@@ -25,6 +25,7 @@ provider_prod = azure_native.Provider(
 DevDeployment(
     project_name=project_name,
     rg_name=dev_resource_group_name,
+    subscription_id=subscription_id_dev,
     location=location,
     opts=pulumi.ResourceOptions(provider=provider_dev),
 ).build()
@@ -32,6 +33,7 @@ DevDeployment(
 ProdDeployment(
     project_name=project_name,
     rg_name=prod_resource_group_name,
+    subscription_id=subscription_id_prod,
     location=location,
     opts=pulumi.ResourceOptions(provider=provider_prod),
 ).build()

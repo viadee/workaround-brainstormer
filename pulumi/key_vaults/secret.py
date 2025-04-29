@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union
 import pulumi_azure_native as azure_native
 import pulumi
 from key_vaults.key_vault import KeyVault
@@ -7,18 +7,11 @@ from key_vaults.key_vault import KeyVault
 def create_secret(
     resource_group_name: str,
     secret_name: str,
-    key: str,
+    key: Union[str, pulumi.Output[str]],
     environment: str,
     keyvault: KeyVault,
     opts: Optional[pulumi.ResourceOptions] = None,
 ):
-    combined_opts = pulumi.ResourceOptions.merge(
-        opts,
-        pulumi.ResourceOptions(
-            ignore_changes=["properties.value", "properties.content_type"]
-        ),
-    )
-
     secret = azure_native.keyvault.Secret(
         f"secret-{secret_name}-{environment}",
         secret_name=secret_name,
@@ -28,7 +21,7 @@ def create_secret(
             value=key,
             content_type="text/plain",
         ),
-        opts=combined_opts,
+        opts=opts,
     )
 
     return secret
