@@ -89,7 +89,7 @@
             </li>
         </ul>
         </div>
-        <a class="cta-button-small" target="_blank" href="/brainstormer">Jetzt Workarounds finden</a>
+        
     </div>
     <div  id="landingpage-table-of-contents-container">
         <section class="intro">
@@ -106,14 +106,15 @@
             <h2 id="Pizzeria Beispiel">Beispiel Coffee Coders Inc.</h2>
             <p>
                 Input ist eine Beschreibung eines Geschäftsprozesses (hier start vereinfacht - es könnte auch ein BPMN-Diagramm sein): 
-                <pre>... wir verwandeln Kaffee und Kundenanforderungen in Lösungen.</pre>
-                Output sind Workaround-Stories die in diesem Geschäftsprozess plausibel sind:
+                <pre> > ... wir verwandeln Kaffee und Kundenanforderungen in Lösungen.</pre>
+                Als Output erhalten wir <i>Workaround-Stories</i> die in diesem Geschäftsprozess plausibel sind:
                 <ol>
                     <li>Als Software-Entwickler bin ich unproduktiv, falls die Kaffeemaschine kaputt ist. Ich habe daher Instant-Kaffee in meinem Schreibtisch bevorratet, um mein Koffein-Level abzusichern. </li>
                     <li>Als Scrum-Masterin sind meine Meetings unproduktiv, wenn sich täglich eine Schlange an der Kaffeemaschine bildet. Ich bereite daher Filterkaffee für alle vor, um die Wartezeit zu verringern.</li>
-                    <li>Als Software-Entwicklerin bin ich unkonzentriert, falls die Kaffeemaschine ausfällt. Ich weiche daher auf Tee aus, um meine Deadlines zu erreichen.</li>                     
+                    <li>Als Software-Entwicklerin bin ich unkonzentriert, falls die Kaffeemaschine ausfällt. Ich weiche daher auf Tee aus, um meine Deadlines zu erreichen.</li>
+                    <li>Als Software-Architektin bin ich unkonzentriert, falls die Kaffeemaschine ausfällt oder die Schlange vor der Maschine zu lang ist. Ich bleibe daher lieber im Homeoffice, um unabhängig von der Kaffeemaschine und der Warteschlange zu sein.</li>
                 </ol>
-
+                Wir bekommen einen Überblick über potenziell beteiligte Personen und deren "Misfits", also Sorgen und Herausforderungen und insb. externe Rahmenbedingungen, die sie dazu bringen vom Sollprozess abzuweichen. Einige davon sind nicht wünschenswert (Software-Architektin nur im Home-Office) andere können Keimzelle eines angepassten Soll-Prozesses sein (die strategische Instant-Kaffee-Reserve). 
             </p>
         </section>
         <section class="research-context">
@@ -123,8 +124,9 @@
             <p>Das Projekt zielt auf neue Methoden, Werkzeuge und Organisationskonzepte, um diese Workarounds zu erkennen, zu bewerten und in Prozessinnovationen umzusetzen.</p>
             <h3 id="Wie Workarounds finden?">Wie Workarounds finden?</h3>
             <p>Trotz ihres potenziellen Werts bleiben Workarounds häufig in den Arbeitsabläufen des Unternehmens verborgen oder unentdeckt. In der Regel sind sie undokumentiert, informell und entgehen der Aufmerksamkeit der Prozessverantwortlichen.</p>
-            <p>Mit geeigneter Datengrundlage können solche Prozessveränderungen per Process Mining gefunden werden – oft gibt es eine solche Grundlage aber nicht, da Workarounds außerhalb von IT-Systemen auftreten oder informelle Kommunikationskanäle nutzen. Die Identifizierung dieser latenten Umgehungslösungen stellt deshalb eine große Herausforderung dar. So kann ein Mitarbeiter beispielsweise persönliche Messaging-Apps verwenden. Mitarbeiterbefragungen sind zwar wertvoll, liefern aber ein unvollständiges Bild, da Mitarbeitende oft nicht bereit sind, ihr nicht standardgemäßes Verhalten offenzulegen (sei es aus Angst, Zeitmangel oder fehlender Initiative).</p>
+            <p>Mit geeigneter Datengrundlage können solche Prozessveränderungen per Process Mining gefunden werden – oft gibt es eine solche Grundlage aber nicht, da Workarounds außerhalb von IT-Systemen auftreten oder informelle Kommunikationskanäle nutzen. Die Identifizierung dieser latenten Umgehungslösungen stellt deshalb eine große Herausforderung dar. So kann ein Mitarbeiter beispielsweise persönliche Messaging-Apps verwenden. Mitarbeiterbefragungen sind zwar wertvoll, liefern aber ein unvollständiges Bild, da Mitarbeitende oft nicht bereit sind, ihr nicht-standardgemäßes Verhalten offenzulegen (sei es aus Angst, Zeitmangel oder fehlender Initiative).</p>
             <p>Können moderne LLMs vielleicht helfen, für einen Geschäftsprozess gezielt Hypothesen zu bilden – abzuschätzen, welche Workarounds es vermutlich geben wird?</p>
+
             <h3 id="Lösungsansatz: Latente Workarounds und erste Erfahrungen">Lösungsansatz: Latente Workarounds und erste Erfahrungen</h3>
             <p>Erstaunlich oft gelingt das. Der Workaround Brainstormer ist ein Werkzeug, das diesen kreativen Prozess leicht und interaktiv macht.</p>
             <p>Anhand einer textuellen Prozessbeschreibung oder eines BPMN-Diagramms bietet er die Möglichkeit, individuelle und domänenspezifische Workarounds mit nur wenigen Mausklicks zu generieren. Der Ansatz ist hierbei wie folgt: Die Prozessbeschreibung und (optional) weiterer Kontext werden in einen speziellen Prompt eingefügt, welcher das LLM instruiert, systematisch Workarounds zu identifizieren. Der Prompt enthält zusätzlich mehrere Workaround-Beispiele (few-shot-examples), um die Ergebnisse des LLM zu verbessern. Diese Beispiele können mithilfe eines RAG-Systems, welches auf eine Wissensdatenbank mit knapp 83 von Unternehmen validierten Workarounds zugreift, erweitert werden.</p>
@@ -133,7 +135,7 @@
             <p>Folgend sollte der Workaround Brainstormer nicht als isoliertes Tool, sondern als ein Kreativitätswerkzeug betrachtet werden, welches in Verbesserungsinitiativen wertvolle Impulse gibt, die anschließend in Expertengruppen bewertet und diskutiert werden.</p>
         </section>
         <section class="example-usage">
-            <h2 id="Beispielhafte Nutzung des Workaround Brainstormers zur Verbesserung der Kundenzufriedenheit in einer Pizzeria">Beispielhafte Nutzung des Workaround Brainstormers zur Verbesserung der Kundenzufriedenheit in einer Pizzeria</h2>
+            <h2 id="Beispielhafte Nutzungsszenarien">Beispielhafte Nutzungsszenarien</h2>
             Wir sehen vor allem zwei Nutzungsszeanarien für den Workaround Brainstormer:
             <ol>
                 <li>
@@ -147,7 +149,7 @@
         <section class="outlook">
             <h2 id="Ausblick – Weiterentwicklung des Brainstormers">Ausblick – Weiterentwicklung des Brainstormers</h2>
             <p>Der Brainstormer ist ein Ergebnis der in den letzten drei Jahren im Rahmen des Projektes Change.WorkAROUND geleisteten Forschungsarbeit. Da allerdings die Forschung noch nicht abgeschlossen ist und bei der Weiterentwicklung des Brainstormers noch viel Gestaltungsspielraum besteht, möchten wir für die Nutzung des Tools einschließlich für das Geben von Feedback appellieren. Mit Ihrem Feedback (Feedbacklink) können Sie uns helfen, das Werkzeug weiter zu verfeinern und im Idealfall mehr Prozessinnovationen zu schaffen.</p>
-            
+
             <p>Ein zentraler Baustein des Werkzeugs ist unsere Wissensdatenbank von in Geschäftsprozessen beobachteten Workarounds und die Erkenntnis, dass ähnliche Workarounds unternehmensübergreifend immer wieder auftauchen. Diese Sammlung von Workarounds darf daher gern wachsen. Wir freuen uns über Ihre Workarounds – gern als Beitrag im <a href="https://github.com/viadee/workaround-brainstormer/issues">GitHub</a> oder sprechen Sie uns an: Frank.Koehne@viadee.de / <a href="https://www.linkedin.com/in/frank-köhne-9b586395">LinkedIn</a>.</p>
         </section>
         <section class="user-guide">
@@ -174,20 +176,27 @@
         </section>
         <section class="faq">
             <h2 id="FAQ">FAQ</h2>
-            <h3 id="Was genau ist ein Workaround?">Was genau ist mit Workaround gemeint?</h3>
+            <h3 id="Was genau ist ein Workaround?">Was genau ist mit <i>Workaround gemeint?</i></h3>
             <p>
                 Ein Workaround ist wissenschaftlich gesehen eine zielgerichtete Anpassung, Improvisation oder sonstige Änderung eines eines bestehenden Arbeitssystems, um Hindernisse, Ausnahmen [..] zu überwinden oder zu umgehen [..] die seine Teilnehmer daran hindern, ein gewünschtes Maß an Effizienz, Effektivität oder andere organisatorische oder persönliche Ziele zu erreichen (<a href="https://aisel.aisnet.org/cais/vol34/iss1/55/">Alter, 2014</a>).
             <br/>
                 Workarounds sind damit nicht per se schlecht, sondern können sich auch als kreative Lösungen zur Verbesserung von Prozessen oder zur Erreichung von Zielen betrachtet herausstellen. Wir empfehlen daher, die Identifikation und die Bewertung von Workarounds voneinander zu trennen. 
             </p>
-            <h3 id="Was sind Workaround-Storys?">Was sind Workaround-Storys?</h3>
-            <p>Workaround-Storys fassen die vier Schlüsselelemente <i>Actor</i>, <i>Context</i>, <i>Challenge or Misfit</i>, <i>Adaptive Action</i> sowie <i>Intended Outcome</i> in einer einzigen, kohärenten Aussage zusammen und vermitteln gleichzeitig ausreichend Informationen für Analysezwecke. Dies ermöglicht den effizienten Austausch von Workarounds zwischen Mensch und Maschine (LLMs).</p>
+            <h3 id="Was sind Workaround-Storys?">Was sind <i>Workaround-Storys?</i></h3>
+            <p>Workaround-Storys fassen (angelehnt an das bekannt User-Story-Format) die Schlüsselelemente <i>Actor</i>, <i>Context</i>, <i>Challenge or Misfit</i>, <i>Adaptive Action</i> sowie <i>Intended Outcome</i> in einer einzigen, kohärenten Aussage zusammen und vermitteln gleichzeitig ausreichend Informationen für Analysezwecke. Dies ermöglicht den einfachen Austausch von Workarounds und die Ähnlichkeitssuche per LLM.</p>
             
             <h3 id="Wie gut sind die Ergebnisse?">Wie gut sind die Ergebnisse?</h3>
             <p>
             Hier ist wichtig zu verstehen, was ein gutes Ergebnis ist. Der Workaround-Brainstormer erzeugt <i>plausible</i> Hypothesen. Das bedeutet, dass die generierten Workarounds vermutlich im beschriebenen Geschäftsprozess <b>existieren</b>. Das sagt Nichts darüber aus, ob sie nützliche Prozessinnovationen darstellen (Meistern neuer Herausforderungen) oder aus unterschiedlichsten Gründen nicht wünschenswert sind (Schatten-IT, Compliance-Verletzungen etc.). Das zu entscheiden wäre der nächste (manuelle) Prozessschritt.<br/>
             In diesem Sinne sind die Ergebnisse gut, denn für detailliert beschrieben Prozesse können Menschen i.A. die generierten Vorschläge nicht von menschlichen Vorschlägen unterscheiden.
             </p>
+            
+            <h3 id="Wie genau muss ich den Prozess beschreiben?">Wie genau muss ich den Prozess beschreiben?</h3>
+            <p>
+            Das ist flexibel und hier wird die Stärke des LLM-Ansatzes sichtbar. Oft sind mit wenigen Sätzen schon gute Ergebnisse zu erzielen. Je mehr Details Sie angeben, desto besser werden die Ergebnisse. Das LLM ist in der Lage, auch BPMN-Diagramme zu verarbeiten. Diese werden dann in Text umgewandelt und als Prozessbeschreibung verwendet. Auch mit Bildern von Prozessen oder Arbeitsplätzen oder einer Kombination dieser Elemente haben wir gute Ergebnisse bekommen.<br/>
+            Eine Erkenntnis aus dem Projekt ist, dass Workarounds häufig auf einem Detail-Level stattfinden, das in BPMN-Diagrammen und formalen Prozessbeschreibungen nicht abgebildet ist (bspw. "Sicherheitshandschuhe vergessen"). Daher ist es sinnvoll, auch die Prozessbeschreibung zu verwenden, um sehr konkrete Arbeitssituationen und Arbeitsplätze zu verdeutlichen. 
+            </p>
+
         </section>
         </div>
     </div>
