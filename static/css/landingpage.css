@@ -77,7 +77,7 @@
 }
 
 .landingpage-sections{
-    margin-left:230px;
+    margin-left:300px;
 }
 .landingpage-container{
     position:relative;
@@ -103,7 +103,7 @@ body {
 }
 
 .landingpage-table-of-contents-container{
-    min-width:230px;
+    min-width:300px;
     position:fixed;
 }
 .toc-ul-nested{
@@ -273,4 +273,21 @@ h1, h2, h3 {
 .content {
     margin-left: 260px;
     padding: 2rem;
+}
+
+.logo-container{
+    display:flex;
+    align-items: center;
+    gap:0.5rem;
+    text-decoration:none;
+}
+
+.logo-title{
+    font-size:xx-large;
+    color:#01215c;
+    font-weight:bold
+}
+
+.logo-ai{
+    color:#999999
 }
