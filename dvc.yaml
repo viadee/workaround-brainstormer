@@ -1,3 +1,12 @@
 metrics:
-  - metrics/llm_metrics.csv
-    type:csv
+- metrics/llm_metrics.csv type:csv
+- dvclive/metrics.json
+plots:
+- dvclive/plots/metrics:
+    x: step
+- used_tokens vs step:
+      template: simple
+      x: used_tokens
+      y:
+          dvclive/plots/metrics/used_tokens.tsv: step
+

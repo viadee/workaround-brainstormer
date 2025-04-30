@@ -2,11 +2,15 @@ import pytest
 import pandas as pd
 from datetime import datetime
 from app import create_app
+from dvclive import Live
 
 # Function to log metric
 def log_metric(workarounds):
     timestamp = datetime.now().isoformat() + "Z"  # ISO 8601 format
     data = {'timestamp': timestamp, 'workarounds': workarounds, "used_tokens":800}
+
+    with Live() as live:
+        live.log_metric("used_tokens",800)
     
     # Append to CSV file
     df = pd.DataFrame([data])
