@@ -15,10 +15,13 @@ from .utils import save_uploaded_file, process_image, format_workarounds_tree
 from .llm import LLMService, ProcessContext, CostLimitExceeded, RAGService
 import logging
 
+from .limiter import limiter
+
 # Create blueprints
 auth_bp = Blueprint('auth', __name__)
 main_bp = Blueprint('main', __name__)
 info_bp = Blueprint('info', __name__)
+
 
 def add_timing_headers(response, **kwargs):
     """Add timing information to response headers."""
@@ -84,7 +87,7 @@ def setCredentials():
 
 
 # Main routes (including API endpoints)
-@main_bp.route('/')
+@info_bp.route('/')
 def index():
     """Render main application page."""
     current_app.logger.info("Rendering index for: %s", session.get('username'))
@@ -95,6 +98,7 @@ def index():
     )
 
 @main_bp.route('/brainstormer')
+@limiter.limit(override_defaults=True, limit_value="300 per day")
 @login_required
 def brainstormer():
     """Render main application page."""
@@ -109,6 +113,7 @@ def brainstormer():
 
 
 @main_bp.route('/admin', methods=['POST', 'GET'])
+@limiter.limit(override_defaults=True, limit_value="300 per day")
 @login_required
 @admin_required
 def admin():

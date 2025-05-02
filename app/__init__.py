@@ -4,18 +4,23 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 from typing import Optional
-
+from .limiter import limiter
 # App version
 APP_VERSION = '0.3.1'
 
 # Define project root directory
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+
+
 def create_app(testing: bool = False) -> Flask:
     """Create and configure the Flask application."""
     app = Flask(__name__, 
                 template_folder='../templates',  
                 static_folder='../static')       
+    
+    
+    limiter.init_app(app)
 
     # Load configuration
     app.secret_key = os.getenv('APPSECRETKEY')
@@ -44,12 +49,17 @@ def create_app(testing: bool = False) -> Flask:
     # Configure logging
     if not testing:
         configure_logging(app)
-
+    
     # Register blueprints
     from .routes import auth_bp, main_bp, info_bp
+    
     app.register_blueprint(auth_bp)
     app.register_blueprint(main_bp)
     app.register_blueprint(info_bp)
+    limiter.limit(override_defaults=True, limit_value="2 per second;2000/hour")(main_bp)
+
+
+    
 
     return app
 

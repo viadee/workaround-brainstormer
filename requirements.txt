@@ -1,5 +1,6 @@
 aiohttp
 Flask
+Flask-Limiter
 langdetect
 numpy
 openai
