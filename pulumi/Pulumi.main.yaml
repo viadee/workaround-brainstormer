@@ -6,6 +6,8 @@ config:
   brainstormer:rg_name_dev: change-work-around-dev
   brainstormer:rg_name_prod: change-work-around-prod
   brainstormer:AZURE-API-URL: https://cwa-azure-openai.openai.azure.com/
+  brainstormer:AZURE_OPENAI_EMBEDDING_MODEL: text-embedding-3-small
+  brainstormer:AZURE_OPENAI_CHAT_MODEL: gpt-4.1-mini
   brainstormer:APP-SECRET-KEY:
     secure: v1:1YU2t3uhyX3J0fNi:STwX2YmV7tbW+FSEm5RR8s0i/GVqgP1fQfTt+s3MO2I9GJosCzhDY0YxjilnXAL066RDcfQZ
   brainstormer:WA-PASSWORD-HASH:

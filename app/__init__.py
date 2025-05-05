@@ -34,7 +34,11 @@ def create_app(testing: bool = False) -> Flask:
         AZURE_API_KEY=os.getenv('AZURE_OPENAI_API_KEY'),
         AZURE_API_VERSION=os.getenv('AZURE_OPENAI_API_VERSION', '2023-12-01-preview'),
         AZURE_API_URL=os.getenv('AZURE_OPENAI_API_URL'),
+        AZURE_CHAT_MODEL=os.getenv('AZURE_OPENAI_CHAT_MODEL'),
+        AZURE_EMBEDDING_MODEL=os.getenv('AZURE_OPENAI_EMBEDDING_MODEL'),
+
         DAILY_COST_THRESHOLD=float(os.getenv('DAILYCOSTTHRESHOLD', '10.0')),
+        
         # Q-Drant settings
         QDRANT_URL = os.getenv('QDRANT_URL'),
         QDRANT_WORKAROUNDS_READ_KEY = os.getenv('QDRANT_WORKAROUNDS_READ_KEY'),

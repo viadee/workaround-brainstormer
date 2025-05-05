@@ -10,7 +10,7 @@ load_dotenv(find_dotenv())
 
 # Initialize AzureOpenAIEmbeddings
 embeddings = AzureOpenAIEmbeddings(
-    model="text-embedding-3-small",
+    model=os.getenv('AZURE_OPENAI_EMBEDDING_MODEL'),
     api_key=os.getenv('AZURE_OPENAI_API_KEY'),
     azure_endpoint=os.getenv('AZURE_OPENAI_API_URL'),
     openai_api_version=os.getenv('AZURE_OPENAI_API_VERSION')

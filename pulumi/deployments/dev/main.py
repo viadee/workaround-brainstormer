@@ -41,7 +41,8 @@ class DevDeployment:
         wa_username = config.require("WA-USERNAME")
         admin_password_hash = config.require_secret("ADMIN-PASSWORD-HASH")
         daily_cost_threshold = config.require("DAILY-COST-THRESHOLD")
-
+        chat_model = config.require("AZURE_OPENAI_CHAT_MODEL")
+        embedding_model = config.require("AZURE_OPENAI_EMBEDDING_MODEL")
         qdrant_url = config.require("QDRANT-URL")
         qdrant_workarounds_read_key = config.require_secret(
             "QDRANT-WORKAROUNDS-READ-KEY"
@@ -235,6 +236,14 @@ class DevDeployment:
             azure_native.app.v20230501.EnvironmentVarArgs(
                 name="AZURE_OPENAI_API_VERSION",
                 value=openai_version if openai_version else "v1",
+            ),
+            azure_native.app.v20230501.EnvironmentVarArgs(
+                name="AZURE_OPENAI_CHAT_MODEL",
+                value=chat_model,
+            ),
+            azure_native.app.v20230501.EnvironmentVarArgs(
+                name="AZURE_OPENAI_EMBEDDING_MODEL",
+                value=embedding_model,
             ),
         ]
 
