@@ -16,23 +16,28 @@ Der <i>Workaround Brainstormer</i> kann Process Owner:innen oder anderen Stakeho
 </br>
 Um das Tool auszuprobieren, können Sie auf den folgenden Button klicken. 
                 
-<a class="cta-button" target="_blank" href="/brainstormer"><span class='btn btn-secondary'>Jetzt Workarounds finden</span></a>
+<a class="cta-button btn btn-secondary" target="_blank" href="/brainstormer">Jetzt Workarounds finden</a>
 
 ## Beispiel Coffee Coders Inc.
 
 
 Input ist eine Beschreibung eines Geschäftsprozesses (hier start vereinfacht - es könnte auch ein BPMN-Diagramm sein)
 
+:::{.callout-note title="Vereinfachter Prozess"}
 <pre> > ... wir verwandeln Kaffee und Kundenanforderungen in Lösungen.</pre>
+
+:::
 
 Als Output erhalten wir <i>Workaround-Stories</i> die in diesem Geschäftsprozess plausibel sind:
 
+:::{.callout-tip title="Workaround-Stories"}
 1.  Als Software-Entwickler bin ich unproduktiv, falls die Kaffeemaschine kaputt ist. Ich habe daher Instant-Kaffee in meinem Schreibtisch bevorratet, um mein Koffein-Level abzusichern.
 2. Als Scrum-Masterin sind meine Meetings unproduktiv, wenn sich täglich eine Schlange an der Kaffeemaschine bildet. Ich bereite daher Filterkaffee für alle vor, um die Wartezeit zu verringern.
 3. Als Software-Entwicklerin bin ich unkonzentriert, falls die Kaffeemaschine ausfällt. Ich weiche daher auf Tee aus, um meine Deadlines zu erreichen.
 4. Als Software-Architektin bin ich unkonzentriert, falls die Kaffeemaschine ausfällt oder die Schlange vor der Maschine zu lang ist. Ich bleibe daher lieber im Homeoffice, um unabhängig von der Kaffeemaschine und der Warteschlange zu sein.
-
+:::
 Wir bekommen einen Überblick über potenziell beteiligte Personen und deren "Misfits", also Sorgen und Herausforderungen und insb. externe Rahmenbedingungen, die sie dazu bringen vom Sollprozess abzuweichen. Einige davon sind nicht wünschenswert (Software-Architektin nur im Home-Office) andere können Keimzelle eines angepassten Soll-Prozesses sein (die strategische Instant-Kaffee-Reserve). 
+
 
 ## Forschungskontext
 
@@ -70,7 +75,7 @@ Wir sehen vor allem zwei Nutzungsszeanarien für den Workaround Brainstormer:
 
 Der Brainstormer ist ein Ergebnis der in den letzten drei Jahren im Rahmen des Projektes Change.WorkAROUND geleisteten Forschungsarbeit. Da allerdings die Forschung noch nicht abgeschlossen ist und bei der Weiterentwicklung des Brainstormers noch viel Gestaltungsspielraum besteht, möchten wir für die Nutzung des Tools einschließlich für das Geben von Feedback appellieren. Mit Ihrem Feedback (Feedbacklink) können Sie uns helfen, das Werkzeug weiter zu verfeinern und im Idealfall mehr Prozessinnovationen zu schaffen.
 
-Ein zentraler Baustein des Werkzeugs ist unsere Wissensdatenbank von in Geschäftsprozessen beobachteten Workarounds und die Erkenntnis, dass ähnliche Workarounds unternehmensübergreifend immer wieder auftauchen. Diese Sammlung von Workarounds darf daher gern wachsen. Wir freuen uns über Ihre Workarounds – gern als Beitrag im <a href="https://github.com/viadee/workaround-brainstormer/issues">GitHub</a> oder sprechen Sie uns an: Frank.Koehne@viadee.de / <a href="https://www.linkedin.com/in/frank-köhne-9b586395">LinkedIn</a>.
+Ein zentraler Baustein des Werkzeugs ist unsere Wissensdatenbank von in Geschäftsprozessen beobachteten Workarounds und die Erkenntnis, dass ähnliche Workarounds unternehmensübergreifend immer wieder auftauchen. Diese Sammlung von Workarounds darf daher gern wachsen. Wir freuen uns über Ihre Workarounds – gern als Beitrag im <a target="__blank" href="https://github.com/viadee/workaround-brainstormer/issues">GitHub</a> oder sprechen Sie uns an: Frank.Koehne@viadee.de / <a href="https://www.linkedin.com/in/frank-köhne-9b586395" target="__blank">LinkedIn</a>.
 
 ## Benutzerhandbuch
 
@@ -107,24 +112,28 @@ Der Brainstormer bietet die Möglichkeit, basierend auf der Prozessbeschreibung,
 
 ## FAQ
 
+:::{.callout-tip collapse="true"}
 ### Was genau ist mit Workaround gemeint?
 
 Ein Workaround ist wissenschaftlich gesehen eine zielgerichtete Anpassung, Improvisation oder sonstige Änderung eines eines bestehenden Arbeitssystems, um Hindernisse, Ausnahmen [..] zu überwinden oder zu umgehen [..] die seine Teilnehmer daran hindern, ein gewünschtes Maß an Effizienz, Effektivität oder andere organisatorische oder persönliche Ziele zu erreichen (<a href="https://aisel.aisnet.org/cais/vol34/iss1/55/">Alter, 2014</a>).
 
 Workarounds sind damit nicht per se schlecht, sondern können sich auch als kreative Lösungen zur Verbesserung von Prozessen oder zur Erreichung von Zielen betrachtet herausstellen. Wir empfehlen daher, die Identifikation und die Bewertung von Workarounds voneinander zu trennen. 
+:::
 
+:::{.callout-tip collapse="true"}
 ### Was sind Workaround-Storys?
 
 Workaround-Storys fassen (angelehnt an das bekannt User-Story-Format) die Schlüsselelemente <i>Actor</i>, <i>Context</i>, <i>Challenge or Misfit</i>, <i>Adaptive Action</i> sowie <i>Intended Outcome</i> in einer einzigen, kohärenten Aussage zusammen und vermitteln gleichzeitig ausreichend Informationen für Analysezwecke. Dies ermöglicht den einfachen Austausch von Workarounds und die Ähnlichkeitssuche per LLM.
-
+:::
+:::{.callout-tip collapse="true"}
 ### Wie gut sind die Ergebnisse?
 
 Hier ist wichtig zu verstehen, was ein gutes Ergebnis ist. Der Workaround-Brainstormer erzeugt <i>plausible</i> Hypothesen. Das bedeutet, dass die generierten Workarounds vermutlich im beschriebenen Geschäftsprozess <b>existieren</b>. Das sagt Nichts darüber aus, ob sie nützliche Prozessinnovationen darstellen (Meistern neuer Herausforderungen) oder aus unterschiedlichsten Gründen nicht wünschenswert sind (Schatten-IT, Compliance-Verletzungen etc.). Das zu entscheiden wäre der nächste (manuelle) Prozessschritt.<br/>
 In diesem Sinne sind die Ergebnisse gut, denn für detailliert beschrieben Prozesse können Menschen i.A. die generierten Vorschläge nicht von menschlichen Vorschlägen unterscheiden.
-
-
+:::
+:::{.callout-tip collapse="true"}
 ### Wie genau muss ich den Prozess beschreiben?
 
 Das ist flexibel und hier wird die Stärke des LLM-Ansatzes sichtbar. Oft sind mit wenigen Sätzen schon gute Ergebnisse zu erzielen. Je mehr Details Sie angeben, desto besser werden die Ergebnisse. Das LLM ist in der Lage, auch BPMN-Diagramme zu verarbeiten. Diese werden dann in Text umgewandelt und als Prozessbeschreibung verwendet. Auch mit Bildern von Prozessen oder Arbeitsplätzen oder einer Kombination dieser Elemente haben wir gute Ergebnisse bekommen.<br/>
 Eine Erkenntnis aus dem Projekt ist, dass Workarounds häufig auf einem Detail-Level stattfinden, das in BPMN-Diagrammen und formalen Prozessbeschreibungen nicht abgebildet ist (bspw. "Sicherheitshandschuhe vergessen"). Daher ist es sinnvoll, auch die Prozessbeschreibung zu verwenden, um sehr konkrete Arbeitssituationen und Arbeitsplätze zu verdeutlichen. 
-
+:::

@@ -9,7 +9,7 @@ website:
         href: "/"
     right:
       - href: /brainstormer
-        text: "<span class='btn btn-secondary'>Jetzt Workarounds finden</span>"
+        text: "<a class='btn btn-secondary' style='margin-bottom: 12px' target='_blank' href='/brainstormer'>Jetzt Workarounds finden</a>"
         
 format:
   html:
