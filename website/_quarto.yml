@@ -2,7 +2,6 @@ project:
   type: website
 
 website:
-  
   navbar:
     left:
       - text: "![](assets/Logo.svg){height=2em}<b class='logo-title'>Br<b class='logo-ai'>AI</b>nstormer</b>"
@@ -11,8 +10,6 @@ website:
       - href: /brainstormer
         text: "<span class='btn btn-primary'>Jetzt Workarounds finden</span>"
         
-
-
 format:
   html:
     theme:
