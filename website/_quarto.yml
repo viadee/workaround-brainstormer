@@ -5,7 +5,7 @@ website:
   favicon: assets/favicon.ico
   navbar:
     left:
-      - text: "![](assets/Logo.svg){height=2em}<b class='logo-title'>Br<b class='logo-ai'>AI</b>nstormer</b>"
+      - text: "<b class='logo-title'> ![](assets/Logo.svg){height=2em}Br<b class='logo-ai'>AI</b>nstormer</b>"
         href: "/"
     right:
       - href: /brainstormer
