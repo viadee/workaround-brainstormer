@@ -38,5 +38,8 @@ PROCESS_DESCRIPTIONS=[
     which evaluates the application against established criteria. If approved, the loan terms are drafted and presented to the customer for review. 
     Upon agreement, the paperwork is processed, and the loan is funded. If the application is denied, 
     the officer communicates the reasons and suggests alternative financing options or improvements for future applications.
+    """,
+    """
+    As a nurse in a busy hospital I apply care and medications and take measurements when visiting patients. Then I enter them into our IT system right away.
     """
 ]

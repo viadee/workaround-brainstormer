@@ -32,8 +32,6 @@ def assess_workarounds(app_client):
             workaround_list = workarounds_list_string
         )
 
-        print(prompt)
-
         assessment = client.beta.chat.completions.parse(
             model="gpt-4.1-mini",
             messages=[{"role": "user", "content": prompt}],
