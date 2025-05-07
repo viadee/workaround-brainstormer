@@ -9,10 +9,12 @@ website:
         href: "/"
     right:
       - href: /brainstormer
-        text: "<span class='btn btn-primary'>Jetzt Workarounds finden</span>"
+        text: "<span class='btn btn-secondary'>Jetzt Workarounds finden</span>"
         
 format:
   html:
+    grid:
+              body-width: 1400px
     theme:
       - litera
       - theme.custom.scss

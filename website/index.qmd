@@ -16,7 +16,7 @@ Der <i>Workaround Brainstormer</i> kann Process Owner:innen oder anderen Stakeho
 </br>
 Um das Tool auszuprobieren, können Sie auf den folgenden Button klicken. 
                 
-<a class="cta-button" target="_blank" href="/brainstormer">Jetzt Workarounds finden</a>
+<a class="cta-button" target="_blank" href="/brainstormer"><span class='btn btn-secondary'>Jetzt Workarounds finden</span></a>
 
 ## Beispiel Coffee Coders Inc.
 
