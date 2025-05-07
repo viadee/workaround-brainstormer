@@ -2,99 +2,163 @@
     "processes": [
         {
             "id": 0,
-            "description": "\n    An online retail business receives customer orders through its website. Once an order is confirmed, the system automatically processes payments through a secure gateway. \n    The next step involves checking the inventory levels for the ordered items. If the items are in stock, a pick list is generated for the warehouse team, who then package the items for shipping. \n    The system notifies the shipping carrier to arrange for pickup or generates a shipping label for direct drop-off. \n    Finally, the customer receives an automated confirmation email with tracking information. \n    Throughout this process, any discrepancies, such as payment failures or inventory discrepancies, must be resolved swiftly to ensure customer satisfaction.\n    ",
+            "description": "\n    In a healthcare facility, the patient scheduling process begins when a patient contacts the reception desk to book an appointment with a specialist. \n    The receptionist verifies the patient's information, including insurance details and medical history, \n    before checking the specialist's availability on the electronic health record (EHR) system. If a suitable time is found, \n    the appointment is set, and the patient is informed about pre-appointment procedures, such as fasting or medication adjustments. \n    Confirmation calls or texts are sent to the patient 24 hours before the appointment. If the patient needs to reschedule or cancel, \n    the receptionist updates the appointment in the system and offers alternative dates.\n    ",
             "generated workarounds": [
                 {
-                    "workaround": "As a customer service representative, when waiting for approvals delays order processing, I prepare all necessary documentation in advance to expedite approvals and reduce waiting times.",
-                    "assessment": false,
-                    "assessment_explaination": "The described process does not mention order approval delays or a related approval process; hence preparing documentation for approvals is not relevant to the given online retail order fulfillment domain."
-                },
-                {
-                    "workaround": "As a warehouse worker, when equipment shortages slow down packing, I use modular packing techniques with available materials to maintain shipment schedules despite limited resources.",
+                    "workaround": "As a receptionist, when verification of insurance and medical history takes too long during peak hours, I pre-fill common patient information on paper forms while on the call to speed up data entry into the EHR system.",
                     "assessment": true,
-                    "assessment_explaination": "Warehouse packing is a key step in the process. Using modular packing techniques during equipment shortages directly relates to maintaining shipment schedules within the warehouse operations of the online retail business."
+                    "assessment_explaination": "Pre-filling common patient information on paper forms to speed up data entry addresses delays in verifying insurance and medical history, which is part of the initial patient information verification step described in the process."
                 },
                 {
-                    "workaround": "As a team leader, when strict shift schedules reduce flexibility, I coordinate informal shift swaps among team members to cover absences and maintain productivity without official changes.",
+                    "workaround": "As a receptionist, when the specialist's schedule is fully booked and appointment availability is limited, I keep a personal handwritten list of cancellations or reschedule requests to quickly offer those slots to other patients.",
                     "assessment": true,
-                    "assessment_explaination": "Shift scheduling and coverage affect warehouse and operational teams in an online retail business. Coordinating informal shift swaps to maintain productivity is relevant to ensuring smooth order fulfillment."
+                    "assessment_explaination": "Maintaining a personal handwritten list of cancellations or reschedule requests helps manage appointment availability and quickly offer slots, directly relating to the scheduling and rescheduling aspects of the patient's appointment booking process."
                 },
                 {
-                    "workaround": "As a data entry clerk, when rigid input forms cause repeated errors, I create quick reference checklists to ensure data accuracy and speed up the entry process.",
-                    "assessment": false,
-                    "assessment_explaination": "Data entry forms and clerks are not mentioned in the process, and the process mainly focuses on automated steps with the system. Thus, improving data entry by checklists is not directly related to the described process."
+                    "workaround": "As a receptionist, when patients seem confused about pre-appointment instructions, I create and hand out simple printed cards summarizing key steps to reduce calls and no-shows related to preparation errors.",
+                    "assessment": true,
+                    "assessment_explaination": "Creating and distributing printed cards summarizing pre-appointment instructions supports patient understanding and adherence, which is part of informing patients about pre-appointment procedures in the described process."
                 },
                 {
-                    "workaround": "As a field technician, when GPS restrictions prevent direct access to sites, I use historical maps and local contacts to find alternative routes and complete visits on time.",
-                    "assessment": false,
-                    "assessment_explaination": "Field technician activities and GPS restrictions are unrelated to the online retail order processing or shipping coordination described. Therefore, this workaround is outside of the given process domain."
+                    "workaround": "As a receptionist, when confirmation calls or texts do not reach the patient in time, I ask patients during booking for their preferred communication method and manual reminders to ensure better appointment adherence.",
+                    "assessment": true,
+                    "assessment_explaination": "Asking patients for their preferred communication method and manually reminding them supplements the confirmation calls or texts step, aiming to improve communication effectiveness and appointment adherence."
+                },
+                {
+                    "workaround": "As a receptionist, when multiple rescheduling requests overload the system, I use a shared spreadsheet offline to track alternative appointment dates as a backup for quick reference and faster updating of the EHR later.",
+                    "assessment": true,
+                    "assessment_explaination": "Using a shared offline spreadsheet to track alternative appointment dates when the system is overloaded relates to managing rescheduling requests efficiently, complementing the need to update appointments and offer alternatives."
                 }
             ],
-            "quality": 0.4
+            "quality": 1.0
         },
         {
             "id": 1,
-            "description": "\n    The onboarding process begins when a candidate accepts a job offer with the company. \n    The new employee is sent an onboarding packet with essential documents and instructions on how to set up their accounts for payroll and benefits. \n    On their first day, they attend orientation, which covers company policies, culture, and compliance training. \n    After orientation, the employee meets their assigned supervisor to receive job-specific training, including access to tools and resources necessary for their role. \n    The process may take several weeks with ongoing assessments to ensure the new employee feels integrated and properly trained.\n    ",
+            "description": "\n    In a retail environment, the inventory management process involves monitoring stock levels, tracking product sales, \n    and managing reordering procedures. Store managers use an inventory management system to conduct regular audits, \n    identifying slow-moving items and products nearing expiration. When stock levels fall below a set threshold, \n    the system automatically generates a purchase order to suppliers. Additionally, \n    the team coordinates with the e-commerce department to ensure online inventory reflects available stock in real-time. \n    Upon receiving new shipments, staff conduct checks to ensure the accurate quantity and quality of products, adjusting records as necessary.\n    ",
             "generated workarounds": [
                 {
-                    "workaround": "As a customer service representative, when technical system delays prevent timely order confirmation, I manually communicate order status updates via phone or email to keep customers informed and maintain satisfaction.",
-                    "assessment": false,
-                    "assessment_explaination": "The workaround involves manual communication in customer service to manage order confirmations, which is unrelated to employee onboarding or training processes."
+                    "workaround": "As a store manager, when the inventory management system lags in updating stock levels during peak sales periods, I manually record critical sales data on a shared spreadsheet to keep reorder decisions timely.",
+                    "assessment": true,
+                    "assessment_explaination": "This workaround directly addresses manual recording of sales data due to delays in the inventory management system updating stock levels, which is relevant to monitoring stock and managing reorder procedures in the retail inventory domain."
                 },
                 {
-                    "workaround": "As an inventory manager, when stock system constraints delay replenishment approvals, I keep a small buffer stock of critical items to avoid production interruptions and minimize downtime.",
-                    "assessment": false,
-                    "assessment_explaination": "This workaround relates to inventory management and stock replenishment, which falls outside the scope of onboarding and new employee integration."
+                    "workaround": "As a warehouse staff member, when shipment arrival times are uncertain and disrupt scheduled checks, I prioritise inspecting high-value or fast-moving items first to ensure key inventory accuracy.",
+                    "assessment": true,
+                    "assessment_explaination": "Prioritizing inspection of high-value or fast-moving items when shipment arrival times are uncertain aligns with receiving and checking shipments for accurate quantity and quality, fitting well within the described inventory management process."
                 },
                 {
-                    "workaround": "As a production supervisor, when rigid shift schedules cause workforce shortages during peak times, I informally swap shifts with colleagues to ensure adequate staffing without breaching official schedules.",
-                    "assessment": false,
-                    "assessment_explaination": "The shift swapping workaround is related to production workforce management and scheduling, not to the onboarding or employee training domain."
+                    "workaround": "As an e-commerce coordinator, when real-time stock updates are delayed due to system syncing issues, I communicate urgent stock shortages directly to the sales team to prevent overselling online.",
+                    "assessment": true,
+                    "assessment_explaination": "Communicating urgent stock shortages to prevent overselling online is closely related to coordinating with the e-commerce department to keep online inventory in sync with actual stock, thus relevant to the domain."
                 },
                 {
-                    "workaround": "As a quality inspector, when official documentation requires lengthy approval times, I flag urgent items for expedited review via direct communication to avoid production hold-ups.",
-                    "assessment": false,
-                    "assessment_explaination": "Expedited approval of quality documentation addresses production processes and approval delays, not employee onboarding or training."
+                    "workaround": "As a store associate, when automated purchase orders trigger too late due to slow audit cycles, I flag and recommend reorders for consistently slow-moving or near-expiry items before thresholds are hit to avoid stockouts or waste.",
+                    "assessment": true,
+                    "assessment_explaination": "Flagging and recommending reorders for slow-moving or near-expiry items before automated triggers occur corresponds with audit activities and managing reorder procedures to avoid stockouts or waste, which is integral to the process."
                 },
                 {
-                    "workaround": "As a warehouse operator, when barcode scanners are temporarily unavailable, I record item movements manually using paper logs to ensure continuous tracking of inventory and avoid discrepancies.",
-                    "assessment": false,
-                    "assessment_explaination": "Manual item tracking as a warehouse operator pertains to inventory and warehouse management, not onboarding or new hire processes."
+                    "workaround": "As a store manager, when official procedures require time-consuming quality checks that delay shelf restocking, I implement a quick preliminary assessment to immediately put acceptable items on the floor while completing detailed checks in parallel.",
+                    "assessment": true,
+                    "assessment_explaination": "Implementing quick preliminary quality checks to speed shelf restocking while completing detailed checks later relates to managing shipment receiving procedures and maintaining operational efficiency, fitting the specified domain."
                 }
             ],
-            "quality": 0.0
+            "quality": 1.0
         },
         {
             "id": 2,
-            "description": "\n    A software development project initiates with requirement gathering sessions involving stakeholders from various departments to understand the needs and scope of the project. \n    After requirements are documented, the team uses an Agile methodology to break the work into manageable sprints, typically lasting two weeks. \n    The development phase requires daily stand-up meetings to discuss progress and blockers. \n    After development, the software goes into a testing phase where quality assurance personnel identify bugs or issues. \n    Once testing is complete and necessary adjustments are made, the team deploys the software and monitors performance metrics to ensure stability in the production environment.\n    ",
+            "description": "\n    The employee performance review process in a corporate environment is a structured approach that occurs biannually. \n    Managers begin by gathering feedback from various sources, including direct reports, peers, and self-assessments. \n    Performance metrics and goals established during the previous review are reviewed and evaluated for progress and outcomes. \n    The manager schedules a one-on-one meeting with the employee to discuss findings, highlight strengths, and identify areas for improvement. \n    Development plans are established to help employees reach their career goals. After the meeting, \n    all notes and action items are documented in the HR management system for future reference and accountability.\n    ",
             "generated workarounds": [
                 {
-                    "workaround": "As an operations coordinator, when equipment availability causes delays, I rearrange task priorities dynamically to keep other work progressing and minimize downtime.",
-                    "assessment": false,
-                    "assessment_explaination": "This workaround pertains to operations coordination and equipment availability, which is outside the domain of software development project management described."
-                },
-                {
-                    "workaround": "As a customer service representative, when official response templates are too rigid for unique requests, I add personalized notes in follow-up emails to address specific client needs and improve satisfaction.",
-                    "assessment": false,
-                    "assessment_explaination": "This workaround relates to customer service interactions and adapting communication templates, which does not relate directly to the software development process given."
-                },
-                {
-                    "workaround": "As a frontline employee, when slow approval processes block urgent tasks, I escalate critical requests informally via direct messaging to supervisors to expedite decisions without breaking protocol.",
-                    "assessment": false,
-                    "assessment_explaination": "This workaround concerns informal escalation by frontline employees to expedite approvals, primarily operational and not specific to software development workflows."
-                },
-                {
-                    "workaround": "As a team lead, when resource constraints limit project progress, I temporarily redistribute tasks among available team members to balance workload and maintain steady output.",
+                    "workaround": "As a manager, when gathering feedback from multiple sources becomes time-consuming or delayed, I informally collect quick verbal feedback during daily interactions to maintain momentum in the review process.",
                     "assessment": true,
-                    "assessment_explaination": "This workaround involves a team lead dynamically redistributing tasks among team members to address resource constraints, directly relevant to managing software development projects and Agile team workflows."
+                    "assessment_explaination": "This workaround directly involves the manager gathering feedback from multiple sources, which is a key step in the biannual employee performance review process."
                 },
                 {
-                    "workaround": "As a quality inspector, when documentation procedures are time-consuming, I use shorthand notes during inspections to speed up data capture and complete reports faster later.",
-                    "assessment": false,
-                    "assessment_explaination": "This workaround involves a quality inspector using shorthand to speed documentation, which relates to physical inspection processes rather than software testing or QA phases in software projects."
+                    "workaround": "As an employee, when scheduling formal one-on-one meetings is difficult due to calendar conflicts, I use instant messaging or email to discuss key points ahead of the meeting to maximize efficiency during the scheduled time.",
+                    "assessment": true,
+                    "assessment_explaination": "Scheduling and conducting one-on-one meetings between managers and employees is part of the process; using instant messaging or email to overcome scheduling conflicts still pertains to managing the review discussion."
+                },
+                {
+                    "workaround": "As a manager, when the official HR management system is cumbersome or slow, I maintain a personal spreadsheet or notes offline to track performance observations and action items promptly before transferring them later.",
+                    "assessment": true,
+                    "assessment_explaination": "Maintaining personal notes or spreadsheets when the HR system is slow relates directly to documenting performance observations and action items, a core element of the review process."
+                },
+                {
+                    "workaround": "As an employee, when development plans feel rigid or too generic, I independently research and propose additional training or projects aligned with my career goals to discuss during the review meeting.",
+                    "assessment": true,
+                    "assessment_explaination": "An employee independently enhancing or tailoring their development plan aligns with the process step focused on establishing development plans to support career goals."
+                },
+                {
+                    "workaround": "As a peer reviewer, when the official feedback form lacks space or flexibility for nuanced comments, I provide supplementary feedback via email or informal notes to ensure comprehensive input.",
+                    "assessment": true,
+                    "assessment_explaination": "Providing supplementary feedback by peers to ensure comprehensive input is relevant to the feedback gathering step in the performance review process."
                 }
             ],
-            "quality": 0.2
+            "quality": 1.0
+        },
+        {
+            "id": 3,
+            "description": "\n    The software release management process in an IT organization is critical for deploying updates and new features. \n    It begins with a detailed planning phase, where project managers and development leads outline the release schedule, \n    assign tasks to developers, and coordinate integration efforts with testing teams. \n    A staging environment is set up for quality assurance (QA) to conduct a series of tests, including performance, security, and usability. \n    Once the software passes all tests, the release is documented, and a deployment window is scheduled. \n    The team communicates the release to stakeholders and prepares rollback procedures in case of unforeseen issues post-deployment.\n    ",
+            "generated workarounds": [
+                {
+                    "workaround": "As a developer, when the task assignments from planning are unclear or overlapping, I informally prioritize tasks with my immediate team members to avoid duplicated work and keep progress steady.",
+                    "assessment": true,
+                    "assessment_explaination": "Prioritizing tasks informally among developers addresses unclear or overlapping task assignments within the planning and task assignment phase, which is part of release management."
+                },
+                {
+                    "workaround": "As a QA tester, when waiting for the staging environment setup delays testing, I start preparing and automating test scripts offline to save time and speed up testing once the environment is ready.",
+                    "assessment": true,
+                    "assessment_explaination": "Preparing and automating test scripts offline when staging environment setup is delayed directly supports QA testing processes in the release management lifecycle."
+                },
+                {
+                    "workaround": "As a release coordinator, when official communication channels are slow or bureaucratic, I use instant messaging groups with stakeholders to quickly share release updates and gather rapid feedback.",
+                    "assessment": true,
+                    "assessment_explaination": "Using instant messaging groups to communicate release updates bypasses slow official channels, impacting stakeholder communication within release management."
+                },
+                {
+                    "workaround": "As a project manager, when the prescribed release schedules are too rigid for unexpected changes, I negotiate informal micro-adjustments with leads to better align timelines without needing formal approvals.",
+                    "assessment": true,
+                    "assessment_explaination": "Negotiating informal micro-adjustments to release schedules addresses flexibility issues in planning and scheduling, a core part of the release management process."
+                },
+                {
+                    "workaround": "As a deployment engineer, when rollback procedures are incomplete or unclear in documentation, I keep a local checklist and scripted rollback steps to be able to respond swiftly if problems arise during deployment.",
+                    "assessment": true,
+                    "assessment_explaination": "Maintaining a local checklist and scripted rollback steps compensates for incomplete rollback procedures, directly supporting deployment and risk management in release management."
+                }
+            ],
+            "quality": 1.0
+        },
+        {
+            "id": 4,
+            "description": "\n    The loan approval process in a bank involves several steps to assess the creditworthiness of applicants. \n    When a customer submits a loan application, the loan officer collects necessary financial documents, including income statements, \n    credit reports, and debt history. The officer inputs this data into an automated underwriting system, \n    which evaluates the application against established criteria. If approved, the loan terms are drafted and presented to the customer for review. \n    Upon agreement, the paperwork is processed, and the loan is funded. If the application is denied, \n    the officer communicates the reasons and suggests alternative financing options or improvements for future applications.\n    ",
+            "generated workarounds": [
+                {
+                    "workaround": "As a loan officer, when applicants delay submitting complete financial documents, I proactively prepare a checklist and guide applicants through required documents during the initial conversation to reduce back-and-forth and speed up processing.",
+                    "assessment": true,
+                    "assessment_explaination": "This workaround addresses the common issue of incomplete documentation in the loan approval process by proactively guiding applicants, which aligns directly with the initial data collection step."
+                },
+                {
+                    "workaround": "As a loan officer, when the automated underwriting system flags incomplete or borderline applications, I use my judgment to preliminarily assess risk and prepare explanations that help the customer understand next steps while awaiting formal results.",
+                    "assessment": true,
+                    "assessment_explaination": "Using judgment to preliminarily assess borderline or incomplete applications complements the automated underwriting step and helps maintain communication with customers during the evaluation phase."
+                },
+                {
+                    "workaround": "As a loan officer, when system downtime or technical issues delay application input, I maintain a manual spreadsheet or paper log of key application details to ensure no data is lost and processing can continue once the system is back online.",
+                    "assessment": true,
+                    "assessment_explaination": "Maintaining a manual log during system downtime ensures continuity of data collection and processing, which is critical to the loan approval workflow reliant on automated systems."
+                },
+                {
+                    "workaround": "As a loan officer, when customers struggle to understand loan terms, I create simplified summary sheets highlighting critical figures and implications to facilitate clearer communication without altering official documentation.",
+                    "assessment": true,
+                    "assessment_explaination": "Creating simplified loan term summaries helps improve customer understanding during the loan terms presentation step without altering official documents, enhancing communication in the process."
+                },
+                {
+                    "workaround": "As a loan officer, when denied applicants request reconsideration or faster feedback, I compile common reasons for denial and suggestions for financial improvement, so I can quickly provide personalized guidance without needing specialist intervention.",
+                    "assessment": true,
+                    "assessment_explaination": "Compiling common denial reasons and suggestions supports the communication step after application rejection, aligning with providing feedback and alternative options to applicants."
+                }
+            ],
+            "quality": 1.0
         }
     ]
 }

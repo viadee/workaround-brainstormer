@@ -21,7 +21,7 @@ def assess_workarounds(app_client):
     for index, process_description in enumerate(PROCESS_DESCRIPTIONS):
 
         # Get output from the app
-        response = app_client.post('/start_map', json={"process_description": process_description})
+        response = app_client.post('/start_map', data={"process_description": process_description})
 
         workarounds_list = response.json
 
@@ -31,6 +31,8 @@ def assess_workarounds(app_client):
             process_description=process_description,
             workaround_list = workarounds_list_string
         )
+
+        print(prompt)
 
         assessment = client.beta.chat.completions.parse(
             model="gpt-4.1-mini",
