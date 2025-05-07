@@ -1,7 +1,8 @@
 project:
   type: website
-
+  output-dir: ../static
 website:
+  favicon: assets/favicon.ico
   navbar:
     left:
       - text: "![](assets/Logo.svg){height=2em}<b class='logo-title'>Br<b class='logo-ai'>AI</b>nstormer</b>"

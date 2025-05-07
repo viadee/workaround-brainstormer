@@ -16,6 +16,7 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 def create_app(testing: bool = False) -> Flask:
     """Create and configure the Flask application."""
     app = Flask(__name__, 
+                static_url_path='/',
                 template_folder='../templates',  
                 static_folder='../static')       
     

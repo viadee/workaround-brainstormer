@@ -91,11 +91,7 @@ def setCredentials():
 def index():
     """Render main application page."""
     current_app.logger.info("Rendering index for: %s", session.get('username'))
-    return render_template(
-        'landingpage/landingpage.html',
-        app_version=current_app.config['APP_VERSION'],
-                default_few_shot_examples=DEFAULT_FEW_SHOT_EXAMPLES
-    )
+    return redirect("/index.html")
 
 @main_bp.route('/brainstormer')
 @limiter.limit(override_defaults=True, limit_value="300 per day")
@@ -381,29 +377,6 @@ def update_few_shot_examples():
     except Exception as e:
         current_app.logger.exception("Error updating few shot examples: %s", e)
         return jsonify({"error": str(e)}), 500
-    
-
-@info_bp.route('/impressum')
-def impressum():
-
-    return render_template(
-        '/landingpage/impressum.html'
-    )
-
-
-@info_bp.route('/datenschutz')
-def datenschutz():
-
-    return render_template(
-        '/landingpage/datenschutz.html'
-    )
-
-@info_bp.route('/nutzungsbedingungen')
-def nutzungsbedingungen():
-
-    return render_template(
-        '/landingpage/nutzungsbedingungen.html'
-    )
     
 
 @main_bp.route('/retreive_similar_few_shot_examples', methods=['POST'])
