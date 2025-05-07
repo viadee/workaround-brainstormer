@@ -38,3 +38,5 @@ ENV/
 .vscode/
 *.swp
 *.swo
+
+.quarto
