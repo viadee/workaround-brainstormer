@@ -15,11 +15,14 @@ PERFORMANCE_ASSESSMENT_PROMPTS = {
 
             Return the assessment as a JSON object in the following format:
             {{
-                "workarounds": [
-                    {"assessment":[true/false],"explaination":[Explaination]},
+                "workaround_assessments": [
+                    {{
+                        "assessment":[true/false],
+                        "explaination":[Explaination]
+                    }},
                     ... (more assessments) ...
                 ]
             }}
-            """
-         }
+        """
+    }
 }

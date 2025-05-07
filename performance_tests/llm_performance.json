@@ -1,31 +1,100 @@
 {
     "processes": [
         {
-            "id": 1,
-            "process_description": "A pizza is baked",
-            "generated_workarounds": [
-                "test_workaround_1",
-                "test_workaround_2"
+            "id": 0,
+            "description": "\n    An online retail business receives customer orders through its website. Once an order is confirmed, the system automatically processes payments through a secure gateway. \n    The next step involves checking the inventory levels for the ordered items. If the items are in stock, a pick list is generated for the warehouse team, who then package the items for shipping. \n    The system notifies the shipping carrier to arrange for pickup or generates a shipping label for direct drop-off. \n    Finally, the customer receives an automated confirmation email with tracking information. \n    Throughout this process, any discrepancies, such as payment failures or inventory discrepancies, must be resolved swiftly to ensure customer satisfaction.\n    ",
+            "generated workarounds": [
+                {
+                    "workaround": "As a customer service representative, when waiting for approvals delays order processing, I prepare all necessary documentation in advance to expedite approvals and reduce waiting times.",
+                    "assessment": false,
+                    "assessment_explaination": "The described process does not mention order approval delays or a related approval process; hence preparing documentation for approvals is not relevant to the given online retail order fulfillment domain."
+                },
+                {
+                    "workaround": "As a warehouse worker, when equipment shortages slow down packing, I use modular packing techniques with available materials to maintain shipment schedules despite limited resources.",
+                    "assessment": true,
+                    "assessment_explaination": "Warehouse packing is a key step in the process. Using modular packing techniques during equipment shortages directly relates to maintaining shipment schedules within the warehouse operations of the online retail business."
+                },
+                {
+                    "workaround": "As a team leader, when strict shift schedules reduce flexibility, I coordinate informal shift swaps among team members to cover absences and maintain productivity without official changes.",
+                    "assessment": true,
+                    "assessment_explaination": "Shift scheduling and coverage affect warehouse and operational teams in an online retail business. Coordinating informal shift swaps to maintain productivity is relevant to ensuring smooth order fulfillment."
+                },
+                {
+                    "workaround": "As a data entry clerk, when rigid input forms cause repeated errors, I create quick reference checklists to ensure data accuracy and speed up the entry process.",
+                    "assessment": false,
+                    "assessment_explaination": "Data entry forms and clerks are not mentioned in the process, and the process mainly focuses on automated steps with the system. Thus, improving data entry by checklists is not directly related to the described process."
+                },
+                {
+                    "workaround": "As a field technician, when GPS restrictions prevent direct access to sites, I use historical maps and local contacts to find alternative routes and complete visits on time.",
+                    "assessment": false,
+                    "assessment_explaination": "Field technician activities and GPS restrictions are unrelated to the online retail order processing or shipping coordination described. Therefore, this workaround is outside of the given process domain."
+                }
             ],
-            "quality": 0.8
+            "quality": 0.4
+        },
+        {
+            "id": 1,
+            "description": "\n    The onboarding process begins when a candidate accepts a job offer with the company. \n    The new employee is sent an onboarding packet with essential documents and instructions on how to set up their accounts for payroll and benefits. \n    On their first day, they attend orientation, which covers company policies, culture, and compliance training. \n    After orientation, the employee meets their assigned supervisor to receive job-specific training, including access to tools and resources necessary for their role. \n    The process may take several weeks with ongoing assessments to ensure the new employee feels integrated and properly trained.\n    ",
+            "generated workarounds": [
+                {
+                    "workaround": "As a customer service representative, when technical system delays prevent timely order confirmation, I manually communicate order status updates via phone or email to keep customers informed and maintain satisfaction.",
+                    "assessment": false,
+                    "assessment_explaination": "The workaround involves manual communication in customer service to manage order confirmations, which is unrelated to employee onboarding or training processes."
+                },
+                {
+                    "workaround": "As an inventory manager, when stock system constraints delay replenishment approvals, I keep a small buffer stock of critical items to avoid production interruptions and minimize downtime.",
+                    "assessment": false,
+                    "assessment_explaination": "This workaround relates to inventory management and stock replenishment, which falls outside the scope of onboarding and new employee integration."
+                },
+                {
+                    "workaround": "As a production supervisor, when rigid shift schedules cause workforce shortages during peak times, I informally swap shifts with colleagues to ensure adequate staffing without breaching official schedules.",
+                    "assessment": false,
+                    "assessment_explaination": "The shift swapping workaround is related to production workforce management and scheduling, not to the onboarding or employee training domain."
+                },
+                {
+                    "workaround": "As a quality inspector, when official documentation requires lengthy approval times, I flag urgent items for expedited review via direct communication to avoid production hold-ups.",
+                    "assessment": false,
+                    "assessment_explaination": "Expedited approval of quality documentation addresses production processes and approval delays, not employee onboarding or training."
+                },
+                {
+                    "workaround": "As a warehouse operator, when barcode scanners are temporarily unavailable, I record item movements manually using paper logs to ensure continuous tracking of inventory and avoid discrepancies.",
+                    "assessment": false,
+                    "assessment_explaination": "Manual item tracking as a warehouse operator pertains to inventory and warehouse management, not onboarding or new hire processes."
+                }
+            ],
+            "quality": 0.0
         },
         {
             "id": 2,
-            "process_description": "In the logistics industry I want to fill up my trucks at night.",
-            "generated_workarounds": [
-                "test_workaround_1",
-                "test_workaround_2"
+            "description": "\n    A software development project initiates with requirement gathering sessions involving stakeholders from various departments to understand the needs and scope of the project. \n    After requirements are documented, the team uses an Agile methodology to break the work into manageable sprints, typically lasting two weeks. \n    The development phase requires daily stand-up meetings to discuss progress and blockers. \n    After development, the software goes into a testing phase where quality assurance personnel identify bugs or issues. \n    Once testing is complete and necessary adjustments are made, the team deploys the software and monitors performance metrics to ensure stability in the production environment.\n    ",
+            "generated workarounds": [
+                {
+                    "workaround": "As an operations coordinator, when equipment availability causes delays, I rearrange task priorities dynamically to keep other work progressing and minimize downtime.",
+                    "assessment": false,
+                    "assessment_explaination": "This workaround pertains to operations coordination and equipment availability, which is outside the domain of software development project management described."
+                },
+                {
+                    "workaround": "As a customer service representative, when official response templates are too rigid for unique requests, I add personalized notes in follow-up emails to address specific client needs and improve satisfaction.",
+                    "assessment": false,
+                    "assessment_explaination": "This workaround relates to customer service interactions and adapting communication templates, which does not relate directly to the software development process given."
+                },
+                {
+                    "workaround": "As a frontline employee, when slow approval processes block urgent tasks, I escalate critical requests informally via direct messaging to supervisors to expedite decisions without breaking protocol.",
+                    "assessment": false,
+                    "assessment_explaination": "This workaround concerns informal escalation by frontline employees to expedite approvals, primarily operational and not specific to software development workflows."
+                },
+                {
+                    "workaround": "As a team lead, when resource constraints limit project progress, I temporarily redistribute tasks among available team members to balance workload and maintain steady output.",
+                    "assessment": true,
+                    "assessment_explaination": "This workaround involves a team lead dynamically redistributing tasks among team members to address resource constraints, directly relevant to managing software development projects and Agile team workflows."
+                },
+                {
+                    "workaround": "As a quality inspector, when documentation procedures are time-consuming, I use shorthand notes during inspections to speed up data capture and complete reports faster later.",
+                    "assessment": false,
+                    "assessment_explaination": "This workaround involves a quality inspector using shorthand to speed documentation, which relates to physical inspection processes rather than software testing or QA phases in software projects."
+                }
             ],
-            "quality": 0.7
-        },
-        {
-            "id": 3,
-            "process_description": "In the pharma industry I am producing individual medicine on requests.",
-            "generated_workarounds": [
-                "test_workaround_1",
-                "test_workaround_2"
-            ],
-            "quality": 0.6
+            "quality": 0.2
         }
     ]
 }

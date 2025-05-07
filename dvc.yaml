@@ -1,9 +1,6 @@
-metrics:
-- performance_tests/llm_performance.json
 plots:
 - performance_tests/llm_performance.json:
     y: id
     x: quality
     template: bar_horizontal
-params:
-- performance_tests/llm_performance.json
+    title: Quality of generated workarounds (same domain)
