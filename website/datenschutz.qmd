@@ -1,0 +1,38 @@
+---
+pagetitle: "Datenschutz"
+---
+
+# Datenschutzerklärung
+
+
+Willkommen auf unserer Datenschutz-Seite. Wir legen großen Wert auf den Schutz Ihrer personenbezogenen Daten und informieren Sie im Folgenden über Art, Umfang und Zweck der Datenerhebung sowie über Ihre Rechte.
+
+## 1. Einleitung
+
+Der Schutz Ihrer personenbezogenen Daten ist uns wichtig. Diese Datenschutzerklärung informiert Sie darüber, welche Daten während Ihres Besuchs auf unserer Webseite erfasst werden und wie diese verarbeitet werden. Außerdem erfahren Sie, welche Rechte Sie in Bezug auf Ihre Daten haben.
+
+## 2. Keine Verarbeitung personenbezogener Daten
+
+Wir möchten ausdrücklich darauf hinweisen, dass wir keinerlei personenbezogene Daten speichern. Die Eingabe von personenbezogenen Daten wie Name, Adresse, E-Mail-Adresse oder Telefonnummer ist auf unserer Webseite ausdrücklich untersagt.
+
+Da wir keine personenbezogenen Daten erfassen oder speichern, findet auch keine Verarbeitung dieser Daten im Sinne der Datenschutz-Grundverordnung (DSGVO) statt.
+
+## 3. Erfassung technischer Daten
+
+Bei der Nutzung unserer Webseite können technische Daten wie Browsertyp und Zugriffszeit erfasst werden. Diese Daten werden ausschließlich zu technischen Zwecken verwendet, um die Funktionsfähigkeit und den sicheren Betrieb der Webseite zu gewährleisten. Dabei werden diese Informationen anonymisiert erhoben, wodurch eine Identifizierung einzelner Nutzer nicht möglich ist.
+
+## 4. Verwendung von Cookies
+
+Unsere Website verwendet Cookies, um das Nutzererlebnis zu verbessern und die Nutzung zu analysieren. Cookies sind kleine Textdateien, die auf Ihrem Endgerät gespeichert werden. Sie können die Verwendung von Cookies jederzeit in Ihren Browsereinstellungen deaktivieren.
+
+## 5. Rechte der Nutzer
+
+Da auf unserer Webseite keine personenbezogenen Daten gespeichert oder verarbeitet werden, besteht auch kein Anspruch auf Auskunft, Berichtigung oder Löschung von Daten. Sollte es dennoch Fragen zur allgemeinen Datenverarbeitung oder zur Datenschutzerklärung geben, können Sie sich jederzeit an uns wenden.
+
+## 6. Änderungen dieser Datenschutzerklärung
+
+Wir behalten uns das Recht vor, diese Datenschutzerklärung jederzeit anzupassen. Die jeweils aktuelle Version wird auf unserer Webseite veröffentlicht. Bitte überprüfen Sie regelmäßig diese Erklärung, um über mögliche Änderungen informiert zu bleiben.
+
+Stand: 29.04.2025
+
+---

@@ -2,20 +2,24 @@ project:
   type: website
 
 website:
-  title: "website"
+  
   navbar:
     left:
-      - href: index.qmd
-        text: Home
-      - about.qmd
+      - text: "![](assets/Logo.svg){height=2em}<b class='logo-title'>Br<b class='logo-ai'>AI</b>nstormer</b>"
+        href: "/"
+    right:
+      - href: /brainstormer
+        text: "<span class='btn btn-primary'>Jetzt Workarounds finden</span>"
+        
+
 
 format:
   html:
     theme:
-      - cosmo
-      - brand
+      - litera
+      - theme.custom.scss
     css: styles.css
-    toc: true
+    include-after-body: footer.html
 
 
 
