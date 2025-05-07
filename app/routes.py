@@ -8,6 +8,7 @@ import os
 import json
 import time
 import uuid
+from werkzeug.utils import secure_filename
 
 from .prompts import DEFAULT_FEW_SHOT_EXAMPLES
 from .auth import login_required, admin_required, check_credentials, setUserCredentialVariables
@@ -433,3 +434,40 @@ def retreive_similar_few_shot_examples():
     except Exception as e:
         current_app.logger.exception("Error generating similar few shot examples: %s", e)
         return jsonify({"error": str(e)}), 500
+
+@main_bp.route('/save_workarounds', methods=['POST'])
+def save_workarounds():
+    try:
+        data = request.get_json()
+        if not data or 'tree' not in data:
+            return jsonify({'error': 'Invalid data format'}), 400
+
+        tree_data = data['tree']
+        
+        # Sanitize the filename
+        raw_filename = data.get('filename', 'workarounds.txt')
+        if not raw_filename.endswith('.txt'): # Ensure it's a txt file
+            raw_filename += '.txt'
+        filename = secure_filename(raw_filename)
+        if not filename: # secure_filename might return an empty string for invalid names
+            filename = 'workarounds.txt'
+
+        formatted_text = format_workarounds_tree(tree_data)
+        
+        # Define a safe directory for saving these files, e.g., a subdirectory in UPLOAD_FOLDER
+        # For this example, let's assume we save it in a 'generated_texts' subdir of UPLOAD_FOLDER
+        # Ensure this directory exists and has correct permissions
+        save_dir = os.path.join(current_app.config['UPLOAD_FOLDER'], 'generated_texts')
+        os.makedirs(save_dir, exist_ok=True)
+        
+        file_path = os.path.join(save_dir, filename)
+        
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(formatted_text)
+            
+        current_app.logger.info(f"Workarounds saved to {file_path}")
+        # Provide the file path relative to a known accessible point if needed, or just success
+        return jsonify({'message': 'Workarounds saved successfully', 'filepath': filename}) # Return just filename for simplicity
+    except Exception as e:
+        current_app.logger.error(f"Error saving workarounds: {str(e)}")
+        return jsonify({'error': str(e)}), 500
