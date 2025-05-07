@@ -23,12 +23,14 @@
 </head>
 <body>
     <div class="brainstormer-content">
-    {% if 'username' in session %}
+    {% if 'username' in session or login_is_required == False %}
         <!-- Navigation buttons (formerly in header.html) -->
         <div class="top-buttons">
+            {% if 'username' in session %}
             <a href="{{ url_for('auth.logout') }}" class="logout-button">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
+            {% endif %}
             <a href="https://forms.office.com/e/TAbpUC1hTp" class="feedback-button" target="_blank">
                 <i class="fas fa-comment-dots feedback-icon"></i> Give Feedback
             </a>

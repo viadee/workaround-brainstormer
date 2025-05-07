@@ -101,6 +101,7 @@ def brainstormer():
     current_app.logger.info("Rendering index for: %s", session.get('username'))
     return render_template(
         'index.html',
+        login_is_required=current_app.config['AUTH_LOGIN_REQUIRED'],
         app_version=current_app.config['APP_VERSION'],
                 default_few_shot_examples=DEFAULT_FEW_SHOT_EXAMPLES
     )

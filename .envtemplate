@@ -1,6 +1,10 @@
 # Flask App secret_key https://flask.palletsprojects.com/en/stable/config/#SECRET_KEY
 APPSECRETKEY=
 
+#Enable/disable authentication for routes with de decorator login_required()
+#Disabled by default
+AUTH_LOGIN_REQUIRED=False # False/True
+
 # User credentials for login
 WAPASSWORDHASH=
 WAUSERNAME=

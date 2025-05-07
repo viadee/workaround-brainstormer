@@ -5,6 +5,7 @@ from logging.handlers import RotatingFileHandler
 import os
 from typing import Optional
 from .limiter import limiter
+from .auth import login_is_required
 # App version
 APP_VERSION = '0.3.1'
 
@@ -37,7 +38,7 @@ def create_app(testing: bool = False) -> Flask:
         AZURE_API_URL=os.getenv('AZURE_OPENAI_API_URL'),
         AZURE_CHAT_MODEL=os.getenv('AZURE_OPENAI_CHAT_MODEL'),
         AZURE_EMBEDDING_MODEL=os.getenv('AZURE_OPENAI_EMBEDDING_MODEL'),
-
+        AUTH_LOGIN_REQUIRED=login_is_required(),
         DAILY_COST_THRESHOLD=float(os.getenv('DAILYCOSTTHRESHOLD', '10.0')),
         
         # Q-Drant settings

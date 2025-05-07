@@ -48,6 +48,7 @@ class DevDeployment:
             "QDRANT-WORKAROUNDS-READ-KEY"
         )
         qdrant_full_access_key = config.require_secret("QDRANT-FULL-ACCESS-KEY")
+        login_required = config.require('AUTH_LOGIN_REQUIRED')
 
         ApplicationRegistration(
             name=f"{self.project_name}-{self.environment}",
@@ -245,6 +246,11 @@ class DevDeployment:
                 name="AZURE_OPENAI_EMBEDDING_MODEL",
                 value=embedding_model,
             ),
+            azure_native.app.v20230501.EnvironmentVarArgs(
+                name="AUTH_LOGIN_REQUIRED",
+                value=login_required,
+            )
+            
         ]
 
         ContainerApp(
