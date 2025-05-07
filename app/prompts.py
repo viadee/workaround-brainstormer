@@ -27,6 +27,7 @@ PROMPTS = {
             - Actually help solve a concrete problem
             - Could be implemented by the people involved
             - Don't require official process changes
+            - Reflect the same domain as the provided process description
 
             **Instructions for Workaround Generation:**
             - Present each workaround as a user story using the following format:
@@ -71,6 +72,7 @@ PROMPTS = {
             - Actually help solve a concrete problem
             - Could be implemented by the people involved
             - Don't require official process changes
+            - Reflect the same domain as the provided process description
 
             **Instructions for Workaround Generation:**
             - Present each workaround as a user story using the following format:
@@ -118,6 +120,7 @@ PROMPTS = {
             - Use comparable resources or approaches
             - Achieve related benefits
             - Maintain the same level of practicality
+            - Reflect the same domain
 
             **Instructions for Similar Workaround Generation:**
             - Present each workaround as a user story using the following format:
@@ -171,6 +174,7 @@ PROMPTS = {
             - Use comparable resources or approaches
             - Achieve related benefits
             - Maintain the same level of practicality
+            - Reflect the same domain
 
             **Instructions for Similar Workaround Generation:**
             - Present each workaround as a user story using the following format:
@@ -223,6 +227,7 @@ PROMPTS = {
             - Tatsächlich ein konkretes Problem lösen helfen
             - Von den beteiligten Personen implementiert werden könnten
             - Keine offiziellen Prozessänderungen erfordern
+            - Sich auf die gleiche Domäne bezieht, wie die Prozessbeschreibung
 
             **Anweisungen für die Erstellung von Workarounds:**
             - Präsentieren Sie jeden Workaround als User Story unter Verwendung des folgenden Formats:
@@ -267,6 +272,7 @@ PROMPTS = {
             - Tatsächlich ein konkretes Problem lösen helfen
             - Von den beteiligten Personen implementiert werden könnten
             - Keine offiziellen Prozessänderungen erfordern
+            - Sich auf die gleiche Domäne bezieht, wie die Prozessbeschreibung
 
             **Anweisungen für die Erstellung von Workarounds:**
             - Präsentieren Sie jeden Workaround als User Story unter Verwendung des folgenden Formats:
@@ -314,6 +320,7 @@ PROMPTS = {
             - Vergleichbare Ressourcen oder Vorgehensweisen nutzen
             - Ähnliche Vorteile erzielen
             - Den gleichen Grad an Praktikabilität beibehalten
+            - Sich auf die gleiche Domäne bezieht
 
             **Anweisungen für die Erstellung ähnlicher Workarounds:**
             - Präsentieren Sie jeden Workaround als User Story unter Verwendung des folgenden Formats:
@@ -367,6 +374,7 @@ PROMPTS = {
             - Vergleichbare Ressourcen oder Vorgehensweisen nutzen
             - Ähnliche Vorteile erzielen
             - Den gleichen Grad an Praktikabilität beibehalten
+            - Sich auf die gleiche Domäne bezieht, wie die Prozessbeschreibung
 
             **Anweisungen für die Erstellung ähnlicher Workarounds:**
             - Präsentieren Sie jeden Workaround als User Story unter Verwendung des folgenden Formats:
