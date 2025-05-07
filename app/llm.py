@@ -381,6 +381,9 @@ class RAGService:
         
         try:
             results = self.vector_store.similarity_search_with_score(process_description,k=5)
+
+            print(results)
+
             formated_results = [result[0].page_content for result in results]
 
             return formated_results

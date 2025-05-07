@@ -1,12 +1,9 @@
 metrics:
-- metrics/llm_metrics.csv type:csv
-- dvclive/metrics.json
+- performance_tests/llm_performance.json
 plots:
-- dvclive/plots/metrics:
-    x: step
-- used_tokens vs step:
-      template: simple
-      x: used_tokens
-      y:
-          dvclive/plots/metrics/used_tokens.tsv: step
-
+- performance_tests/llm_performance.json:
+    y: id
+    x: quality
+    template: bar_horizontal
+params:
+- performance_tests/llm_performance.json

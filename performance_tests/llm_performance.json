@@ -1,0 +1,31 @@
+{
+    "processes": [
+        {
+            "id": 1,
+            "process_description": "A pizza is baked",
+            "generated_workarounds": [
+                "test_workaround_1",
+                "test_workaround_2"
+            ],
+            "quality": 0.8
+        },
+        {
+            "id": 2,
+            "process_description": "In the logistics industry I want to fill up my trucks at night.",
+            "generated_workarounds": [
+                "test_workaround_1",
+                "test_workaround_2"
+            ],
+            "quality": 0.7
+        },
+        {
+            "id": 3,
+            "process_description": "In the pharma industry I am producing individual medicine on requests.",
+            "generated_workarounds": [
+                "test_workaround_1",
+                "test_workaround_2"
+            ],
+            "quality": 0.6
+        }
+    ]
+}
