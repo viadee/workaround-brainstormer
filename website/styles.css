@@ -1,0 +1,79 @@
+.impressum{
+    max-width: 350px
+}
+
+.find-wa-btn{
+    background-color: black;
+    color:white;
+}
+
+
+.footer {
+    width: calc(100% - 60px);
+    border-top: 1px solid var(--border-color-grey);
+    padding: 30px;
+}
+.footer-container{
+    max-width: 1800px;
+    display: flex;
+    justify-content:space-evenly;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: auto;
+}
+.footer-legal{
+   display: flex;
+   flex-direction: column;
+   z-index: 1;
+}
+.footer-partners{
+    display: flex;
+    flex-direction: column;
+}
+.footer-partner-logo{
+    margin-bottom: 30px;
+    margin-right: 30px;
+    width: 200px;
+
+}
+.footer-partner-ecis-logo{
+    width: 250px;
+    height:125px;
+    margin-left: 30px;
+}
+.footer-partners-logo-container{
+    display:inline-flex;
+
+}
+.footer-partners-left-section{
+    display: flex;
+    flex-direction: column;
+}
+.footer-links{
+    z-index: 1;
+}
+.footer-link{
+    color: black;
+    text-decoration: none;
+    margin: 5px;
+    z-index: 1;
+}
+.footer-link-github{
+    width: 50px;
+}
+.footer-link:hover{
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+
+.logo-title{
+    font-size:xx-large;
+    color:#01215c;
+    font-weight:bold;
+}
+
+.logo-ai{
+    color:#999999
+}

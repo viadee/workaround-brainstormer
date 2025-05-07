@@ -6,24 +6,7 @@ import subprocess
 
 def get_latest_image(acr_name: str, repository: str, login_server: str) -> str:
     # Run the Azure CLI command to get the latest tag
-    command = [
-        "az",
-        "acr",
-        "repository",
-        "show-tags",
-        "--name",
-        acr_name,
-        "--repository",
-        repository,
-        "--orderby",
-        "time_desc",
-        "--top",
-        "1",
-        "--query",
-        "[0]",
-        "--output",
-        "tsv",
-    ]
+    command = f"az acr repository show-tags --name {acr_name} --repository {repository} --orderby time_desc --top 1 --query [0] --output tsv"
 
     result = subprocess.run(
         command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, shell=True

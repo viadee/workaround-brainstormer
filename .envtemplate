@@ -1,13 +1,31 @@
+# Flask App secret_key https://flask.palletsprojects.com/en/stable/config/#SECRET_KEY
 APPSECRETKEY=
+
+#Enable/disable authentication for routes with de decorator login_required()
+#Disabled by default
+AUTH_LOGIN_REQUIRED=False # False/True
+
+# User credentials for login
 WAPASSWORDHASH=
 WAUSERNAME=
+
+# Password for admin user
 ADMINPASSWORDHASH=
-DAILYCOSTTHRESHOLD=
 
-AZURE_OPENAI_API_URL=
+# Daily cost threshold in dollars. Costs are calculated using the OPENAI CompletionUsage statistics
+DAILYCOSTTHRESHOLD=10
+
+# Chat and embedding model API configuration
+# Both models are expected to be deployed behind the same url in Azure
+# The LLMs are both implemented using the Azure openai package, so you will need to use Azure models or implement your own LLM and RAG services
 AZURE_OPENAI_API_KEY=
+AZURE_OPENAI_API_URL=
 AZURE_OPENAI_API_VERSION=
+# The following models are used in our development and production and are therefore recommended
+AZURE_OPENAI_EMBEDDING_MODEL=text-embedding-3-small
+AZURE_OPENAI_CHAT_MODEL=gpt-4.1-mini
 
+# Configuration for the vector database https://qdrant.tech/
 QDRANT_URL=
 QDRANT_WORKAROUNDS_READ_KEY=
 QDRANT_FULL_ACCESS_KEY=

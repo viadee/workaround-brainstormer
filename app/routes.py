@@ -15,10 +15,13 @@ from .utils import save_uploaded_file, process_image, format_workarounds_tree
 from .llm import LLMService, ProcessContext, CostLimitExceeded, RAGService
 import logging
 
+from .limiter import limiter
+
 # Create blueprints
 auth_bp = Blueprint('auth', __name__)
 main_bp = Blueprint('main', __name__)
 info_bp = Blueprint('info', __name__)
+
 
 def add_timing_headers(response, **kwargs):
     """Add timing information to response headers."""
@@ -84,23 +87,21 @@ def setCredentials():
 
 
 # Main routes (including API endpoints)
-@main_bp.route('/')
+@info_bp.route('/')
 def index():
     """Render main application page."""
     current_app.logger.info("Rendering index for: %s", session.get('username'))
-    return render_template(
-        'landingpage/landingpage.html',
-        app_version=current_app.config['APP_VERSION'],
-                default_few_shot_examples=DEFAULT_FEW_SHOT_EXAMPLES
-    )
+    return redirect("/index.html")
 
 @main_bp.route('/brainstormer')
+@limiter.limit(override_defaults=True, limit_value="300 per day")
 @login_required
 def brainstormer():
     """Render main application page."""
     current_app.logger.info("Rendering index for: %s", session.get('username'))
     return render_template(
         'index.html',
+        login_is_required=current_app.config['AUTH_LOGIN_REQUIRED'],
         app_version=current_app.config['APP_VERSION'],
                 default_few_shot_examples=DEFAULT_FEW_SHOT_EXAMPLES
     )
@@ -109,6 +110,7 @@ def brainstormer():
 
 
 @main_bp.route('/admin', methods=['POST', 'GET'])
+@limiter.limit(override_defaults=True, limit_value="300 per day")
 @login_required
 @admin_required
 def admin():
@@ -376,29 +378,6 @@ def update_few_shot_examples():
     except Exception as e:
         current_app.logger.exception("Error updating few shot examples: %s", e)
         return jsonify({"error": str(e)}), 500
-    
-
-@info_bp.route('/impressum')
-def impressum():
-
-    return render_template(
-        '/landingpage/impressum.html'
-    )
-
-
-@info_bp.route('/datenschutz')
-def datenschutz():
-
-    return render_template(
-        '/landingpage/datenschutz.html'
-    )
-
-@info_bp.route('/nutzungsbedingungen')
-def nutzungsbedingungen():
-
-    return render_template(
-        '/landingpage/nutzungsbedingungen.html'
-    )
     
 
 @main_bp.route('/retreive_similar_few_shot_examples', methods=['POST'])

@@ -1,0 +1,25 @@
+project:
+  type: website
+  output-dir: ../static
+website:
+  favicon: assets/favicon.ico
+  navbar:
+    left:
+      - text: "<b class='logo-title'> ![](assets/Logo.svg){height=2em}Br<b class='logo-ai'>AI</b>nstormer</b>"
+        href: "/"
+    right:
+      - href: /brainstormer
+        text: "<a class='btn btn-secondary' style='margin-bottom: 12px' target='_blank' href='/brainstormer'>Jetzt Workarounds finden</a>"
+        
+format:
+  html:
+    grid:
+              body-width: 1400px
+    theme:
+      - litera
+      - theme.custom.scss
+    css: styles.css
+    include-after-body: footer.html
+
+
+

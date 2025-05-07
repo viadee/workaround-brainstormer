@@ -100,6 +100,7 @@ class LLMService:
             api_version=current_app.config['AZURE_API_VERSION'],
             azure_endpoint=current_app.config['AZURE_API_URL']
         )
+        self.chat_model = current_app.config['AZURE_CHAT_MODEL']
         self.language_service = LanguageService()
         
         # If session_id is provided, use it; otherwise try to get from Flask session
@@ -200,7 +201,7 @@ class LLMService:
         messages = self._create_messages(prompt, process)
         
         completion = self.client.beta.chat.completions.parse(
-            model="gpt-4.1-mini",
+            model=self.chat_model,
             messages=messages,
             response_format={"type": "json_object"},
         )
@@ -229,7 +230,7 @@ class LLMService:
         messages = self._create_messages(prompt, process)
         
         completion = self.client.beta.chat.completions.parse(
-            model="gpt-4.1-mini",
+            model=self.chat_model,
             messages=messages,
             response_format={"type": "json_object"},
         )
@@ -255,7 +256,7 @@ class LLMService:
         prompt = get_node_label_prompt(workaround, other_workarounds)
 
         completion = self.client.chat.completions.create(
-            model="gpt-4.1-mini",
+            model=self.chat_model,
             messages=[{"role": "user", "content": prompt}]
         )
 
@@ -346,9 +347,9 @@ class RAGService:
         Args:
             session_id: Optional session ID. If not provided, will try to get from Flask session.
         """
-
+        self.embedding_model_name = current_app.config['AZURE_EMBEDDING_MODEL']
         self.embeddings_client = AzureOpenAIEmbeddings(
-            model="text-embedding-3-small",
+            model=self.embedding_model_name,
             api_key = current_app.config['AZURE_API_KEY'],
             azure_endpoint = current_app.config['AZURE_API_URL'],
             openai_api_version = current_app.config['AZURE_API_VERSION']

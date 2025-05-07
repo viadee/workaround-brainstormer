@@ -9,11 +9,20 @@ import os
 # Authentication configuration
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD_HASH = os.getenv('ADMINPASSWORDHASH')
+AUTH_LOGIN_REQUIRED = os.getenv('AUTH_LOGIN_REQUIRED')
+
+def login_is_required():
+    if(AUTH_LOGIN_REQUIRED == None or AUTH_LOGIN_REQUIRED.lower() == 'false'):
+        return False
+    elif(AUTH_LOGIN_REQUIRED.lower() == 'true'):
+        return True
 
 def login_required(f):
     """Decorator to require login for routes."""
     @wraps(f)
     def decorated_function(*args, **kwargs):
+        if not(login_is_required()):
+            return f(*args, **kwargs)
         if 'username' not in session:
             flash('Please log in to access this page.', 'warning')
             return redirect(url_for('auth.login'))  # Updated to use auth.login
@@ -45,7 +54,7 @@ def check_credentials(username: str, password: str) -> bool:
     Returns:
         bool: True if credentials are valid
     """
-    return True
+    
     # Check admin credentials
     if username == ADMIN_USERNAME:
         return check_password_hash(ADMIN_PASSWORD_HASH, password)

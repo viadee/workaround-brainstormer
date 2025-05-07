@@ -9,6 +9,7 @@
     <!-- Styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/variables.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
     <!-- External Dependencies -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://kit.fontawesome.com/441def4347.js" crossorigin="anonymous"></script>
@@ -22,16 +23,18 @@
 </head>
 <body>
     <div class="brainstormer-content">
-    {% if 'username' in session %}
+    {% if 'username' in session or login_is_required == False %}
         <!-- Navigation buttons (formerly in header.html) -->
         <div class="top-buttons">
+            {% if 'username' in session %}
             <a href="{{ url_for('auth.logout') }}" class="logout-button">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
-            <a href="https://forms.office.com/e/nqdmjHnUVd" class="feedback-button" target="_blank">
+            {% endif %}
+            <a href="https://forms.office.com/e/TAbpUC1hTp" class="feedback-button" target="_blank">
                 <i class="fas fa-comment-dots feedback-icon"></i> Give Feedback
             </a>
-            <a href="{{ url_for('main.index') }}" class="">
+            <a href="{{ url_for('info.index') }}" class="">
                 <i class="fas"></i> Documentation
             </a>
             {% if 'is_admin' in session and session['is_admin'] %}

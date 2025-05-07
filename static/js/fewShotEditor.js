@@ -24,7 +24,7 @@ class FewShotEditor {
         this.retreiveBtn = document.getElementById('retreive-similar-few-shot-btn');
         this.description = document.getElementById('process-input');
         this.additionalContext = document.getElementById('additional-context');
-
+        this.file_preview_img = document.getElementById('file_preview_img')
         // Populate the editor when the modal opens
         this.editBtn.addEventListener('click', () => {
             this.currentLang = "en"; // Reset to default language on open.
@@ -166,7 +166,11 @@ class FewShotEditor {
 
     retreiveFewShotExamples() {
         if (!this.description.value) {
-            this.displayError('Please insert a process description or a process image!');
+            if(this.file_preview_img.getAttribute('src') != ""){
+                this.displayError('Please enter a textual process description to retrieve similar few-shot examples.')
+                return;
+            }
+            this.displayError('Please insert a process description!');
             return;
         }
         const payload = {

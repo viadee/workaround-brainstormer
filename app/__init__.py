@@ -4,18 +4,25 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 from typing import Optional
-
+from .limiter import limiter
+from .auth import login_is_required
 # App version
 APP_VERSION = '0.3.1'
 
 # Define project root directory
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+
+
 def create_app(testing: bool = False) -> Flask:
     """Create and configure the Flask application."""
     app = Flask(__name__, 
+                static_url_path='/',
                 template_folder='../templates',  
                 static_folder='../static')       
+    
+    
+    limiter.init_app(app)
 
     # Load configuration
     app.secret_key = os.getenv('APPSECRETKEY')
@@ -29,7 +36,11 @@ def create_app(testing: bool = False) -> Flask:
         AZURE_API_KEY=os.getenv('AZURE_OPENAI_API_KEY'),
         AZURE_API_VERSION=os.getenv('AZURE_OPENAI_API_VERSION', '2023-12-01-preview'),
         AZURE_API_URL=os.getenv('AZURE_OPENAI_API_URL'),
+        AZURE_CHAT_MODEL=os.getenv('AZURE_OPENAI_CHAT_MODEL'),
+        AZURE_EMBEDDING_MODEL=os.getenv('AZURE_OPENAI_EMBEDDING_MODEL'),
+        AUTH_LOGIN_REQUIRED=login_is_required(),
         DAILY_COST_THRESHOLD=float(os.getenv('DAILYCOSTTHRESHOLD', '10.0')),
+        
         # Q-Drant settings
         QDRANT_URL = os.getenv('QDRANT_URL'),
         QDRANT_WORKAROUNDS_READ_KEY = os.getenv('QDRANT_WORKAROUNDS_READ_KEY'),
@@ -44,12 +55,17 @@ def create_app(testing: bool = False) -> Flask:
     # Configure logging
     if not testing:
         configure_logging(app)
-
+    
     # Register blueprints
     from .routes import auth_bp, main_bp, info_bp
+    
     app.register_blueprint(auth_bp)
     app.register_blueprint(main_bp)
     app.register_blueprint(info_bp)
+    limiter.limit(override_defaults=True, limit_value="2 per second;2000/hour")(main_bp)
+
+
+    
 
     return app
 
