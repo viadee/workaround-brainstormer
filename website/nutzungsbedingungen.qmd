@@ -4,7 +4,7 @@ pagetitle: "Nutzungsbedindungen"
 
 
 # Nutzungsbedindungen
-Stand: 29.04.2025
+Stand: 12.05.2025
 
 
 ## Lizenz
@@ -33,7 +33,8 @@ Dennoch möchten wir im Sinne der Transparenz klarstellen:
 Die durch das System generierten Hypothesen sind nicht urheberrechtlich geschützt und können beliebig weiterverwendet werden.
 
 ## Acceptable Use
-viadee betreibt eine Installation des Workaround Brainstormers, um Feedback zu ermöglichen. Die Nutzung der bereitgestellten Installation ist im angemessenen Maße zulässig.
+Die viadee Unternehmensberatung AG betreibt eine Installation des Open Source-Werkzeuges *Workaround Brainstormer*, um Feedback zu ermöglichen. Die Nutzung der bereitgestellten Installation ist im angemessenen Maße zulässig.
+
 Die Nutzung des Workaround Brainstormers erfolgt auf eigene Verantwortung. viadee übernimmt keine Haftung für Schäden oder Verluste, die aus der Nutzung, fehlerhaften Hypothesen oder der Nichtverfügbarkeit des Systems resultieren, soweit gesetzlich zulässig. Unangemessen und nicht zulässig sind folgende Nutzungsweisen:
 
 - Jegliche Nutzung zu illegalen, unethischen oder gegen geltendes Recht verstoßenden Zwecken ist untersagt.
@@ -43,3 +44,11 @@ Die Nutzung des Workaround Brainstormers erfolgt auf eigene Verantwortung. viade
 
 Die Nutzer:innen sind verpflichtet, keine personenbezogenen oder vertraulichen Daten in das System einzugeben. Die Verantwortung für die Einhaltung datenschutzrechtlicher Vorgaben liegt ausschließlich bei den Nutzer:innen.
 Es besteht kein Anspruch auf Support, Wartung oder Weiterentwicklung der Installation.
+
+## Umgang mit Feedback
+
+Nutzer:innen haben die Möglichkeit, über ein Feedback-Formular (via MSForms) anonym Kommentare und Anregungen zu übermitteln.
+
+Durch die Übermittlung von Feedback gewähren Nutzer:innen viadee ein uneingeschränktes, unbefristetes und räumlich unbegrenztes Nutzungsrecht an allen eingereichten Inhalten. Dies schließt ausdrücklich die Nutzung zu Forschungszwecken und die Veröffentlichung der Inhalte ein.
+
+viadee behält sich das Recht vor, diese Nutzungsbedingungen jederzeit zu ändern. Änderungen werden auf dieser Webseite bekannt gegeben.
