@@ -389,6 +389,16 @@ def retreive_similar_few_shot_examples():
         # Expecting data in the form: { "few_shot_examples": { "en": { "start_no_image": [ ... ] } } }
         process_description = data.get('process_description', {})
 
+        # If Qdrant credentials are not provided, return service not availiable response.
+        if not current_app.config['QDRANT_URL'] or not current_app.config['QDRANT_WORKAROUNDS_READ_KEY']:
+            response = jsonify({
+                'status':'failure',
+                'error': 'Qdrant Vector DB not setup. Standard few-shot examples are loaded.'
+            })
+
+            response.status_code = 503
+            return response
+
         rag_service = RAGService(session_id=session.get('id'))
         retreived_similar_workarounds = rag_service.retreive_similar_workarounds(process_description=process_description)
 
