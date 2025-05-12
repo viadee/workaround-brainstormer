@@ -23,10 +23,10 @@
 </head>
 <body>
     <div class="brainstormer-content">
-    {% if 'username' in session or login_is_required == False %}
+    
         <!-- Navigation buttons (formerly in header.html) -->
         <div class="top-buttons">
-            {% if 'username' in session %}
+            {% if 'username' in session and login_is_required == True %}
             <a href="{{ url_for('auth.logout') }}" class="logout-button">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
@@ -44,7 +44,7 @@
             {% endif %}
 
         </div>
-    {% endif %}
+
 
     {% block content %}{% endblock %}
     </div>
