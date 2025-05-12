@@ -9,10 +9,14 @@ import os
 # Authentication configuration
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD_HASH = os.getenv('ADMINPASSWORDHASH')
-AUTH_LOGIN_REQUIRED = os.getenv('AUTH_LOGIN_REQUIRED')
+
 
 def login_is_required():
-    if(AUTH_LOGIN_REQUIRED.lower() == 'true'):
+    AUTH_LOGIN_REQUIRED = os.getenv('AUTH_LOGIN_REQUIRED')
+    if(AUTH_LOGIN_REQUIRED is None):
+        return False
+    
+    elif(AUTH_LOGIN_REQUIRED.lower() == 'true'):
         return True
     
     return False
@@ -54,7 +58,6 @@ def check_credentials(username: str, password: str) -> bool:
     Returns:
         bool: True if credentials are valid
     """
-    
     # Check admin credentials
     if username == ADMIN_USERNAME:
         return check_password_hash(ADMIN_PASSWORD_HASH, password)
