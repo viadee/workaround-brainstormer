@@ -26,6 +26,7 @@ AZURE_OPENAI_EMBEDDING_MODEL=text-embedding-3-small
 AZURE_OPENAI_CHAT_MODEL=gpt-4.1-mini
 
 # Configuration for the vector database https://qdrant.tech/
+# The app will work without providing QDRANT variables, but RAG few-shot functionalities will not accessible.
 QDRANT_URL=
 QDRANT_WORKAROUNDS_READ_KEY=
 QDRANT_FULL_ACCESS_KEY=
