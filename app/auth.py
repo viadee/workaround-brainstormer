@@ -12,10 +12,10 @@ ADMIN_PASSWORD_HASH = os.getenv('ADMINPASSWORDHASH')
 AUTH_LOGIN_REQUIRED = os.getenv('AUTH_LOGIN_REQUIRED')
 
 def login_is_required():
-    if(AUTH_LOGIN_REQUIRED == None or AUTH_LOGIN_REQUIRED.lower() == 'false'):
-        return False
-    elif(AUTH_LOGIN_REQUIRED.lower() == 'true'):
+    if(AUTH_LOGIN_REQUIRED.lower() == 'true'):
         return True
+    
+    return False
 
 def login_required(f):
     """Decorator to require login for routes."""

@@ -2,8 +2,7 @@
 APPSECRETKEY=
 
 #Enable/disable authentication for routes with de decorator login_required()
-#Disabled by default
-AUTH_LOGIN_REQUIRED=False # False/True
+#Unless the value is True, the authentication is disabled by default
 
 # User credentials for login
 WAPASSWORDHASH=
