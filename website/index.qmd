@@ -21,10 +21,10 @@ Um das Tool auszuprobieren, können Sie auf den folgenden Button klicken.
 ## Beispiel Coffee Coders Inc.
 
 
-Input ist eine Beschreibung eines Geschäftsprozesses (hier start vereinfacht - es könnte auch ein BPMN-Diagramm sein)
+Input ist eine Beschreibung eines Geschäftsprozesses (hier stark vereinfacht - es könnte auch ein BPMN-Diagramm sein)
 
 :::{.callout-note title="Vereinfachter Prozess"}
-<pre> > ... wir verwandeln Kaffee und Kundenanforderungen in Lösungen.</pre>
+> ... in der IT-Beratung nehmen wir erst Kundenanforderungen auf. Dann geben wir Kaffee hinzu und erstellen Software-Lösungen.
 
 :::
 
