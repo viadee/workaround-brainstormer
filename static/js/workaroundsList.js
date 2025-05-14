@@ -123,12 +123,19 @@ class WorkaroundsList {
     }
 
     async handleDownload() {
+
+        const nodes = graphManager.getNodes()
+
+        if (nodes.length == 0){
+            return
+        } 
+
         try {
             const response = await fetch('/update_workarounds', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
-                    workarounds_tree: this.buildTreeData(graphManager.getNodes()) 
+                    workarounds_tree: this.buildTreeData(nodes) 
                 }),
             });
             
