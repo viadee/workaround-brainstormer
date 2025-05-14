@@ -18,13 +18,14 @@ class NodeContextMenu{
 
         this.graphManager.handleMouseOut(event, d)
         const contextMenu = document.createElement('div');
+        contextMenu.id = "contextMenu"
         contextMenu.style.left = event.clientX + 10 + 'px'
         contextMenu.style.top = event.clientY + 'px'
         contextMenu.className = 'node-contextmenu'
         
         const collapseNodeButton = document.createElement('button');
         collapseNodeButton.innerText = 'Collapse Node'
-        collapseNodeButton.addEventListener('click', () => this.collapseNode(event, d), removeContextMenu(), {once: true})
+        collapseNodeButton.addEventListener('click', () => this.collapseNode(event, d), this.removeContextMenu(), {once: true})
         
         const collapseWithFeedbackButton = document.createElement('button')
         collapseWithFeedbackButton.innerText = 'Collapse with feedback'
@@ -32,31 +33,32 @@ class NodeContextMenu{
 
         const expandNodeButton = document.createElement('button');
         expandNodeButton.innerText = 'Add Node'
-        expandNodeButton.addEventListener('click', () => this.handleAddNode(), removeContextMenu())
+        expandNodeButton.addEventListener('click', () => this.handleAddNode(event, d), this.removeContextMenu())
         contextMenu.appendChild(collapseNodeButton);
         contextMenu.appendChild(expandNodeButton);
 
-        contextMenu.addEventListener('mouseenter', () => contextMenu.addEventListener('mouseleave', removeContextMenu))
-        document.body.addEventListener('click', removeContextMenu, {once: true}) 
+        contextMenu.addEventListener('mouseenter', () => contextMenu.addEventListener('mouseleave', this.removeContextMenu))
+        document.body.addEventListener('click', this.removeContextMenu, {once: true}) 
 
-        function removeContextMenu(){
-            contextMenu.remove()
-        }
+        
         
         document.body.appendChild(contextMenu)
     }
-
-    handleCollapseWithFeedback(){
-          
+    removeContextMenu(){
+        const menu = document.getElementById("contextMenu")
+        if(menu == null){
+            return;
+        }
+        menu.remove()
     }
-    handleAddNode(){
+    handleAddNode(event, d){
         const dialog = document.createElement('div')
         dialog.id = 'addnode-dialog'
         dialog.className = 'addnode-dialog'
 
         const textArea = document.createElement('textarea')
         textArea.classList = 'addnode-textarea'
-        textArea.placeholder = 'Write workaround description...'
+        textArea.placeholder = 'As a [role], when [situation], I [action] to [outcome].'
         textArea.id = 'textArea_addNode'
         dialog.appendChild(textArea)
 
@@ -75,6 +77,9 @@ class NodeContextMenu{
 
         document.body.appendChild(dialog);
         
+        const gM = this.graphManager
+        const self = this;
+        
         function handleSubmit(){
             const textAreaEl = document.getElementById('textArea_addNode')
             if(textAreaEl == null){
@@ -84,7 +89,9 @@ class NodeContextMenu{
             
             
             const newNode = {
-                id: self.nextNodeId++,
+                id: gM.getNodes().reduce((max, obj) => {
+                    return obj.id > max ? obj.id : max;
+                }, 0) + 1,
                 text: workaroundDescription,
                 parent: d.id,
                 expanded: false
@@ -95,12 +102,12 @@ class NodeContextMenu{
             d.expanded = true;
            
             self.updateUIHook();
-            removeContextMenu()
+            self.removeContextMenu()
             dialog.remove()
         }
 
         function handleClose(){
-            removeContextMenu();
+            self.removeContextMenu();
             dialog.remove();
         }
 
