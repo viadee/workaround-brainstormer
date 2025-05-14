@@ -315,7 +315,7 @@ def update_workarounds():
     """Update and format workarounds list."""
     try:
         data = request.get_json()
-        if not data or 'workaround_tree' not in data:
+        if not data or 'workarounds_tree' not in data:
             return jsonify({'error':'Invalid data format'}),400
 
         workarounds_tree = data.get('workarounds_tree')
