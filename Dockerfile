@@ -63,8 +63,8 @@ RUN chmod -R u+w /app/logs /app/temp_uploads
 # Switch to the non-root user
 USER appuser
 
-# Expose port 8080
-EXPOSE 8080
+# Expose port 5000
+EXPOSE 5000
 
 # Use Gunicorn as the final command
-CMD ["gunicorn", "run:app", "--workers=8", "--bind=0.0.0.0:8080"]
+CMD ["gunicorn", "run:app", "--workers=8", "--bind=0.0.0.0:5000"]
