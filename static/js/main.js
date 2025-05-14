@@ -5,6 +5,7 @@ class App {
         this.nextNodeId = 1;
         this.isExpanding = false;
         this.currentFilename = null;
+        this.fetchWorkaroundsState = false
         this.setupComponents();
         this.setupEventListeners();
     }
@@ -57,6 +58,10 @@ class App {
     }
 
     async createInitialStructure() {
+        if(this.fetchWorkaroundsState == true){
+            throw new Error("Fetch error")
+        }
+        this.fetchWorkaroundsState = true
         this.graphManager.clearGraph();
         this.spinner.style.display = "block";
 
@@ -124,6 +129,7 @@ class App {
             alert(error.message || 'Error retrieving initial workarounds.');
         } finally {
             this.spinner.style.display = "none";
+            this.fetchWorkaroundsState = false
         }
     }
 
