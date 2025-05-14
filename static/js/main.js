@@ -59,7 +59,7 @@ class App {
 
     async createInitialStructure() {
         if(this.fetchWorkaroundsState == true){
-            throw new Error("Fetch error")
+            return;
         }
         this.fetchWorkaroundsState = true
         this.graphManager.clearGraph();
