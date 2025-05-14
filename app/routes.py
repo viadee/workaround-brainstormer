@@ -9,13 +9,11 @@ import json
 import time
 import uuid
 from werkzeug.utils import secure_filename
-
 from .prompts import DEFAULT_FEW_SHOT_EXAMPLES
 from .auth import login_required, admin_required, check_credentials, setUserCredentialVariables
 from .utils import save_uploaded_file, process_image, format_workarounds_tree
 from .llm import LLMService, ProcessContext, CostLimitExceeded, RAGService
 import logging
-
 from .limiter import limiter
 
 # Create blueprints
@@ -80,10 +78,10 @@ def setCredentials():
 
             return redirect(url_for('main.admin'))
         except Exception as e:
-            current_app.logger.error("Error setting user credentials in environment variable")
-            return jsonify({'error': e}), 500
+            current_app.logger.error("Error setting user credentials in environment variable: %s",str(e))
+            return jsonify({'error': 'Internal Server Error'}), 500
     
-    return 405
+    return jsonify({'error': 'Method not allowed'}), 405
 
 
 
@@ -104,7 +102,7 @@ def brainstormer():
         'index.html',
         login_is_required=current_app.config['AUTH_LOGIN_REQUIRED'],
         app_version=current_app.config['APP_VERSION'],
-                default_few_shot_examples=DEFAULT_FEW_SHOT_EXAMPLES
+        default_few_shot_examples=DEFAULT_FEW_SHOT_EXAMPLES
     )
 
 
@@ -150,8 +148,8 @@ def download_logs():
 def start_map():
     """Initialize workaround map generation."""
     start_time = time.time()
-    process_description = request.form.get('process_description', '')
-    additional_context = request.form.get('additional_context', '')
+    process_description = request.form.get('process_description', '').strip()
+    additional_context = request.form.get('additional_context', '').strip()
     
     current_app.logger.info("Starting map generation")
     base64_image = None
@@ -222,11 +220,12 @@ def start_map():
 @login_required
 def get_similar_workarounds():
     start_time = time.time()
+    temp_file_path = None
+    base64_image = None
+    file_processing_start = file_processing_end = None
+
     try:
         current_app.logger.info("Received get_similar_workarounds request")
-        temp_file_path = None
-        base64_image = None
-        file_processing_start = file_processing_end = None
         
         # If there's a file, handle it
         if 'file' in request.files and request.files['file'].filename:
@@ -316,8 +315,10 @@ def update_workarounds():
     """Update and format workarounds list."""
     try:
         data = request.get_json()
+        if not data or 'workaround_tree' not in data:
+            return jsonify({'error':'Invalid data format'}),400
+
         workarounds_tree = data.get('workarounds_tree')
-        
         formatted_text = format_workarounds_tree(workarounds_tree)
         session['workarounds_text'] = formatted_text
         
@@ -387,32 +388,24 @@ def retreive_similar_few_shot_examples():
     """Retreive few shot examples based on user input."""
     try:
         data = request.get_json()
-        # Expecting data in the form: { "few_shot_examples": { "en": { "start_no_image": [ ... ] } } }
         process_description = data.get('process_description', {})
 
         # If Qdrant credentials are not provided, return service not availiable response.
         if not current_app.config['QDRANT_URL'] or not current_app.config['QDRANT_WORKAROUNDS_READ_KEY']:
-            response = jsonify({
+            return jsonify({
                 'status':'failure',
                 'error': 'Qdrant Vector DB not setup. Standard few-shot examples are loaded.'
-            })
-
-            response.status_code = 503
-            return response
+            }), 503
 
         rag_service = RAGService(session_id=session.get('id'))
         retreived_similar_workarounds = rag_service.retreive_similar_workarounds(process_description=process_description)
 
-        response = jsonify({
+        current_app.logger.info("Similar few shot examples generated.")
+        return jsonify({
             'status': 'success',
             'data': retreived_similar_workarounds,
             'message': 'Retreived similar workarounds successfully.'
-        })
-
-        current_app.logger.info("Similar few shot examples generated.")
-
-        response.status_code = 200
-        return response
+        }), 200
     
     except Exception as e:
         current_app.logger.exception("Error generating similar few shot examples: %s", e)
@@ -450,7 +443,7 @@ def save_workarounds():
             
         current_app.logger.info(f"Workarounds saved to {file_path}")
         # Provide the file path relative to a known accessible point if needed, or just success
-        return jsonify({'message': 'Workarounds saved successfully', 'filepath': filename}) # Return just filename for simplicity
+        return jsonify({'message': 'Workarounds saved successfully', 'filepath': filename}), 200 # Return just filename for simplicity
     except Exception as e:
         current_app.logger.error(f"Error saving workarounds: {str(e)}")
         return jsonify({'error': str(e)}), 500
