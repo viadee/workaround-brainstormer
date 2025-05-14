@@ -1,15 +1,16 @@
 # app/llm.py
 from dataclasses import dataclass
-from typing import List, Optional, Dict, Any, Union
+from typing import List, Optional, Dict, Any
 import json
 import os
 from flask import session
 from datetime import datetime, timedelta
 import logging
 import openai
-from flask import current_app
+from flask import current_app, session, has_request_context
 from .language_service import LanguageService
 from .prompts import PROMPTS, DEFAULT_FEW_SHOT_EXAMPLES
+
 # RAG dependencies
 from qdrant_client import QdrantClient
 from langchain_qdrant import QdrantVectorStore
@@ -26,11 +27,9 @@ def setup_logging():
     if logger.handlers:
         logger.handlers.clear()
     
-    # Get the project root directory (parent of app/)
+    # Ensure log directory exists
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     logs_dir = os.path.join(project_root, 'logs')
-    
-    # Ensure log directory exists
     os.makedirs(logs_dir, exist_ok=True)
     
     handler = logging.handlers.RotatingFileHandler(
@@ -95,28 +94,33 @@ class LLMService:
         Args:
             session_id: Optional session ID. If not provided, will try to get from Flask session.
         """
+
+        api_key = current_app.config.get('AZURE_API_KEY')
+        api_version = current_app.config.get('AZURE_API_VERSION')
+        azure_endpoint = current_app.config.get('AZURE_API_URL')
+
+        if not all([api_key, api_version, azure_endpoint]):
+            raise ValueError("Missing configuration for Azure OpenAI API.")
+
         self.client = openai.AzureOpenAI(
-            api_key=current_app.config['AZURE_API_KEY'],
-            api_version=current_app.config['AZURE_API_VERSION'],
-            azure_endpoint=current_app.config['AZURE_API_URL']
+            api_key=api_key,
+            api_version=api_version,
+            azure_endpoint=azure_endpoint
         )
+
         self.chat_model = current_app.config['AZURE_CHAT_MODEL']
         self.language_service = LanguageService()
-        
-        # If session_id is provided, use it; otherwise try to get from Flask session
-        if session_id:
-            self.session_id = session_id
-        else:
-            from flask import session, has_request_context
-            if has_request_context() and 'id' in session:
-                self.session_id = session['id']
-            else:
-                self.session_id = 'no_session'
+        self.session_id = session_id or self._get_session_id()
+
+    def _get_session_id(self) -> str:
+        """Retrieve session ID safely."""
+        if has_request_context() and 'id' in session:
+            return session['id']
+        return 'no_session'
 
     
     def _log_info(self, message: str) -> None:
         """Log general information with session ID."""
-        logger = logging.getLogger('llm_calls')
         logger.info(message, extra={'session_id': self.session_id})
 
     def _log_api_call(self, function: str, input_data: str, 
@@ -127,8 +131,6 @@ class LLMService:
                 token_usage['prompt_tokens'] * (5 / 1_000_000) +  
                 token_usage['completion_tokens'] * (15 / 1_000_000)
             )
-
-            logger = logging.getLogger('llm_calls')
             logger.info('', extra={
                 'session_id': self.session_id,
                 'function': function,
@@ -156,11 +158,7 @@ class LLMService:
         stored = session.get('few_shot_examples')
         # If stored is not a dict (or is missing), convert if it is a list or use an empty dict.
         if not isinstance(stored, dict):
-            if isinstance(stored, list):
-                # Assume the list belongs to English.
-                stored = {"en": stored}
-            else:
-                stored = {}
+            stored = {"en": stored} if isinstance(stored, list) else {}
             session['few_shot_examples'] = stored
 
         # Get the examples for the current language directly.
@@ -197,23 +195,28 @@ class LLMService:
         # Get appropriate prompt template
         key = "start_with_image" if process.base64_image else "start_no_image"
         prompt = self._get_prompt(key, process)
-        
         messages = self._create_messages(prompt, process)
-        
-        completion = self.client.beta.chat.completions.parse(
-            model=self.chat_model,
-            messages=messages,
-            response_format={"type": "json_object"},
-        )
 
-        self._log_api_call(
-            function="get_workarounds",
-            input_data=prompt,
-            output_data=completion.choices[0].message.content,
-            token_usage=completion.usage.model_dump()
-        )
+        try:
+            completion = self.client.beta.chat.completions.parse(
+                model=self.chat_model,
+                messages=messages,
+                response_format={"type": "json_object"},
+            )
+            self._log_api_call(
+                function="get_workarounds",
+                input_data=prompt,
+                output_data=completion.choices[0].message.content,
+                token_usage=completion.usage.model_dump()
+            )
+            return json.loads(completion.choices[0].message.content)['workarounds']
+        except openai.error.OpenAIError as e:
+            logger.error(f"OpenAI API error on get_workarounds: {str(e)}")
+            return []
+        except Exception as e:
+            logger.error(f"Unexpected error during get_workarounds: {str(e)}")
+            return []
 
-        return json.loads(completion.choices[0].message.content)['workarounds']
 
     def get_similar_workarounds(
         self,
@@ -226,23 +229,28 @@ class LLMService:
         # Get appropriate prompt template
         key = "similar_with_image" if process.base64_image else "similar_no_image"
         prompt = self._get_prompt(key, process, similar_workaround=similar_workaround)
-        
         messages = self._create_messages(prompt, process)
         
-        completion = self.client.beta.chat.completions.parse(
-            model=self.chat_model,
-            messages=messages,
-            response_format={"type": "json_object"},
-        )
-
-        self._log_api_call(
-            function="get_similar_workarounds",
-            input_data=prompt,
-            output_data=completion.choices[0].message.content,
-            token_usage=completion.usage.model_dump()
-        )
-
-        return json.loads(completion.choices[0].message.content)['workarounds']
+        try:
+            completion = self.client.beta.chat.completions.parse(
+                model=self.chat_model,
+                messages=messages,
+                response_format={"type": "json_object"},
+            )
+            self._log_api_call(
+                function="get_similar_workarounds",
+                input_data=prompt,
+                output_data=completion.choices[0].message.content,
+                token_usage=completion.usage.model_dump()
+            )
+            return json.loads(completion.choices[0].message.content)['workarounds']
+        
+        except openai.error.OpenAIError as e:
+            logger.error(f"OpenAI API error on get_similar_workarounds: {str(e)}")
+            return []
+        except Exception as e:
+            logger.error(f"Unexpected error during get_similar_workarounds: {str(e)}")
+            return []
 
     def generate_node_label(
         self,
@@ -255,19 +263,27 @@ class LLMService:
 
         prompt = get_node_label_prompt(workaround, other_workarounds)
 
-        completion = self.client.chat.completions.create(
-            model=self.chat_model,
-            messages=[{"role": "user", "content": prompt}]
-        )
+        try:
+            completion = self.client.chat.completions.create(
+                model=self.chat_model,
+                messages=[{"role": "user", "content": prompt}]
+            )
 
-        self._log_api_call(
-            function="generate_node_label",
-            input_data=prompt,
-            output_data=completion.choices[0].message.content,
-            token_usage=completion.usage.model_dump()
-        )
+            self._log_api_call(
+                function="generate_node_label",
+                input_data=prompt,
+                output_data=completion.choices[0].message.content,
+                token_usage=completion.usage.model_dump()
+            )
 
-        return completion.choices[0].message.content.strip()
+            return completion.choices[0].message.content.strip()
+        
+        except openai.error.OpenAIError as e:
+            logger.error(f"OpenAI API error on generate_node_label: {str(e)}")
+            return ""
+        except Exception as e:
+            logger.error(f"Unexpected error during generate_node_label: {str(e)}")
+            return ""
 
     def _check_cost_threshold(self) -> bool:
         """Check if API usage is within daily cost threshold."""
@@ -288,9 +304,7 @@ class LLMService:
                             '%Y-%m-%d %H:%M:%S'
                         )
                         if timestamp >= cutoff_time:
-                            cost = log_entry.get('estimated_cost', 0)
-                            if cost:
-                                total_cost += float(cost)
+                            total_cost += float(log_entry.get('estimated_cost', 0))
                     except (json.JSONDecodeError, KeyError, ValueError):
                         continue
 
@@ -367,30 +381,24 @@ class RAGService:
         )
 
         self.language_service = LanguageService()
-    
-        # If session_id is provided, use it; otherwise try to get from Flask session
-        if session_id:
-            self.session_id = session_id
-        else:
-            from flask import session, has_request_context
-            if has_request_context() and 'id' in session:
-                self.session_id = session['id']
-            else:
-                self.session_id = 'no_session'
+        self.session_id = session_id or self._get_session_id()
 
-    def retreive_similar_workarounds(self, process_description):
-        
+    def _get_session_id(self) -> str:
+        """Retrieve session ID safely."""
+        if has_request_context() and 'id' in session:
+            return session['id']
+        return 'no_session'
+
+    def retreive_similar_workarounds(self, process_description:str) -> List[str]:
+        """Retrieve similar workarounds using vector store."""
         try:
             results = self.vector_store.similarity_search_with_score(process_description,k=5)
-
-            print(results)
-
             formated_results = [result[0].page_content for result in results]
-
             return formated_results
         
         except Exception as e:
-            print(f'Error retreiving similar workarounds: {str(e)}')
+            logger.error(f'Error retreiving similar workarounds: {str(e)}')
+            return []
     
         
 
