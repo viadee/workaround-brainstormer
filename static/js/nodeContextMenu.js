@@ -24,7 +24,7 @@ class NodeContextMenu{
         contextMenu.className = 'node-contextmenu'
         
         const collapseNodeButton = document.createElement('button');
-        collapseNodeButton.innerText = 'Collapse Node'
+        collapseNodeButton.innerText = 'Remove Node'
         collapseNodeButton.addEventListener('click', () => this.collapseNode(event, d), this.removeContextMenu(), {once: true})
         
         const collapseWithFeedbackButton = document.createElement('button')
