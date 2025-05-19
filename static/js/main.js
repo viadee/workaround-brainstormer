@@ -55,6 +55,47 @@ class App {
         window.addEventListener('nodeClick', (e) => this.expandNode(e.detail.event, e.detail.node));
         window.addEventListener('nodeContextMenu', (e) => this.nodeContextMenu.showNodeContextMenu(e.detail.event, e.detail.node));
         window.addEventListener('highlightNode', (e) => this.graphManager.highlightNode(e.detail.nodeId));
+
+        // Sidebar toggle button
+        document.getElementById('toggle-btn').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            // sidebar.classList.toggle('collapsed');
+
+            // Check if the sidebar is currently collapsed
+            if (sidebar.classList.contains('collapsed')) {
+                sidebar.classList.remove('hidden'); // Make it visible before expanding
+                setTimeout(() => {
+                    sidebar.classList.remove('collapsed'); // Remove collapsed class to reveal sidebar
+                }, 10); // Short delay to allow CSS transition to kick in
+            } else {
+                sidebar.classList.add('collapsed'); // Add collapsed class to hide sidebar
+
+                // After finished sliding out, make it hidden
+                setTimeout(() => {
+                    sidebar.classList.add('hidden'); // Then add hidden class
+                }, 300); // Match the duration of the CSS transition
+            }
+        });
+        // Sidebar toggle button
+        document.getElementById('toggle-btn-sidebar').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            // sidebar.classList.toggle('collapsed');
+
+            // Check if the sidebar is currently collapsed
+            if (sidebar.classList.contains('collapsed')) {
+                sidebar.classList.remove('hidden'); // Make it visible before expanding
+                setTimeout(() => {
+                    sidebar.classList.remove('collapsed'); // Remove collapsed class to reveal sidebar
+                }, 10); // Short delay to allow CSS transition to kick in
+            } else {
+                sidebar.classList.add('collapsed'); // Add collapsed class to hide sidebar
+
+                // After finished sliding out, make it hidden
+                setTimeout(() => {
+                    sidebar.classList.add('hidden'); // Then add hidden class
+                }, 300); // Match the duration of the CSS transition
+            }
+        });
     }
 
     async createInitialStructure() {

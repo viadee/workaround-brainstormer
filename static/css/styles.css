@@ -12,6 +12,7 @@ body {
   background-color: #f0f0f0;
   font-weight: 100;
   color: black;
+  position: relative;
 }
 
 .brainstormer-content{
@@ -36,7 +37,68 @@ body {
   flex-direction: column;
   height: 100%;
   background-color: #f8f8f8;
-  max-width: 400px;
+  max-width: 100%;
+  width:500px;
+  transition: transform 0.3s, opacity 0.3s ease;
+  position: absolute;
+  top:0;
+  right:0;
+  z-index:1000;
+}
+
+#toggle-btn{
+    aspect-ratio: 1;
+    height: 50px;
+    font-size:x-large;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    cursor: pointer;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    align-self: flex-start;
+    display:flex;
+    position:absolute;
+    align-items:center;
+    right:20px;
+    top:20px;
+    justify-content: center;
+}
+
+#toggle-btn-text{
+  transform:rotate(180deg)
+}
+
+#toggle-btn-sidebar {
+    margin-left:20px;
+    margin-right:20px;
+    margin-top:20px;
+    aspect-ratio: 1;
+    height: 50px;
+    font-size:x-large;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    margin-top: 1rem;
+    cursor: pointer;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    align-self: flex-start;
+    display:flex;
+    align-items:center;
+}
+
+#sidebar.collapsed {
+  transform: translateX(100%);
+  pointer-events: none; /* Prevent interaction with the hidden sidebar */
+}
+
+#sidebar.hidden {
+    display: none; /* Completely hide the sidebar after moving out */
 }
 
 #input-container,
@@ -79,8 +141,8 @@ h2 {
 /* Navigation and Controls */
 .top-buttons {
   position: fixed;
-  top: 10px;
-  left: 10px;
+  top: 20px;
+  left: 20px;
   display: flex;
   gap: 10px;
   z-index: 1000;
