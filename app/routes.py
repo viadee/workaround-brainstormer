@@ -20,7 +20,7 @@ from .limiter import limiter
 auth_bp = Blueprint('auth', __name__)
 main_bp = Blueprint('main', __name__)
 info_bp = Blueprint('info', __name__)
-
+api_bp = Blueprint('api', __name__, url_prefix='/api')
 
 def add_timing_headers(response, **kwargs):
     """Add timing information to response headers."""
@@ -120,7 +120,7 @@ def admin():
     )
 
 
-@main_bp.route('/download_logs')
+@api_bp.route('/download_logs')
 @login_required
 @admin_required
 def download_logs():
@@ -143,7 +143,7 @@ def download_logs():
         flash('Error downloading log file.', 'error')
         return redirect(url_for('main.brainstormer'))
 
-@main_bp.route('/generateWorkarounds', methods=['POST'])
+@api_bp.route('/generateWorkarounds', methods=['POST'])
 def generateWorkarounds():
     
     start_time = time.time()
@@ -216,7 +216,7 @@ def generateWorkarounds():
 
 
 
-@main_bp.route('/generateMisfits', methods=['POST'])
+@api_bp.route('/generateMisfits', methods=['POST'])
 def generateMisfits():
     
     start_time = time.time()
@@ -288,7 +288,7 @@ def generateMisfits():
 
 
 
-@main_bp.route('/generateRoles', methods=['POST'])
+@api_bp.route('/generateRoles', methods=['POST'])
 def generateRoles():
     start_time = time.time()
     process_description = request.form.get('process_description', '').strip()
@@ -357,7 +357,7 @@ def generateRoles():
 
 
 
-@main_bp.route('/start_map', methods=['POST'])
+@api_bp.route('/start_map', methods=['POST'])
 @login_required
 def start_map():
     """Initialize workaround map generation."""
@@ -430,7 +430,7 @@ def start_map():
         if temp_file_path and os.path.exists(temp_file_path):
             os.remove(temp_file_path)
 
-@main_bp.route('/get_similar_workarounds', methods=['POST'])
+@api_bp.route('/get_similar_workarounds', methods=['POST'])
 @login_required
 def get_similar_workarounds():
     start_time = time.time()
@@ -523,7 +523,7 @@ def get_similar_workarounds():
 
 
 
-@main_bp.route('/update_workarounds', methods=['POST'])
+@api_bp.route('/update_workarounds', methods=['POST'])
 @login_required
 def update_workarounds():
     """Update and format workarounds list."""
@@ -542,7 +542,7 @@ def update_workarounds():
         current_app.logger.exception("Error updating workarounds: %s", e)
         return jsonify({'error': str(e)}), 500
 
-@main_bp.route('/download_workarounds', methods=['GET'])
+@api_bp.route('/download_workarounds', methods=['GET'])
 @login_required
 def download_workarounds():
     """Download formatted workarounds as text file."""
@@ -561,7 +561,7 @@ def download_workarounds():
         flash('Error downloading workarounds file.', 'error')
         return redirect(url_for('main.brainstormer'))
     
-@main_bp.route('/test_logging')
+@api_bp.route('/test_logging')
 @login_required
 @admin_required
 def test_logging():
@@ -581,7 +581,7 @@ def test_logging():
     
     return jsonify({'status': 'Logging test complete'})
 
-@main_bp.route('/update_few_shot_examples', methods=['POST'])
+@api_bp.route('/update_few_shot_examples', methods=['POST'])
 @login_required
 def update_few_shot_examples():
     """Update the few shot examples based on user input."""
@@ -596,7 +596,7 @@ def update_few_shot_examples():
         return jsonify({"error": str(e)}), 500
     
 
-@main_bp.route('/retreive_similar_few_shot_examples', methods=['POST'])
+@api_bp.route('/retreive_similar_few_shot_examples', methods=['POST'])
 @login_required
 def retreive_similar_few_shot_examples():
     """Retreive few shot examples based on user input."""
@@ -625,7 +625,7 @@ def retreive_similar_few_shot_examples():
         current_app.logger.exception("Error generating similar few shot examples: %s", e)
         return jsonify({"error": str(e)}), 500
 
-@main_bp.route('/save_workarounds', methods=['POST'])
+@api_bp.route('/save_workarounds', methods=['POST'])
 def save_workarounds():
     try:
         data = request.get_json()

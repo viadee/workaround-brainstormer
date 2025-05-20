@@ -1,0 +1,175 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workaround Brainstormer</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/variables.css">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <!-- External Dependencies -->
+
+    <!-- Additional head content -->
+    <script type="text/javascript">
+        // This variable is now available to your JS code.
+        //var defaultFewShotExamples = {{ default_few_shot_examples|tojson }};
+    </script>
+
+</head>
+<body>
+    <div class="brainstormer-content">
+    
+        <!-- Navigation buttons (formerly in header.html) -->
+        <div class="top-buttons">
+            
+
+
+        </div>
+
+        
+    <!-- Map container (left side) -->
+    <div id="map-container">
+        <div class="spinner" id="map-spinner"></div>
+        <div id="instructions">
+            Left click to expand similar workarounds.<br>
+            Right click to open context menu.
+        </div>
+        <div id="app-version">App Version: {{ app_version }}</div>
+    </div>
+
+    <!-- Sidebar (right side) -->
+    <div id="sidebar">
+        <!-- Input Container -->
+        <div id="input-container">
+            <h2>
+                <span class="header-text">
+                    <i class="fas fa-sitemap"></i> Process Description
+                </span>
+                <span class="icon-container">
+                    <i class="fas fa-cog" id="settings-icon"></i>
+                </span>
+            </h2>
+
+            <!-- File upload alert area -->
+            <div id="file-upload-alert" class="file-upload-alert"></div>
+
+            <div class="upload-container" id="upload-container">
+                <!-- Process Description Input -->
+                <textarea 
+                    id="process-input" 
+                    class="process-textarea"
+                    placeholder="Type your process description here..."
+                ></textarea>
+            
+                <!-- Instructions Overlay -->
+                <div class="overlay-placeholder" id="overlay-placeholder">
+                    <div class="upload-instructions">
+                        <i class="fas fa-file-upload upload-icon"></i>
+                        <p class="drag-drop-text">Drag & drop a process diagram here</p>
+                        <p class="browse-text">or <a href="#" id="browse-link" class="browse-link">click to browse</a></p>
+                    </div>
+                </div>
+            
+                <!-- Hidden File Input -->
+                <input 
+                    type="file" 
+                    id="file-input" 
+                    accept=".svg,.png,.jpg,.jpeg,.pdf"
+                    hidden
+                />
+            
+                <!-- Upload Feedback Area -->
+                <div class="file-preview-overlay">
+                    <img id="file_preview_img" src="" alt="File preview">
+                    <button class="file-preview-remove" aria-label="Remove file">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="file-preview-filename"></div>
+                </div>
+            </div>
+
+            <div id="context-hint" class="context-hint" style="display: none;">
+                <i class="fas fa-lightbulb"></i>
+                <span>Click the <i class="fas fa-cog"></i> icon to add more context about your process!</span>
+            </div>
+
+            <!-- Expert panel (toggled via settings icon) -->
+            <div id="expert-panel">
+                <h3>Additional Context</h3>
+                <textarea 
+                    id="additional-context" 
+                    placeholder="Enter additional context about the company or process"
+                    style="width: 100%; min-height: 100px;"
+                ></textarea>
+                <!-- Nicely styled button to open the few–shot editor -->
+                <button id="edit-few-shot-btn" type="button" class="edit-btn">Edit Few Shot Examples</button>
+            </div>
+
+            <!-- Modal for editing few-shot examples -->
+            <div id="few-shot-modal" class="modal">
+                <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <h3>Edit Few Shot Examples</h3>
+                
+                <!-- Language tabs (using short labels) -->
+                <div id="language-tabs" style="margin-bottom:10px;">
+                    <button class="lang-tab" data-lang="en">EN</button>
+                    <button class="lang-tab" data-lang="de">DE</button>
+                    <!-- Add more tabs as needed -->
+                </div>
+                
+                <!-- Editor container where each example row is rendered -->
+                <div id="few-shot-editor"></div>
+                
+                <!-- New row for adding an example, so that the plus button aligns with the checkboxes -->
+                <div class="few-shot-row add-row">
+                    <button id="add-example-btn" type="button" class="add-example-btn">
+                    <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+
+                <!-- Button for retreiving similar workarounds -->
+                <div class="few-shot-row add-row">
+                    <button id="retreive-similar-few-shot-btn" type="button" class="edit-btn">Retreive similar Few Shot Examples</button>
+                </div>
+                
+                <!-- Inline feedback message -->
+                <div id="few-shot-feedback" class="feedback-message" style="display:none;"></div>
+                </div>
+            </div>
+
+            <!-- Start button -->
+            <button id="start-button">Generate Workarounds</button>
+        </div>
+
+        <!-- Info Container: Workaround List -->
+        <div id="info-container">
+            <h2>
+                <span class="header-text">
+                    <i class="fas fa-list"></i> Workaround List
+                </span>
+                <span class="icon-container">
+                    <a href="#" id="download-btn" class="download-icon" title="Download Workarounds">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                    </a>
+                </span>
+            </h2>
+            <div id="workarounds-list"><!-- Dynamically generated list --></div>
+        </div>
+    </div>
+
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+
+</body>
+</html>

@@ -1,5 +1,5 @@
 // static/js/workaroundsList.js
-class WorkaroundsList {
+export class WorkaroundsList {
     constructor() {
         this.container = document.getElementById('workarounds-list');
         this.expandedNodes = new Set();
@@ -153,4 +153,4 @@ class WorkaroundsList {
 }
 
 // Make available globally
-export default WorkaroundsList;
+window.WorkaroundsList = WorkaroundsList;
