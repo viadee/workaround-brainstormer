@@ -216,7 +216,82 @@ class LLMService:
         except Exception as e:
             logger.error(f"Unexpected error during get_workarounds: {str(e)}")
             return []
+        
+    def get_misfits(self, process: ProcessContext, roles):
+        key = "GenerateMisfitsPrompt"
+        prompt = self._get_prompt(key, process, roles=roles)
+        messages = self._create_messages(prompt, process)
 
+        try:
+            completion = self.client.beta.chat.completions.parse(
+                model= self.chat_model,
+                messages=messages,
+                response_format={"type": "json_object"}
+            )
+            self._log_api_call(
+                function="get_misfits",
+                input_data=prompt,
+                output_data=completion.choices[0].message.content,
+                token_usage=completion.usage.model_dump()
+            )
+            return json.loads(completion.choices[0].message.content)
+        except openai.error.OpenAIError as e:
+            logger.error(f"OpenAI API error on get_misfits: {str(e)}")
+            return []
+        except Exception as e:
+            logger.error(f"Unexpected error during get_misfits: {str(e)}")
+            return []
+    def get_workarounds_from_misfits(self, process: ProcessContext, misfits):
+        
+        key = "GenerateWorkaroundsPrompt"
+        prompt = self._get_prompt(key, process, misfits=misfits)
+        messages = self._create_messages(prompt, process)
+
+        try:
+            completion = self.client.beta.chat.completions.parse(
+                model= self.chat_model,
+                messages=messages,
+                response_format={"type": "json_object"}
+            )
+            self._log_api_call(
+                function="get_workarounds_from_misfits",
+                input_data=prompt,
+                output_data=completion.choices[0].message.content,
+                token_usage=completion.usage.model_dump()
+            )
+            return json.loads(completion.choices[0].message.content)
+        except openai.error.OpenAIError as e:
+            logger.error(f"OpenAI API error on get_workarounds_from_misfits: {str(e)}")
+            return []
+        except Exception as e:
+            logger.error(f"Unexpected error during get_workarounds_from_misfits: {str(e)}")
+            return []
+
+    def get_roles(self, process: ProcessContext) -> List[str]:
+
+        key = "GenerateRolesPrompt"
+        prompt = self._get_prompt(key, process)
+        messages = self._create_messages(prompt, process)
+
+        try:
+            completion = self.client.beta.chat.completions.parse(
+                model= self.chat_model,
+                messages=messages,
+                response_format={"type": "json_object"}
+            )
+            self._log_api_call(
+                function="get_roles",
+                input_data=prompt,
+                output_data=completion.choices[0].message.content,
+                token_usage=completion.usage.model_dump()
+            )
+            return json.loads(completion.choices[0].message.content)
+        except openai.error.OpenAIError as e:
+            logger.error(f"OpenAI API error on get_roles: {str(e)}")
+            return []
+        except Exception as e:
+            logger.error(f"Unexpected error during get_roles: {str(e)}")
+            return []
 
     def get_similar_workarounds(
         self,

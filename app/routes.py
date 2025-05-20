@@ -143,6 +143,220 @@ def download_logs():
         flash('Error downloading log file.', 'error')
         return redirect(url_for('main.brainstormer'))
 
+@main_bp.route('/generateWorkarounds', methods=['POST'])
+def generateWorkarounds():
+    
+    start_time = time.time()
+    process_description = request.form.get('process_description', '').strip()
+    additional_context = request.form.get('additional_context', '').strip()
+    misfits = request.form.get('misfits').strip()
+    if(misfits is None):
+        raise ValueError()
+    
+    current_app.logger.info("Starting map generation")
+    base64_image = None
+    temp_file_path = None
+    file_processing_start = file_processing_end = None
+
+    try:
+        # Handle file upload with timing
+        if 'file' in request.files and request.files['file'].filename:
+            file_processing_start = time.time()
+            temp_file_path, filename = save_uploaded_file(request.files['file'])
+            base64_image = process_image(temp_file_path, filename)
+            file_processing_end = time.time()
+
+        llm_service = LLMService(session_id=session.get('id'))
+        process = ProcessContext(
+            description=process_description,
+            additional_context=additional_context,
+            base64_image=base64_image
+        )
+        
+        # Language detection timing
+        lang_detect_start = time.time()
+        session['detected_language'] = llm_service.detect_language(process)
+        process.language = session['detected_language']
+        lang_detect_end = time.time()
+        
+        # API call timing
+        api_call_start = time.time()
+        workarounds = llm_service.get_workarounds_from_misfits(process, misfits)
+        api_call_end = time.time()
+        
+        session['workarounds'] = workarounds
+        
+        current_app.logger.info("Successfully generated workarounds")
+        response = jsonify(workarounds)
+        
+        # Add all timing headers including file processing if present
+        timing_headers = {
+            'Language_Detection_Start': lang_detect_start,
+            'Language_Detection_End': lang_detect_end,
+            'API_Call_Start': api_call_start,
+            'API_Call_End': api_call_end
+        }
+        
+        if file_processing_start and file_processing_end:
+            timing_headers.update({
+                'File_Processing_Start': file_processing_start,
+                'File_Processing_End': file_processing_end
+            })
+            
+        return add_timing_headers(response, **timing_headers)
+    
+    except Exception as e:
+        current_app.logger.exception("Error in workarounds generation: %s", e)
+        return jsonify({'error': str(e)}), 500
+
+    finally:
+        if temp_file_path and os.path.exists(temp_file_path):
+            os.remove(temp_file_path)
+
+
+
+
+@main_bp.route('/generateMisfits', methods=['POST'])
+def generateMisfits():
+    
+    start_time = time.time()
+    process_description = request.form.get('process_description', '').strip()
+    additional_context = request.form.get('additional_context', '').strip()
+    roles = request.form.get('roles').strip()
+    if(roles is None):
+        raise ValueError()
+    
+    current_app.logger.info("Starting map generation")
+    base64_image = None
+    temp_file_path = None
+    file_processing_start = file_processing_end = None
+
+    try:
+        # Handle file upload with timing
+        if 'file' in request.files and request.files['file'].filename:
+            file_processing_start = time.time()
+            temp_file_path, filename = save_uploaded_file(request.files['file'])
+            base64_image = process_image(temp_file_path, filename)
+            file_processing_end = time.time()
+
+        llm_service = LLMService(session_id=session.get('id'))
+        process = ProcessContext(
+            description=process_description,
+            additional_context=additional_context,
+            base64_image=base64_image
+        )
+        
+        # Language detection timing
+        lang_detect_start = time.time()
+        session['detected_language'] = llm_service.detect_language(process)
+        process.language = session['detected_language']
+        lang_detect_end = time.time()
+        
+        # API call timing
+        api_call_start = time.time()
+        misfits = llm_service.get_misfits(process, roles)
+        api_call_end = time.time()
+        
+        session['misfits'] = misfits
+        
+        current_app.logger.info("Successfully generated workarounds")
+        response = jsonify(misfits)
+        
+        # Add all timing headers including file processing if present
+        timing_headers = {
+            'Language_Detection_Start': lang_detect_start,
+            'Language_Detection_End': lang_detect_end,
+            'API_Call_Start': api_call_start,
+            'API_Call_End': api_call_end
+        }
+        
+        if file_processing_start and file_processing_end:
+            timing_headers.update({
+                'File_Processing_Start': file_processing_start,
+                'File_Processing_End': file_processing_end
+            })
+            
+        return add_timing_headers(response, **timing_headers)
+    
+    except Exception as e:
+        current_app.logger.exception("Error in map generation: %s", e)
+        return jsonify({'error': str(e)}), 500
+
+    finally:
+        if temp_file_path and os.path.exists(temp_file_path):
+            os.remove(temp_file_path)
+
+
+
+@main_bp.route('/generateRoles', methods=['POST'])
+def generateRoles():
+    start_time = time.time()
+    process_description = request.form.get('process_description', '').strip()
+    additional_context = request.form.get('additional_context', '').strip()
+    
+    current_app.logger.info("Starting map generation")
+    base64_image = None
+    temp_file_path = None
+    file_processing_start = file_processing_end = None
+
+    try:
+        # Handle file upload with timing
+        if 'file' in request.files and request.files['file'].filename:
+            file_processing_start = time.time()
+            temp_file_path, filename = save_uploaded_file(request.files['file'])
+            base64_image = process_image(temp_file_path, filename)
+            file_processing_end = time.time()
+
+        llm_service = LLMService(session_id=session.get('id'))
+        process = ProcessContext(
+            description=process_description,
+            additional_context=additional_context,
+            base64_image=base64_image
+        )
+        
+        # Language detection timing
+        lang_detect_start = time.time()
+        session['detected_language'] = llm_service.detect_language(process)
+        process.language = session['detected_language']
+        lang_detect_end = time.time()
+        
+        # API call timing
+        api_call_start = time.time()
+        roles = llm_service.get_roles(process)
+        api_call_end = time.time()
+        
+        session['roles'] = roles
+        
+        current_app.logger.info("Successfully generated roles")
+        response = jsonify(roles)
+        
+        # Add all timing headers including file processing if present
+        timing_headers = {
+            'Language_Detection_Start': lang_detect_start,
+            'Language_Detection_End': lang_detect_end,
+            'API_Call_Start': api_call_start,
+            'API_Call_End': api_call_end
+        }
+        
+        if file_processing_start and file_processing_end:
+            timing_headers.update({
+                'File_Processing_Start': file_processing_start,
+                'File_Processing_End': file_processing_end
+            })
+            
+        return add_timing_headers(response, **timing_headers)
+    
+    except Exception as e:
+        current_app.logger.exception("Error in roles generation: %s", e)
+        return jsonify({'error': str(e)}), 500
+
+    finally:
+        if temp_file_path and os.path.exists(temp_file_path):
+            os.remove(temp_file_path)
+
+
+
+
 @main_bp.route('/start_map', methods=['POST'])
 @login_required
 def start_map():
