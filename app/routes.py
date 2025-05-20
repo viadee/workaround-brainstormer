@@ -143,7 +143,7 @@ def download_logs():
         flash('Error downloading log file.', 'error')
         return redirect(url_for('main.brainstormer'))
 
-@api_bp.route('/generateWorkarounds', methods=['POST'])
+@main_bp.route('/generateWorkarounds', methods=['POST'])
 def generateWorkarounds():
     
     start_time = time.time()
@@ -216,7 +216,7 @@ def generateWorkarounds():
 
 
 
-@api_bp.route('/generateMisfits', methods=['POST'])
+@main_bp.route('/generateMisfits', methods=['POST'])
 def generateMisfits():
     
     start_time = time.time()
@@ -288,7 +288,7 @@ def generateMisfits():
 
 
 
-@api_bp.route('/generateRoles', methods=['POST'])
+@main_bp.route('/generateRoles', methods=['POST'])
 def generateRoles():
     start_time = time.time()
     process_description = request.form.get('process_description', '').strip()
@@ -357,7 +357,7 @@ def generateRoles():
 
 
 
-@api_bp.route('/start_map', methods=['POST'])
+@main_bp.route('/start_map', methods=['POST'])
 @login_required
 def start_map():
     """Initialize workaround map generation."""
