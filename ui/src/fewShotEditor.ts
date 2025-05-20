@@ -1,37 +1,50 @@
 // static/js/FewShotEditor.js
 
-class FewShotEditor {
+export class FewShotEditor {
+
+    private currentLang: string
+    private modal: HTMLElement 
+    private editor: HTMLElement 
+    private feedbackMessage: HTMLElement
+    private langTabButtons: NodeListOf<Element> 
+
+    private editBtn: HTMLElement
+    private closeModal: HTMLElement 
+    private addExampleBtn: HTMLElement 
+    private retreiveBtn: HTMLElement 
+    private description: HTMLElement
+    private additionalContext: HTMLElement 
+    private file_preview_img: HTMLElement
+
     constructor() {
-        // Initialize the examples from the server variable.
-        this.allExamples = JSON.parse(JSON.stringify(defaultFewShotExamples));
+        // todo get exampels from api endpoint
+        //this.allExamples = JSON.parse(JSON.stringify(defaultFewShotExamples));
 
         // Set the current language; default to English.
         this.currentLang = "en";
-        this.modal = document.getElementById('few-shot-modal');
-        this.editor = document.getElementById('few-shot-editor');
-        this.feedbackMessage = document.getElementById('few-shot-feedback');
+        this.modal = document.getElementById('few-shot-modal')as HTMLElement;
+        this.editor = document.getElementById('few-shot-editor')as HTMLElement;
+        this.feedbackMessage = document.getElementById('few-shot-feedback') as HTMLElement;
         this.langTabButtons = document.querySelectorAll('.lang-tab');
 
-        this.initializeUIElements();
-        this.setupEventListeners();
-        this.populateEditor();
-    }
-
-    initializeUIElements() {
-        this.editBtn = document.getElementById('edit-few-shot-btn');
-        this.closeModal = this.modal.querySelector('.close-modal');
-        this.addExampleBtn = document.getElementById('add-example-btn');
-        this.retreiveBtn = document.getElementById('retreive-similar-few-shot-btn');
-        this.description = document.getElementById('process-input');
-        this.additionalContext = document.getElementById('additional-context');
-        this.file_preview_img = document.getElementById('file_preview_img')
-        // Populate the editor when the modal opens
+        this.editBtn = document.getElementById('edit-few-shot-btn') as HTMLElement;
+        this.closeModal = this.modal.querySelector('.close-modal') as HTMLElement;
+        this.addExampleBtn = document.getElementById('add-example-btn') as HTMLElement;
+        this.retreiveBtn = document.getElementById('retreive-similar-few-shot-btn') as HTMLElement;
+        this.description = document.getElementById('process-input') as HTMLElement;
+        this.additionalContext = document.getElementById('additional-context') as HTMLElement;
+        this.file_preview_img = document.getElementById('file_preview_img')as HTMLElement
+        // Populate the editor when the modal opens 
         this.editBtn.addEventListener('click', () => {
             this.currentLang = "en"; // Reset to default language on open.
             this.updateLangTabs();
             this.modal.style.display = 'block';
         });
+
+        this.setupEventListeners();
+        this.populateEditor();
     }
+
 
     setupEventListeners() {
         this.closeModal.addEventListener('click', () => this.closeModalAndSave());
@@ -44,7 +57,7 @@ class FewShotEditor {
         this.langTabButtons.forEach(btn => {
             btn.addEventListener('click', () => {
                 this.updateCurrentLanguageExamples(); // save current state first
-                this.currentLang = btn.getAttribute('data-lang');
+                this.currentLang = btn.getAttribute('data-lang') as string;
                 this.updateLangTabs();
                 this.populateEditor();
             });
@@ -85,7 +98,7 @@ class FewShotEditor {
 
     populateEditor() {
         this.editor.innerHTML = ''; // Clear existing rows.
-        const examples = this.allExamples[this.currentLang] || [];
+        const examples = this.allExamples != undefined ? this.allExamples[this.currentLang] : [];
         examples.forEach((ex, index) => {
             const row = document.createElement('div');
             row.classList.add('few-shot-row');

@@ -1,24 +1,51 @@
 
 // static/js/main.js
+import { GraphManager } from './graphManager'
+import { FileUploadManager } from './fileUpload'
+import { WorkaroundsList } from './workaroundsList'
+import { FewShotEditor } from './fewShotEditor'
+import { WorkaroundGenerationSettings } from './WorkaroundGenerationSettings'
+import { NodeContextMenu } from './nodeContextMenu'
+import { IWorkaround } from './types'
+
 class App {
+
+    private nextNodeId: number
+    private isExpanding: boolean
+    private currentFilename: string | null
+    private fetchWorkaroundsState: boolean
+
+    private graphManager: GraphManager
+    private fileUploadManager: FileUploadManager
+    private workaroundsList: WorkaroundsList 
+    private fewShotEditor: FewShotEditor 
+    private workaroundGenerationSettings: WorkaroundGenerationSettings
+    private spinner: HTMLElement | null
+    private nodeContextMenu: NodeContextMenu
+
     constructor() {
         this.nextNodeId = 1;
         this.isExpanding = false;
         this.currentFilename = null;
         this.fetchWorkaroundsState = false
+
+        this.graphManager = new GraphManager()
+        this.fileUploadManager = new FileUploadManager();
+        this.workaroundsList = new WorkaroundsList();
+        this.fewShotEditor = new FewShotEditor();
+        this.workaroundGenerationSettings = new WorkaroundGenerationSettings()
+
+        this.spinner = document.getElementById("map-spinner");
+
+        this.nodeContextMenu = new NodeContextMenu(this.graphManager, () => this.updateUI(), this.workaroundGenerationSettings)
+
         this.setupComponents();
         this.setupEventListeners();
     }
 
 
     setupComponents() {
-        this.graphManager = window.graphManager;
-        this.fileUploadManager = window.fileUploadManager;
-        this.workaroundsList = window.workaroundsList;
-        this.fewShotEditor = window.fewShotEditor;
-        this.workaroundGenerationSettings = window.workaroundGenerationSettings
-
-        this.spinner = document.getElementById("map-spinner");
+        
         
         // Expert panel toggle
         const settingsIcon = document.getElementById("settings-icon");
@@ -31,7 +58,7 @@ class App {
             });
         }
 
-        this.nodeContextMenu = new window.NodeContextMenu(this.graphManager, () => this.updateUI(), this.workaroundGenerationSettings)
+        
     }
 
     setupEventListeners() {
@@ -41,8 +68,9 @@ class App {
             startButton.addEventListener("click", () => this.createInitialStructure());
         }
 
+        
         // File upload event
-        window.addEventListener('fileUploaded', (e) => {
+        window.addEventListener('fileUploaded', (e: CustomEventInit) => {
             this.currentFilename = e.detail.filename;
         });
 
@@ -52,21 +80,25 @@ class App {
         });
 
         // Node events
-        window.addEventListener('nodeClick', (e) => this.expandNode(e.detail.event, e.detail.node));
-        window.addEventListener('nodeContextMenu', (e) => this.nodeContextMenu.showNodeContextMenu(e.detail.event, e.detail.node));
-        window.addEventListener('highlightNode', (e) => this.graphManager.highlightNode(e.detail.nodeId));
+        window.addEventListener('nodeClick', (e: CustomEventInit) => this.expandNode(e.detail.event, e.detail.node));
+        window.addEventListener('nodeContextMenu', (e: CustomEventInit) => this.nodeContextMenu.showNodeContextMenu(e.detail.event, e.detail.node));
+        window.addEventListener('highlightNode', (e: CustomEventInit) => this.graphManager.highlightNode(e.detail.nodeId));
     }
 
-    async createInitialStructure() {
+    async createInitialStructure(): Promise<void> {
+        console.log(123)
         if(this.fetchWorkaroundsState == true){
             return;
         }
         this.fetchWorkaroundsState = true
         this.graphManager.clearGraph();
-        this.spinner.style.display = "block";
+        if(this.spinner != null)
+            this.spinner.style.display = "block";
+        else 
+            throw new Error("Spinner is null")
 
-        const description = document.getElementById('process-input').value;
-        const additionalContext = document.getElementById('additional-context')?.value || '';
+        const description = (document.getElementById('process-input') as HTMLInputElement).value;
+        const additionalContext = (document.getElementById('additional-context') as HTMLInputElement).value || '';
 
         try{
             this.fewShotEditor.currentLang = "en";
@@ -107,12 +139,12 @@ class App {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             
-            const workarounds = await response.json();
+            const workarounds = await response.json() as  { error: string }
             if (workarounds.error) {
                 throw new Error(workarounds.error);
             }
             
-            workarounds.forEach(text => {
+            (workarounds as unknown as Array<string>).forEach(text => {
                 const childNode = {
                     id: this.nextNodeId++,
                     text,
@@ -124,7 +156,7 @@ class App {
             });
 
             this.updateUI();
-        } catch (error) {
+        } catch (error: {message: string}) {
             console.error('Error creating initial structure:', error);
             alert(error.message || 'Error retrieving initial workarounds.');
         } finally {
@@ -134,15 +166,18 @@ class App {
     }
 
     // in main.js, update the expandNode method
-    async expandNode(event, d) {
+    async expandNode(event: Event, d: IWorkaround) {
         if (this.isExpanding || d.expanded || d.id === 0) return;
         this.isExpanding = true;
-        this.spinner.style.display = "block";
+        if(this.spinner == null)
+            throw new Error("Spinner is null")
+        else 
+            this.spinner.style.display = "block";
     
         try {
             // Build data object
             const requestData = {
-                process_description: document.getElementById('process-input').value,
+                process_description: (document.getElementById('process-input') as HTMLInputElement).value,
                 additional_context: this.workaroundGenerationSettings.getAdditionalPromptContext(),
                 similar_workaround: d.text,
                 other_workarounds: this.graphManager.getNodes()
@@ -254,12 +289,6 @@ class App {
 window.addEventListener('load', () => {
     console.log('Initializing components...');
     
-    // Create global instances
-    window.graphManager = new window.GraphManager();
-    window.fileUploadManager = new window.FileUploadManager();
-    window.workaroundsList = new window.WorkaroundsList();
-    window.workaroundGenerationSettings = new window.WorkaroundGenerationSettings()
-    window.fewShotEditor = new window.FewShotEditor();
     // Initialize the main app
     window.app = new App();
     
