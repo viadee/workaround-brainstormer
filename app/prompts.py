@@ -29,8 +29,9 @@ Finally, from the basic population of roles, minimize the role selection by
 -	do not include generic role names like “intern” or “Manager”, but “production manager” would be valid
 
 Return as much roles as you can an JSON Array in the following format:
-[“Role1“, “Role2“]
-
+{{
+ "roles" : [“Role1“, “Role2“]
+}}
 Minimize your answer length to only return the JSON Array and only two short sentences addressing the selection process.
 
 """,
@@ -64,8 +65,8 @@ Based on this analysis, for each given role, return three to seven Challenges as
 -	Continue with the context or action e.g. “As a consultant, when I am in a workshop with my client”
 -	Finish with the identified challenge:  “As a consultant, when I am in a workshop with my client and can’t find the issue in the information system.”
 {{
-“role1”: [“Challenge1”, “Challenge2”, “Challenge3”],
-“role2”: [“Challenge1”, “Challenge2”, “Challenge3”]
+“role1”: [{{label: "short label of the challenge", text: "sentence"}}, {{label: "short label of the challenge", text: "sentence"}}, {{label: "short label of the challenge", text: "sentence"}}],
+“role2”: [{{label: "short label of the challenge", text: "sentence"}}, {{label: "short label of the challenge", text: "sentence"}}]
 }}, 
 
 """,
