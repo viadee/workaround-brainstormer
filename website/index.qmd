@@ -46,9 +46,7 @@ Als Output erhalten wir <i>Workaround-Stories</i> die in diesem Geschäftsprozes
 
 </div>
 
-
-
-{{< video assets/wa_brainstormer_erklaervideo.mp4 width="400" height="300" >}}
+{{< video assets/wa_brainstormer_erklaervideo.mp4 width="450" >}}
 
 
 ::::
