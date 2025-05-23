@@ -99,8 +99,15 @@ Finally, formulate a workaround that enables the role to overcome, bypass or min
 Return the workarounds as a JSON object in the following format:
 {{
 "role1": [
-"As a [role] [context/activity], when [misfit/challenge], I [adaptive action] to [intended outcome]."
-"... (more workarounds) ..."
+{{
+    "workaround":"As a [role] [context/activity], when [challenge], I [adaptive action] to [intended outcome].",
+    "challengeLabel": "the label of the associated challenge"
+}},
+{{
+    "workaround":"As a [role] [context/activity], when [challenge], I [adaptive action] to [intended outcome].",
+    "Label": "the label of the associated challenge"
+}}
+
 ]
 }}
 
