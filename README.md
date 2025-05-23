@@ -19,7 +19,7 @@ Both the [CWA Corpus](rag/workarounds_corpus.csv) and the software tool are lice
 
 ## How it works
 
-[Watch video](/static/.mp4)
+<video src="static/assets/wa_brainstormer_erklaervideo.mp4" width="320" height="240" controls></video>
 
 # Getting Started
 
