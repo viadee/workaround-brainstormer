@@ -19,7 +19,9 @@ Both the [CWA Corpus](rag/workarounds_corpus.csv) and the software tool are lice
 
 ## How it works
 
-<video src="static/assets/wa_brainstormer_erklaervideo.mp4" width="320" height="240" controls></video>
+https://github.com/user-attachments/assets/cb4db8b1-3041-4e84-a225-20d2dee6df62
+
+
 
 # Getting Started
 
