@@ -28,7 +28,14 @@ Input ist eine Beschreibung eines Geschäftsprozesses (hier stark vereinfacht - 
 
 :::
 
+
+
 Als Output erhalten wir <i>Workaround-Stories</i> die in diesem Geschäftsprozess plausibel sind:
+
+
+:::: {.coffee-image}
+
+<div>
 
 :::{.callout-tip title="Workaround-Stories"}
 1.  Als Software-Entwickler bin ich unproduktiv, falls die Kaffeemaschine kaputt ist. Ich habe daher Instant-Kaffee in meinem Schreibtisch bevorratet, um mein Koffein-Level abzusichern.
@@ -36,7 +43,17 @@ Als Output erhalten wir <i>Workaround-Stories</i> die in diesem Geschäftsprozes
 3. Als Software-Entwicklerin bin ich unkonzentriert, falls die Kaffeemaschine ausfällt. Ich weiche daher auf Tee aus, um meine Deadlines zu erreichen.
 4. Als Software-Architektin bin ich unkonzentriert, falls die Kaffeemaschine ausfällt oder die Schlange vor der Maschine zu lang ist. Ich bleibe daher lieber im Homeoffice, um unabhängig von der Kaffeemaschine und der Warteschlange zu sein.
 :::
+
+</div>
+
+
+
+{{< video assets/wa_brainstormer_erklaervideo.mp4 width="400" height="300" >}}
+
+
+::::
 Wir bekommen einen Überblick über potenziell beteiligte Personen und deren "Misfits", also Sorgen und Herausforderungen und insb. externe Rahmenbedingungen, die sie dazu bringen vom Sollprozess abzuweichen. Einige davon sind nicht wünschenswert (Software-Architektin nur im Home-Office) andere können Keimzelle eines angepassten Soll-Prozesses sein (die strategische Instant-Kaffee-Reserve). 
+
 
 
 ## Forschungskontext

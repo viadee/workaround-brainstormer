@@ -7,7 +7,14 @@
     color:white;
 }
 
-
+.coffee-image{
+    display: flex; 
+}
+.c-image{
+    height: min-content;
+    padding-left: 20px;
+    padding-top:40px;
+}
 .footer {
     width: calc(100% - 60px);
     border-top: 1px solid var(--border-color-grey);

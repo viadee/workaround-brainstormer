@@ -41,6 +41,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-5d6235342de7a1051cd107f891de7694.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="site_libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -152,7 +154,7 @@ ul.task-list li input[type="checkbox"] {
 <p><a class="cta-button btn btn-secondary" target="_blank" href="./brainstormer">Jetzt Workarounds finden</a></p>
 <section id="beispiel-coffee-coders-inc." class="level2">
 <h2 class="anchored" data-anchor-id="beispiel-coffee-coders-inc.">Beispiel Coffee Coders Inc.</h2>
-<p>Input ist eine Beschreibung eines Geschäftsprozesses (hier start vereinfacht - es könnte auch ein BPMN-Diagramm sein)</p>
+<p>Input ist eine Beschreibung eines Geschäftsprozesses (hier stark vereinfacht - es könnte auch ein BPMN-Diagramm sein)</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Vereinfachter Prozess">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -163,10 +165,14 @@ Vereinfachter Prozess
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<pre> &gt; ... wir verwandeln Kaffee und Kundenanforderungen in Lösungen.</pre>
+<blockquote class="blockquote">
+<p>… in der IT-Beratung nehmen wir erst Kundenanforderungen auf. Dann geben wir Kaffee hinzu und erstellen Software-Lösungen.</p>
+</blockquote>
 </div>
 </div>
 <p>Als Output erhalten wir <i>Workaround-Stories</i> die in diesem Geschäftsprozess plausibel sind:</p>
+<div class="coffee-image">
+<div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Workaround-Stories">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -184,6 +190,9 @@ Workaround-Stories
 <li>Als Software-Architektin bin ich unkonzentriert, falls die Kaffeemaschine ausfällt oder die Schlange vor der Maschine zu lang ist. Ich bleibe daher lieber im Homeoffice, um unabhängig von der Kaffeemaschine und der Warteschlange zu sein.</li>
 </ol>
 </div>
+</div>
+</div>
+<div class="quarto-video"><video id="video_shortcode_videojs_video1" width="400" height="300" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title=""><source src="assets/wa_brainstormer_erklaervideo.mp4"></video></div>
 </div>
 <p>Wir bekommen einen Überblick über potenziell beteiligte Personen und deren “Misfits”, also Sorgen und Herausforderungen und insb. externe Rahmenbedingungen, die sie dazu bringen vom Sollprozess abzuweichen. Einige davon sind nicht wünschenswert (Software-Architektin nur im Home-Office) andere können Keimzelle eines angepassten Soll-Prozesses sein (die strategische Instant-Kaffee-Reserve).</p>
 </section>
@@ -778,6 +787,7 @@ Wie genau muss ich den Prozess beschreiben?
   });
   </script>
 </div> <!-- /content -->
+<script>videojs(video_shortcode_videojs_video1);</script>
 
 
 

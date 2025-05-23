@@ -17,6 +17,10 @@ The tool contains the [CWA Corpus](rag/workarounds_corpus.csv), i.e. a list auf 
 
 Both the [CWA Corpus](rag/workarounds_corpus.csv) and the software tool are licensed under the [BSD 3-Clause License](LICENSE).
 
+## How it works
+
+[Watch video](/static/.mp4)
+
 # Getting Started
 
 ## Installation
