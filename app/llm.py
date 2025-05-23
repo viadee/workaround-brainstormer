@@ -107,7 +107,7 @@ class LLMService:
             api_version=api_version,
             azure_endpoint=azure_endpoint
         )
-
+        
         self.chat_model = current_app.config['AZURE_CHAT_MODEL']
         self.language_service = LanguageService()
         self.session_id = session_id or self._get_session_id()
