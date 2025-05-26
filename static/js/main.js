@@ -156,35 +156,25 @@ class App {
         }
 
         try {
-            // const response = await fetch('/start_map', {
-            //     method: 'POST',
-            //     body: formData,
-            // });
+            const roleResponse = await fetch('/api/generateRoles', {
+                method: 'POST',
+                body: formData,
+            });
             
-            // if (!response.ok) {
-            //     throw new Error(`HTTP error! status: ${response.status}`);
-            // }
+            if (!roleResponse.ok) {
+                throw new Error(`HTTP error! status: ${roleResponse.status}`);
+            }
             
-            // const workarounds = await response.json();
-            // if (workarounds.error) {
-            //     throw new Error(workarounds.error);
-            // }
-                        
-            // workarounds.forEach(text => {
-            //     const childNode = {
-            //         id: this.nextNodeId++,
-            //         text,
-            //         expanded: false,
-            //         parent: rootNode.id,
-            //         category: "role"
-            //     };
-            //     this.graphManager.addNode(childNode);
-            //     this.graphManager.addLink(rootNode.id, childNode.id);
-            // });
+            const roleData = await roleResponse.json();
+            if (roleData.error) {
+                throw new Error(roleData.error);
+            }
 
-            const response = this.backendTest.returnRoles()
+            console.log(roleData)
 
-            const roles = response.roles
+            const roles = roleData["roles"]
+
+            console.log(roles)
 
             roles.forEach(role => {
                 const childNode = {
@@ -201,9 +191,29 @@ class App {
 
             this.updateUI();
 
-            await sleep(2000)
+            // await sleep(2000)
+
+            formData.append('roles',roles)
+
+            const misfitResponse = await fetch('/api/generateMisfits', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!misfitResponse.ok) {
+                throw new Error(`HTTP error! status: ${misfitResponse.status}`);
+            }
             
-            const misfitResponse = this.backendTest.returnMisfits()
+            const misfitData = await misfitResponse.json();
+            if (misfitData.error) {
+                throw new Error(misfitData.error);
+            }
+
+            console.log(misfitData)
+
+            const misfits = misfitData["misfits"]
+            
+            // const misfitResponse = this.backendTest.returnMisfits()
 
             for (const role of roles) {
                 try {
