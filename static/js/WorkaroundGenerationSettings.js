@@ -4,6 +4,7 @@ class WorkaroundGenerationSettings{
     
     constructor(){
         this.undesirableWorkarounds = []
+        this.undesirableMisfits = []
     }
 
     addUndesirableWorkaround(workaround){

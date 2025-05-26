@@ -170,11 +170,7 @@ class App {
                 throw new Error(roleData.error);
             }
 
-            console.log(roleData)
-
             const roles = roleData["roles"]
-
-            console.log(roles)
 
             roles.forEach(role => {
                 const childNode = {
@@ -191,9 +187,9 @@ class App {
 
             this.updateUI();
 
-            // await sleep(2000)
-
             formData.append('roles',roles)
+
+            formData.append('challenges_quantity',1)
 
             const misfitResponse = await fetch('/api/generateMisfits', {
                 method: 'POST',
@@ -209,15 +205,12 @@ class App {
                 throw new Error(misfitData.error);
             }
 
-            console.log(misfitData)
-
-            const misfits = misfitData["misfits"]
             
             // const misfitResponse = this.backendTest.returnMisfits()
 
             for (const role of roles) {
                 try {
-                    const misfits = misfitResponse[role];
+                    const misfits = misfitData[role];
                     const parentNode = this.graphManager.getNodes().filter(node => node.text === role)[0]
 
                     for (const misfit of misfits) {
@@ -242,17 +235,28 @@ class App {
 
             this.updateUI();
 
-            await sleep(2000)
+            formData.append("misfits", JSON.stringify(misfitData))
 
+            const workaroundResponse = await fetch('/api/generateWorkarounds', {
+                method: 'POST',
+                body: formData,
+            });
 
-            const workaroundResponse = this.backendTest.returnWorkarounds()
+            if (!workaroundResponse.ok) {
+                throw new Error(`HTTP error! status: ${workaroundResponse.status}`);
+            }
+            
+            const workaroundData = await workaroundResponse.json();
+            if (workaroundData.error) {
+                throw new Error(workaroundData.error);
+            }
 
             const misfitNodes = this.graphManager.getNodes().filter(x => x.category === "misfit")
 
             for (const misfitNode of misfitNodes) {
                 try {
                     const role = this.graphManager.getNodeById(misfitNode.parent)
-                    const workarounds = workaroundResponse[role.label].filter(x => x.misfitLabel === misfitNode.label)
+                    const workarounds = workaroundData[role.label].filter(x => x.challengeLabel === misfitNode.label)
 
                     for (const workaround of workarounds) {
                         const workaroundNode = {
@@ -267,6 +271,7 @@ class App {
                     }
                 } catch (error) {
                     console.error(`Error retrieving workaround for misfit: ${misfitNode.label}`, error)
+                    continue
                 }
             }
 
