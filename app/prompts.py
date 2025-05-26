@@ -3,32 +3,44 @@ PROMPTS = {
 
         
 "GenerateRolesPrompt" : """
-
-You are an expert process analyst with extensive experience investigating business processes across various industries. Consider the process of the attached process diagram.
+You are an expert process analyst with extensive experience investigating business processes across various industries.
 Let’s systematically analyze which roles respectively process participants/actors does the process description explicit and implicit include:
-1.	First, list the explicid mentioned roles in the process description.
-2.	Secondly, , consider the following questions and instructions to gather implicit mentioned or other relevant roles. Gather as much roles as you can: 	
--	what roles are most common or obvious in the described process domain e.g. industry the  process is performed in?
--	what roles perform the most critical tasks and what roles have desicion-making power or hold specific insides about the process?
--	explore diverse types of roles and ensure including roles that are different accordingly to the following dimensions:
-o	Hierarchy level (Management, Supervisor, staff jobs, line jobs), 
-o	Occupation 
-	Managers e.g. Production manager in agriculture, IT-Manager)
-	Professionals e.g. physicist, Architect, Teacher, Medical doctor, Accountant, Lawyer
-	Technicians e.g. Mechanical Engineering, Biogas technician, 3D printing technician, Network technician
-	Service and sales workers e.g. Call centre agent, Cook, cleaning specialist
-	Agricultural, forestry and fishery e.g. Crop farmer, fisher
-	Craft and related trade e.g. Bricklayer, Carpenter, avionics technician, computer hardware repair technician, Baker
-	Plant and machine operators e.g. Coating machine operator, Chemical mixer, Assemblers
-	Elementary e.g. handpacker, Distribution center dispatcher
--	type of employment (e.g. intern, full-time seasonal workers, etc.), 
--	function/department (e.g. Control tower, Accounting, Production line, Kitchen, )
+
+Consider the following process and/or the attached process diagram: 
+{process_description}
+
+**Additional Context:**
+{additional_context}
+
+1.	First, list the explicit mentioned roles in the process description.
+2.	Secondly, consider the following questions and instructions to gather implicitly mentioned or other relevant roles. Gather as many roles as you can: 	
+    -	think about roles that are most common or obvious in the described process domain e.g. industry the process is performed in
+    -	consider roles that perform the most critical tasks and what roles have decision-making power or hold specific insides about the process
+    -	think about jobs not mentioned in but indirectly affected by the process
+    -	explore diverse types of roles and ensure including roles that are different accordingly to the following dimensions:
+        o	Hierarchy level (Management, Supervisor, staff jobs, line jobs), 
+    o	Occupation 
+        	Managers e.g. Production manager in agriculture, IT-Manager)
+        	Professionals e.g. physicist, Architect, Teacher, Medical doctor, Accountant, Lawyer
+        	Technicians e.g. Mechanical Engineering, Biogas technician, 3D printing technician, Network technician
+        	Service and sales workers e.g. Call centre agent, Cook, cleaning specialist
+        	Agricultural, forestry and fishery e.g. Crop farmer, fisher
+        	Craft and related trade e.g. Bricklayer, Carpenter, avionics technician, computer hardware repair technician, Baker
+        	Plant and machine operators e.g. Coating machine operator, Chemical mixer, Assemblers
+        	Elementary e.g. handpacker, Distribution center dispatcher
+    o	type of employment (e.g. intern, full-time seasonal workers, etc.), 
+    o	function/department (e.g. Control tower, Accounting, Production line, Kitchen)
+
+**Examples**
+{few_shot_examples}
+
 Finally, from the basic population of roles, minimize the role selection by 
 -	only including roles that can be differentiated by the nature of the role from the other roles, so that any of the final selected roles reflect a unique perspective on the process.
--	decide how many roles to select by weighing up if any role could give a valuable new perspective or if its nature is too similar to another role. 
+-	decide how many roles to select by weighing up if any role could give a valuable new perspective or if its nature is too similar to another role.
 -	do not include generic role names like “intern” or “Manager”, but “production manager” would be valid
 
-Return as much roles as you can an JSON Array in the following format:
+Return a maximum of {roles_quantity} roles as a JSON array in the following format:
+
 {{
  "roles" : [“Role1“, “Role2“]
 }}
@@ -39,28 +51,37 @@ Minimize your answer length to only return the JSON Array and only two short sen
 
 "GenerateMisfitsPrompt" : """
 
-You are an expert process analyst with extensive experience investigating business processes across various industries. Consider the process of the attached process diagram and the following roles participating in the process:
+You are an expert process analyst with extensive experience investigating business processes across various industries.
+
+Consider the following process and/or the attached process diagram: 
+{process_description}
+
+**Additional Context:**
+{additional_context}
+
+And the identified roles participating in the process:
 {roles}
 
 For each role, let’s systematically analyze unusual potential obstacles, issues, exceptions, anomalies, mishaps, established practices, management expectations or structural constraints that could prevent the role achieving a desired level of efficiency, effectiveness or other personal or organizational goals:
 
 1.	First, analyze the context the role performs its work:
-•	Identify which responsibilities the role has and what actions it performs
-•	Clarify the goal or outcome the role is expected to accomplish
-•	Consider the context or environment the role performs its activities in (e.g. information system, social climate, rules) and how it could impact the role’s work
+    •	Identify which responsibilities the role has and what actions it performs
+    •	Clarify the goal or outcome the role is expected to accomplish
+    •	Consider the context or environment the role performs its activities in (e.g. information system, social climate, rules) and how it could impact the role’s work
 2.	Reconstruct all dependencies the roles relies on in order to perform it’s work:
-•	What external factors could negatively impact the execution of the process or workflow?
-•	What internal factors could influence the work done by the role?
+    •	What external factors could negatively impact the execution of the process or workflow?
+    •	What internal factors could influence the work done by the role?
 3.	Finally, evaluate potential challenges that could occur during the activities and hinder the expected achievement of the desired outcome.
-•	Look for points where resources might be constrained
-•	Consider areas where official procedures might be too rigid
-•	Reflect to include issues that are different in their effect (e.g. time, quality, costs) on the intended outcomes
-•	Only include issues that could be solved by the role itself
-•	Think about challenges that are ultra specific in the considered process domain
+    •	Look for points where resources might be constrained
+    •	Consider areas where official procedures might be too rigid
+    •	Reflect to include issues that are different in their effect (e.g. time, quality, costs) on the intended outcomes
+    •	Only include issues that could be solved by the role itself
+    •	Think about challenges that are ultra specific in the considered process domain
 
+**Examples**
+{few_shot_examples}
 
-
-Based on this analysis, for each given role, return three to seven Challenges as an JSON object in the following format:
+Based on this analysis, for each given role, return {challenges_quantity} Challenges as an JSON object in the following format:
 -	Start each sentence with the role e.g. “As a consultant, ”
 -	Continue with the context or action e.g. “As a consultant, when I am in a workshop with my client”
 -	Finish with the identified challenge:  “As a consultant, when I am in a workshop with my client and can’t find the issue in the information system.”
@@ -74,38 +95,96 @@ Based on this analysis, for each given role, return three to seven Challenges as
 
 "GenerateWorkaroundsPrompt": """
 
+You are an expert process analyst with extensive experience investigating business processes across various industries. 
 
-You are an expert process analyst with extensive experience investigating business processes across various industries. Consider the process of the attached process diagram and the following challenges that could occur in the process:
+Consider the following process and/or the attached process diagram: 
+{process_description}
+
+**Additional Context:**
+{additional_context}
+
+And the identified challenges that occur in the process:
 {misfits}
 
 Let’s systemically analyze the described challenges of the role, derive possible adaptive actions and formulate meaningful workarounds that enable achieving the desired outcome.
 For each challenge:
 
 1.	First, understand the context the challenge occurs in. What is the desired outcome of the activity performed by the role?
--	Is it important for achieving organizational goals like customer satisfaction or revenue growth?
--	Could the activity be driven by efficiency or effectiveness?
--	Do personal goals impact the work or its outcomes?
+    -	Is it important for achieving organizational goals like customer satisfaction or revenue growth?
+    -	Could the activity be driven by efficiency or effectiveness?
+    -	Do personal goals impact the work or its outcomes?
 2.	Secondly, analyze the source of the challenge:
--	Are the obstacles external or internal respectively in the control of the organization or role?
--	Do established practices, management expectations, or structural constraints hindering the role from achieving the desired outcomes?
+    -	Are the obstacles external or internal respectively in the control of the organization or role?
+    -	Do established practices, management expectations, or structural constraints hindering the role from achieving the desired outcomes?
 3.	Thirdly, evaluate possible adaptive actions the role could perform to overcome the challenge and achieve the desired outcomes:
--	What could the role do with the available resources?
--	Do common standards or best practices exist for processes in this domain?
--	Generate adaptive actions that solve the concrete problem, don’t require official process changes, could be implemented by the people involved and are realistic in the domain of the process
-Finally, formulate a workaround that enables the role to overcome, bypass or minimize the challenge:
+    -	What could the role do with the available resources?
+    -	Do common standards or best practices exist for processes in this domain?
+    -	Generate adaptive actions that solve the concrete problem, don’t require official process changes, could be implemented by the people involved and are realistic in the domain of the process
+
+Finally, for each challenge, formulate {workarounds_quantity} unique workarounds that enable the role to overcome, bypass or minimize the challenge:
+-   make sure to generate the just mentioned quantity ({workarounds_quantity}) of workarounds for each challenge. For example, if you have three challenges per role and 3 roles in total, you must generate 3 * 3 * {workarounds_quantity} workarounds in total!
 -	Present each workaround as a user story using the following format:
 -	Template: "As a [role] [context], when [challenge], I [adaptive action] to [intended outcome]."
--	Provide 5 unique workarounds relevant to the process described.
+
+**Examples**
+
+{{
+  "Production Manager": [
+    {{
+      "workaround": "As a Production Manager overseeing production timelines, when facing supplier delays, I establish alternative suppliers and maintain a buffer stock to prevent disruptions.",
+      "challengeLabel": "Supplier Delays"
+    }},
+    {{
+      "workaround": "As a Production Manager needing real-time data, when I encounter technical issues accessing the warehousing system, I set up a manual log to ensure I can make timely decisions.",
+      "challengeLabel": "Technical Issues"
+    }},
+    {{
+      "workaround": "As a Production Manager reliant on inventory updates, when I face communication discrepancies with the Warehouse Supervisor, I implement a standardized communication protocol to receive timely and accurate information.",
+      "challengeLabel": "Communication Discrepancies"
+    }},
+    {{
+      "workaround": "As a Production Manager managing production schedules, when experiencing supplier delays, I draft contingency production plans to minimize impact.",
+      "challengeLabel": "Supplier Delays"
+    }},
+    {{
+      "workaround": "As a Production Manager assessing inventory needs, when facing technical issues with the system, I coordinate regular check-ins with IT for prompt resolutions.",
+      "challengeLabel": "Technical Issues"
+    }},
+    {{
+      "workaround": "As a Production Manager overseeing workflow, when dealing with communication discrepancies, I arrange for weekly synchronization meetings with the Warehouse Supervisor.",
+      "challengeLabel": "Communication Discrepancies"
+    }},
+    {{
+      "workaround": "As a Production Manager focusing on output, when faced with supplier delays, I proactively engage in regular updates with suppliers to anticipate delays.",
+      "challengeLabel": "Supplier Delays"
+    }},
+    {{
+      "workaround": "As a Production Manager relying on inventory information, when I experience technical issues, I request read-only access to inventory data for alternative access methods.",
+      "challengeLabel": "Technical Issues"
+    }},
+    {{
+      "workaround": "As a Production Manager striving for seamless production, when encountering communication discrepancies, I create a shared online dashboard for real-time updates.",
+      "challengeLabel": "Communication Discrepancies"
+    }}
+  ]
+
+{few_shot_examples}
+
+}}
 Return the workarounds as a JSON object in the following format:
 {{
 "role1": [
 {{
     "workaround":"As a [role] [context/activity], when [challenge], I [adaptive action] to [intended outcome].",
-    "challengeLabel": "the label of the associated challenge"
+    "challengeLabel": "First challenge"
 }},
 {{
-    "workaround":"As a [role] [context/activity], when [challenge], I [adaptive action] to [intended outcome].",
-    "Label": "the label of the associated challenge"
+    "workaround":"The second workaround addressing the challenge...",
+    "challengeLabel": "First challenge"
+}},
+{{
+    "workaround":"The third workaround addressing the challenge...",
+    "challengeLabel": "First challenge"
 }}
 
 ]
@@ -313,7 +392,7 @@ Return the workarounds as a JSON object in the following format:
                 ]
             }}
             """
-                },
+    },
     "de": {
         "start_no_image": """
             Sie sind ein erfahrener Prozessanalyst mit umfassender Erfahrung in der Untersuchung von Geschäftsprozessen in verschiedenen Branchen.

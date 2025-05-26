@@ -1,5 +1,5 @@
 # app/llm.py
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List, Optional, Dict, Any
 import json
 import os
@@ -72,6 +72,13 @@ def setup_logging():
     logger.propagate = False
 
 
+
+@dataclass
+class PromptSettings:
+    roles_quantity: int = 5 # Defining the type of 'quantity' property
+    workarounds_quantity: int = 3
+    challenges_quantity: int = 3
+
 @dataclass
 class ProcessContext:
     """Container for process analysis input data."""
@@ -79,6 +86,8 @@ class ProcessContext:
     additional_context: str = ""
     base64_image: Optional[str] = None
     language: str = "en" 
+
+    prompt_settings: PromptSettings = field(default_factory=PromptSettings)
 
 class CostLimitExceeded(Exception):
     """Raised when daily API cost threshold is exceeded."""
@@ -175,6 +184,9 @@ class LLMService:
             process_description=process.description,
             additional_context=process.additional_context,
             few_shot_examples=few_shot_str,
+            roles_quantity=process.prompt_settings.roles_quantity,
+            challenges_quantity=process.prompt_settings.challenges_quantity,
+            workarounds_quantity=process.prompt_settings.workarounds_quantity,
             **kwargs
         )
 
