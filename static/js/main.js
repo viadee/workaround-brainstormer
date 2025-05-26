@@ -1,4 +1,10 @@
-
+import FileUploadManager from "./fileUpload.js";
+import FewShotEditor from "./fewShotEditor.js";
+import GraphManager from "./graphManager.js";
+import NodeContextMenu from "./nodeContextMenu.js";
+import WorkaroundGenerationSettings from "./WorkaroundGenerationSettings.js";
+import WorkaroundsList from "./workaroundsList.js";
+import BackendTest from "./backendTest.js";
 // static/js/main.js
 class App {
     constructor() {
@@ -12,11 +18,14 @@ class App {
 
 
     setupComponents() {
-        this.graphManager = window.graphManager;
-        this.fileUploadManager = window.fileUploadManager;
-        this.workaroundsList = window.workaroundsList;
-        this.fewShotEditor = window.fewShotEditor;
-        this.workaroundGenerationSettings = window.workaroundGenerationSettings
+        this.graphManager = new GraphManager;
+        this.fileUploadManager = new FileUploadManager;
+        this.workaroundsList = new WorkaroundsList;
+        this.fewShotEditor = new FewShotEditor;
+        this.workaroundGenerationSettings = new WorkaroundGenerationSettings;
+
+        this.backendTest = new BackendTest;
+
 
         this.spinner = document.getElementById("map-spinner");
         
@@ -31,7 +40,7 @@ class App {
             });
         }
 
-        this.nodeContextMenu = new window.NodeContextMenu(this.graphManager, () => this.updateUI(), this.workaroundGenerationSettings)
+        this.nodeContextMenu = new NodeContextMenu(this.graphManager, () => this.updateUI(), this.workaroundGenerationSettings)
     }
 
     setupEventListeners() {
@@ -99,6 +108,13 @@ class App {
     }
 
     async createInitialStructure() {
+
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+
         if(this.fetchWorkaroundsState == true){
             return;
         }
@@ -111,10 +127,10 @@ class App {
 
         try{
             this.fewShotEditor.currentLang = "en";
-            await this.fewShotEditor.updateLangTabs();
-            await this.fewShotEditor.retreiveFewShotExamples();
-            await this.fewShotEditor.updateCurrentLanguageExamples();
-            await this.fewShotEditor.autoSave();
+            this.fewShotEditor.updateLangTabs();
+            this.fewShotEditor.retreiveFewShotExamples();
+            this.fewShotEditor.updateCurrentLanguageExamples();
+            this.fewShotEditor.autoSave();
         } catch (error) {
             console.error('Error loading similar few-shot examples:', error);
         }
@@ -124,7 +140,8 @@ class App {
             id: 0, 
             text: this.currentFilename || description,
             description: description, // Store original description
-            expanded: false 
+            expanded: false,
+            category: "root"
         };
         this.graphManager.addNode(rootNode);
 
@@ -139,32 +156,112 @@ class App {
         }
 
         try {
-            const response = await fetch('/start_map', {
-                method: 'POST',
-                body: formData,
-            });
+            // const response = await fetch('/start_map', {
+            //     method: 'POST',
+            //     body: formData,
+            // });
             
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+            // if (!response.ok) {
+            //     throw new Error(`HTTP error! status: ${response.status}`);
+            // }
             
-            const workarounds = await response.json();
-            if (workarounds.error) {
-                throw new Error(workarounds.error);
-            }
-            
-            workarounds.forEach(text => {
+            // const workarounds = await response.json();
+            // if (workarounds.error) {
+            //     throw new Error(workarounds.error);
+            // }
+                        
+            // workarounds.forEach(text => {
+            //     const childNode = {
+            //         id: this.nextNodeId++,
+            //         text,
+            //         expanded: false,
+            //         parent: rootNode.id,
+            //         category: "role"
+            //     };
+            //     this.graphManager.addNode(childNode);
+            //     this.graphManager.addLink(rootNode.id, childNode.id);
+            // });
+
+            const response = this.backendTest.returnRoles()
+
+            const roles = response.roles
+
+            roles.forEach(role => {
                 const childNode = {
-                    id: this.nextNodeId++,
-                    text,
-                    expanded: false,
-                    parent: rootNode.id
-                };
+                    id:this.nextNodeId++,
+                    text:role,
+                    expanded:true,
+                    parent:rootNode.id,
+                    category: "role",
+                    label:role
+                }
                 this.graphManager.addNode(childNode);
                 this.graphManager.addLink(rootNode.id, childNode.id);
-            });
+            })
 
             this.updateUI();
+
+            await sleep(2000)
+            
+            const misfitResponse = this.backendTest.returnMisfits()
+
+            for (const role of roles) {
+                try {
+                    const misfits = misfitResponse[role];
+                    const parentNode = this.graphManager.getNodes().filter(node => node.text === role)[0]
+
+                    for (const misfit of misfits) {
+                        const misfitNode = {
+                            id:this.nextNodeId++,
+                            text:misfit.text,
+                            label:misfit.label,
+                            expanded:true,
+                            parent:parentNode.id,
+                            category:"misfit"
+                        }
+                        this.graphManager.addNode(misfitNode);
+                        this.graphManager.addLink(parentNode.id, misfitNode.id);
+                    }
+
+                } catch (error) {
+                    // Handle the error or log it
+                    console.error(`Error retrieving role: ${role}`, error);
+                    continue; // Only if you want to skip to the next one
+                }
+            }
+
+            this.updateUI();
+
+            await sleep(2000)
+
+
+            const workaroundResponse = this.backendTest.returnWorkarounds()
+
+            const misfitNodes = this.graphManager.getNodes().filter(x => x.category === "misfit")
+
+            for (const misfitNode of misfitNodes) {
+                try {
+                    const role = this.graphManager.getNodeById(misfitNode.parent)
+                    const workarounds = workaroundResponse[role.label].filter(x => x.misfitLabel === misfitNode.label)
+
+                    for (const workaround of workarounds) {
+                        const workaroundNode = {
+                            id: this.nextNodeId++,
+                            text: workaround.workaround,
+                            expanded: false,
+                            parent: misfitNode.id,
+                            category: "workaround"
+                        }
+                        this.graphManager.addNode(workaroundNode);
+                        this.graphManager.addLink(misfitNode.id, workaroundNode.id);
+                    }
+                } catch (error) {
+                    console.error(`Error retrieving workaround for misfit: ${misfitNode.label}`, error)
+                }
+            }
+
+            this.updateUI()
+
         } catch (error) {
             console.error('Error creating initial structure:', error);
             alert(error.message || 'Error retrieving initial workarounds.');
@@ -240,12 +337,14 @@ class App {
                     id: this.nextNodeId++,
                     text: text,
                     parent: d.id,
-                    expanded: false
+                    expanded: false,
+                    category: "workaround"
                 };
                 this.graphManager.addNode(childNode);
                 this.graphManager.addLink(d.id, childNode.id);
             });
 
+            d.category = "expanded";
             d.expanded = true;
             this.graphManager.updateNodeLabel(d.id, nodeLabel);
             this.updateUI();
@@ -295,12 +394,6 @@ class App {
 window.addEventListener('load', () => {
     console.log('Initializing components...');
     
-    // Create global instances
-    window.graphManager = new window.GraphManager();
-    window.fileUploadManager = new window.FileUploadManager();
-    window.workaroundsList = new window.WorkaroundsList();
-    window.workaroundGenerationSettings = new window.WorkaroundGenerationSettings()
-    window.fewShotEditor = new window.FewShotEditor();
     // Initialize the main app
     window.app = new App();
     

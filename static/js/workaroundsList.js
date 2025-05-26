@@ -153,4 +153,4 @@ class WorkaroundsList {
 }
 
 // Make available globally
-window.WorkaroundsList = WorkaroundsList;
+export default WorkaroundsList;

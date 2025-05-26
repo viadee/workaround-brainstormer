@@ -48,17 +48,10 @@
 
     {% block content %}{% endblock %}
     </div>
-    <!-- Load dependencies first -->
-    <script src="{{ url_for('static', filename='js/graphManager.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/fileUpload.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/workaroundsList.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/nodeContextMenu.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/WorkaroundGenerationSettings.js') }}"></script>
 
 
-    <!-- Load main app last -->
-    <script src="{{ url_for('static', filename='js/fewShotEditor.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <!-- Load main app -->
+    <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
 
     <!-- Additional scripts -->
     {% block scripts %}{% endblock %}

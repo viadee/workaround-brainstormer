@@ -437,7 +437,7 @@ h2 {
 }
 
 /* Graph Visualization */
-.node {
+.sub-node-group {
   cursor: pointer;
 }
 

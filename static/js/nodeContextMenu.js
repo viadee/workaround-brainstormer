@@ -99,7 +99,7 @@ class NodeContextMenu{
             gM.addNode(newNode);
             gM.addLink(d.id, newNode.id);
         
-            d.expanded = true;
+            d.category = "expanded";
            
             self.updateUIHook();
             self.removeContextMenu()
@@ -153,4 +153,4 @@ class NodeContextMenu{
     }
 }
 
-window.NodeContextMenu = NodeContextMenu
+export default NodeContextMenu;

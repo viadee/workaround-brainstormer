@@ -35,4 +35,4 @@ class WorkaroundGenerationSettings{
     }
 }
 
-window.WorkaroundGenerationSettings = WorkaroundGenerationSettings
+export default WorkaroundGenerationSettings

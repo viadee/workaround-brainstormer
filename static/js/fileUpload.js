@@ -171,5 +171,4 @@ class FileUploadManager {
     }
 }
 
-// Make available globally
-window.FileUploadManager = FileUploadManager;
+export default FileUploadManager;

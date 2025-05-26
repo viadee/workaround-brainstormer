@@ -41,7 +41,9 @@ class GraphManager {
             expanded: '#1f77b4',
             collapsed: '#2ca02c',
             highlight: '#ff0000',
-            stroke: '#333'
+            stroke: '#333',
+            role: "#58ade1",
+            misfit: "#d13f42",
         };
     }
 
@@ -74,6 +76,10 @@ class GraphManager {
         return Array.from(this.nodes.values());
     }
 
+    getNodeById(id) {
+        return this.nodes.get(id)
+    }
+
     getLinks() {
         return Array.from(this.links).map(JSON.parse);
     }
@@ -97,9 +103,9 @@ class GraphManager {
         d3.selectAll('.node').attr('stroke', null).attr('stroke-width', null);
         d3.select(event.currentTarget)
             .transition().duration(200)
-            .attr("r", d.id === 0 ? 12 : 10)
             .attr("stroke", this.colors.stroke)
-            .attr("stroke-width", 2);
+            .attr("stroke-width", 2)
+            .style("transform","scale(1.5)");
 
         // Show appropriate text in tooltip
         const tooltipText = d.id === 0 ? 
@@ -116,9 +122,9 @@ class GraphManager {
     handleMouseOut(event, d) {
         d3.select(event.currentTarget)
             .transition().duration(200)
-            .attr("r", d.id === 0 ? 8 : 6)
             .attr("stroke", null)
-            .attr("stroke-width", null);
+            .attr("stroke-width", null)
+            .style("transform","scale(1)");
         this.tooltip.style("display", "none");
     }
 
@@ -157,15 +163,11 @@ class GraphManager {
             .join("g")
             .attr("class", "node-group");
 
-        nodeGroup.selectAll("circle")
-            .data(d => [d])
-            .join("circle")
-            .attr("class", d => `node node-${d.id}`)
-            .attr("r", d => d.id === 0 ? 8 : 6)
-            .attr("fill", d => {
-                if (d.id === 0) return this.colors.root;
-                return d.expanded ? this.colors.expanded : this.colors.collapsed;
-            })
+        const subNodeGroup = nodeGroup.append("g")
+            .attr("class","sub-node-group")
+            .on("mouseover", (event, d) => this.handleMouseOver(event, d))
+            .on("mouseout", (event, d) => this.handleMouseOut(event, d))
+            .on("mousemove", (event) => this.handleMouseMove(event))
             .on("click", (event, d) => {
                 if (d.id !== 0) {
                     window.dispatchEvent(new CustomEvent('nodeClick', { detail: { event, node: d } }));
@@ -174,9 +176,82 @@ class GraphManager {
             .on("contextmenu", (event, d) => {
                 window.dispatchEvent(new CustomEvent('nodeContextMenu', { detail: { event, node: d } }));
             })
-            .on("mouseover", (event, d) => this.handleMouseOver(event, d))
-            .on("mouseout", (event, d) => this.handleMouseOut(event, d))
-            .on("mousemove", (event) => this.handleMouseMove(event));
+
+        
+
+        subNodeGroup.append("circle") // Append circle now to the grouped node
+            .attr("class", d => `node node-${d.id}`)
+            .attr("r", d => d.id === 0 ? 12 : 10)
+            .attr("fill", d => {
+                switch (d.category){
+                    case "root":
+                        return this.colors.root
+                    case "role":
+                        return this.colors.role
+                    case "misfit":
+                        return this.colors.misfit
+                    case "expanded":
+                        return this.colors.expanded
+                    default:
+                        return this.colors.collapsed
+                }
+            })
+        
+        subNodeGroup.append("image")
+            .attr("xlink:href", "https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png") // Replace with your icon URL
+            .attr("xlink:href", d => {
+                switch (d.category){
+                    case "role":
+                        return "https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png"
+                    case "misfit":
+                        return "https://iconvulture.com/wp-content/uploads/2017/12/lightning-bolt-shadow.svg"
+                    default:
+                        return ""
+                }
+            })
+            .attr("color","white")
+            .attr("width", d => {
+                switch (d.category){
+                    case "role":
+                        return 17
+                    case "misfit":
+                        return 12
+                    default:
+                        return 12
+                }
+            })
+            .attr("height", d => {
+                switch (d.category){
+                    case "role":
+                        return 17
+                    case "misfit":
+                        return 12
+                    default:
+                        return 12
+                }
+            })
+            .attr("x", d => {
+                switch (d.category){
+                    case "role":
+                        return -8.5
+                    case "misfit":
+                        return -6
+                    default:
+                        return -6
+                }
+            })
+            .attr("y", d => {
+                switch (d.category){
+                    case "role":
+                        return -8.5
+                    case "misfit":
+                        return -6
+                    default:
+                        return -6
+                }
+            })
+            .attr("class", d => `icon icon-${d.id}`) // Optional classes for the icon
+            .raise()
 
         nodeGroup.selectAll("text")
             .data(d => (d.expanded && d.label) ? [d] : [])
@@ -187,11 +262,14 @@ class GraphManager {
             .attr("font-size", "10px")
             .attr("fill", "#333");
 
+        nodeGroup.raise()
+
+
         this.simulation.nodes(nodes).on("tick", () => this.ticked(link, nodeGroup));
         this.simulation.force("link").links(links);
         this.simulation.alpha(1).restart();
     }
-
+    
     ticked(link, nodeGroup) {
         link
             .attr("x1", d => d.source.x)
@@ -221,4 +299,4 @@ class GraphManager {
 }
 
 // Make available globally
-window.GraphManager = GraphManager;
+export default GraphManager;
