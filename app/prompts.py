@@ -190,9 +190,6 @@ Return the workarounds as a JSON object in the following format:
 ]
 }}
 
-
-
-
 """,
         "start_no_image": """
             You are an expert process analyst with extensive experience investigating business processes across various industries.
@@ -394,6 +391,192 @@ Return the workarounds as a JSON object in the following format:
             """
     },
     "de": {
+        "GenerateRolesPrompt": """"
+            Sie sind ein erfahrener Prozessanalytiker mit umfangreicher Erfahrung in der Untersuchung von Geschäftsprozessen in verschiedenen Branchen.
+            Lassen Sie uns systematisch analysieren, welche Rollen bzw. Prozessbeteiligten/Akteure die Prozessbeschreibung explizit und implizit beinhaltet:
+
+            Betrachten Sie den folgenden Prozess bzw. das beigefügte Prozessdiagramm: 
+            {process_description}
+
+            **Zusätzlicher Kontext:**
+            {additional_context}
+
+            1.	Führen Sie zunächst die explizit genannten Rollen in der Prozessbeschreibung auf.
+            2.	2. Beachten Sie die folgenden Fragen und Anweisungen, um implizit erwähnte oder andere relevante Rollen zu sammeln. Sammeln Sie so viele Rollen, wie Sie können: 	
+                - Denken Sie an die Rollen, die in der beschriebenen Prozessdomäne am häufigsten oder offensichtlichsten sind, z. B. die Branche, in der der Prozess durchgeführt wird.
+                - Überlegen Sie, welche Rollen die kritischsten Aufgaben ausführen und welche Rollen Entscheidungsbefugnis haben oder über spezifische Insiderkenntnisse über den Prozess verfügen
+                - Denken Sie an Stellen, die im Prozess nicht erwähnt werden, aber indirekt von ihm betroffen sind
+                - Untersuchen Sie die verschiedenen Rollentypen und stellen Sie sicher, dass Sie Rollen einbeziehen, die sich entsprechend den folgenden Dimensionen unterscheiden:
+                    o Hierarchiestufe (Management, Vorgesetzte, Mitarbeiter, Linienstellen), 
+                o Berufliche Stellung 
+                     Führungskräfte, z. B. Produktionsleiter in der Landwirtschaft, IT-Manager)
+                     Fachkräfte z.B. Physiker, Architekt, Lehrer, Arzt, Buchhalter, Jurist
+                     Techniker z.B. Maschinenbau, Biogastechniker, 3D-Drucktechniker, Netzwerktechniker
+                     Service- und Vertriebsmitarbeiter, z. B. Callcenter-Agent, Koch, Reinigungsfachkraft
+                     Land- und Forstwirtschaft und Fischerei, z. B. Landwirt, Fischer
+                     Handwerk und verwandte Berufe, z. B. Maurer, Schreiner, Avionik-Techniker, Computer-Hardware-Reparaturtechniker, Bäcker
+                     Anlagen- und Maschinenbediener, z. B. Beschichtungsmaschinenführer, Chemikalienmischer, Monteure
+                     Elementare Tätigkeiten, z. B. Handpacker, Disponent in Verteilungszentren
+                o Art der Beschäftigung (z. B. Praktikant, Vollzeit-Saisonarbeiter, usw.), 
+                o Funktion/Abteilung (z. B. Kontrollturm, Buchhaltung, Produktionslinie, Küche)
+
+            **Beispiele**
+            {**Beispiele**}
+
+            Reduzieren Sie schließlich aus der Grundgesamtheit der Rollen die Rollenauswahl, indem Sie 
+            - nur Rollen aufgenommen werden, die sich durch die Art der Rolle von den anderen Rollen unterscheiden lassen, so dass jede der schließlich ausgewählten Rollen eine einzigartige Perspektive auf den Prozess widerspiegelt.
+            - Entscheiden Sie, wie viele Rollen ausgewählt werden sollen, indem Sie abwägen, ob eine Rolle eine wertvolle neue Perspektive bieten könnte oder ob ihre Art einer anderen Rolle zu ähnlich ist.
+            - Nehmen Sie keine generischen Rollennamen wie „Praktikant“ oder „Manager“ auf, aber „Produktionsleiter“ wäre zulässig.
+
+            Geben Sie ein Maximum von {roles_quantity} Rollen als JSON-Array im folgenden Format zurück:
+
+            {{
+            „roles„ : [“Role1“, ‚Role2‘]
+            }}
+            Minimieren Sie die Länge Ihrer Antwort, indem Sie nur das JSON-Array und nur zwei kurze Sätze über den Auswahlprozess zurückgeben.
+                    
+        
+        """,
+        "GenerateMisfitsPrompt": """
+
+            Sie sind ein erfahrener Prozessanalytiker mit umfangreicher Erfahrung in der Untersuchung von Geschäftsprozessen in verschiedenen Branchen.
+
+            Betrachten Sie den folgenden Prozess und/oder das beigefügte Prozessdiagramm: 
+            {process_description}
+
+            **Zusätzlicher Kontext:**
+            {additional_context}
+
+            Und die identifizierten Rollen, die an dem Prozess beteiligt sind:
+            {roles}
+
+            Lassen Sie uns für jede Rolle systematisch ungewöhnliche potenzielle Hindernisse, Probleme, Ausnahmen, Anomalien, Pannen, etablierte Praktiken, Erwartungen des Managements oder strukturelle Einschränkungen analysieren, die die Rolle daran hindern könnten, den gewünschten Grad an Effizienz, Effektivität oder andere persönliche oder organisatorische Ziele zu erreichen:
+
+            1.	Analysieren Sie zunächst den Kontext, in dem die Rolle ihre Arbeit verrichtet:
+                - Stellen Sie fest, welche Verantwortlichkeiten die Rolle hat und welche Handlungen sie ausführt.
+                - Klären Sie das Ziel oder Ergebnis, das die Rolle erreichen soll
+                - Berücksichtigen Sie den Kontext oder das Umfeld, in dem die Rolle ihre Tätigkeiten ausführt (z. B. Informationssystem, soziales Klima, Regeln) und wie sich dies auf die Arbeit der Rolle auswirken könnte
+            2.	Rekonstruieren Sie alle Abhängigkeiten, auf die die Rolle angewiesen ist, um ihre Aufgaben zu erfüllen:
+                - Welche externen Faktoren könnten sich negativ auf die Ausführung des Prozesses oder Arbeitsablaufs auswirken?
+                - Welche internen Faktoren könnten die Arbeit der Rolle beeinflussen?
+            3.	Bewerten Sie schließlich mögliche Herausforderungen, die während der Aktivitäten auftreten und das Erreichen des gewünschten Ergebnisses behindern könnten.
+                - Suchen Sie nach Punkten, an denen die Ressourcen eingeschränkt sein könnten
+                - Berücksichtigen Sie Bereiche, in denen die offiziellen Verfahren zu starr sein könnten.
+                - Berücksichtigen Sie Probleme, die sich unterschiedlich auf die angestrebten Ergebnisse auswirken (z. B. Zeit, Qualität, Kosten)
+                - Berücksichtigen Sie nur Probleme, die durch die Rolle selbst gelöst werden können.
+                - Denken Sie an Herausforderungen, die für den betrachteten Prozessbereich sehr spezifisch sind
+
+            **Beispiele**
+            {few_shot_examples}
+
+            Geben Sie auf der Grundlage dieser Analyse für jede gegebene Rolle {challenges_quantity} Herausforderungen als JSON-Objekt im folgenden Format zurück:
+            - Beginnen Sie jeden Satz mit der Rolle, z. B. „Als Berater, “
+            - Fahren Sie mit dem Kontext oder der Aktion fort, z. B. „Als Berater, wenn ich in einem Workshop mit meinem Kunden bin“.
+            - Schließen Sie mit der identifizierten Herausforderung ab: „Als Berater, wenn ich in einem Workshop mit meinem Kunden bin und das Problem im Informationssystem nicht finden kann.“
+            {{
+            „role1": [{{label: „Kurzbezeichnung der Herausforderung“, text: „Satz"}}, {{label: „Kurzbezeichnung der Herausforderung“, text: „Satz"}}, {{label: „Kurzbezeichnung der Herausforderung“, Text: „Satz"}}],
+            „role2": [{{label: „Kurzbezeichnung der Herausforderung“, text: „Satz"}}, {{label: „Kurzbezeichnung der Herausforderung“, text: „sentence"}}]
+            }}, 
+
+        """,
+
+        "GenerateWorkaroundsPrompt": """
+
+            Sie sind ein erfahrener Prozessanalytiker mit umfangreicher Erfahrung in der Untersuchung von Geschäftsprozessen in verschiedenen Branchen. 
+
+            Betrachten Sie den folgenden Prozess und/oder das beigefügte Prozessdiagramm: 
+            {process_description}
+
+            **Zusätzlicher Kontext:**
+            {additional_context}
+
+            Und die identifizierten Herausforderungen, die in diesem Prozess auftreten:
+            {misfits}
+
+            Analysieren wir die beschriebenen Herausforderungen der Rolle systematisch, leiten wir mögliche adaptive Maßnahmen ab und formulieren wir sinnvolle Workarounds, die das Erreichen des gewünschten Ergebnisses ermöglichen.
+            Für jede Herausforderung:
+
+            1.	Verstehen Sie zunächst den Kontext, in dem die Herausforderung auftritt. Was ist das gewünschte Ergebnis der von der Rolle ausgeführten Aktivität?
+                - Ist sie wichtig, um Unternehmensziele wie Kundenzufriedenheit oder Umsatzwachstum zu erreichen?
+                - Könnte die Tätigkeit von Effizienz oder Effektivität bestimmt sein?
+                - Beeinflussen persönliche Ziele die Arbeit oder ihre Ergebnisse?
+            2.	Zweitens: Analysieren Sie die Ursache der Herausforderung:
+                - Sind die Hindernisse extern oder intern bzw. liegen sie im Einflussbereich der Organisation oder der Rolle?
+                - Behindern etablierte Praktiken, Erwartungen des Managements oder strukturelle Zwänge die Rolle daran, die gewünschten Ergebnisse zu erzielen?
+            3.	Drittens: Bewerten Sie mögliche Anpassungsmaßnahmen, die die Rolle durchführen könnte, um die Herausforderung zu bewältigen und die gewünschten Ergebnisse zu erreichen:
+                - Was könnte die Rolle mit den verfügbaren Ressourcen tun?
+                - Gibt es gemeinsame Standards oder bewährte Verfahren für Prozesse in diesem Bereich?
+                - Erarbeiten Sie adaptive Maßnahmen, die das konkrete Problem lösen, keine offiziellen Prozessänderungen erfordern, von den beteiligten Personen umgesetzt werden können und im Bereich des Prozesses realistisch sind.
+
+            Formulieren Sie schließlich für jede Herausforderung {Workarounds_Quantity} einzigartige Workarounds, die es der Rolle ermöglichen, die Herausforderung zu überwinden, zu umgehen oder zu minimieren:
+            - Stellen Sie sicher, dass Sie für jede Herausforderung die soeben erwähnte Anzahl ({workarounds_quantity}) von Umgehungslösungen erstellen. Wenn Sie zum Beispiel drei Herausforderungen pro Rolle und insgesamt 3 Rollen haben, müssen Sie insgesamt 3 * 3 * {workarounds_quantity} Workarounds generieren!
+            - Stellen Sie jede Problemumgehung als Benutzergeschichte in folgendem Format dar:
+            - Vorlage: „Als [Rolle] [Kontext], wenn [Herausforderung], ich [adaptive Aktion] zu [beabsichtigtes Ergebnis].“
+
+            **Beispiele**
+
+            {{
+            „Produktionsleiter": [
+                {{
+                „workaround": „Als Produktionsleiter, der die Produktionszeitpläne überwacht, ermittle ich bei Verspätungen von Lieferanten alternative Lieferanten und halte einen Pufferbestand vor, um Störungen zu vermeiden.“,
+                „challengeLabel": „Lieferantenverzögerungen“
+                }},
+                {{
+                „workaround": „Wenn ich als Produktionsleiter, der Echtzeitdaten benötigt, auf technische Probleme beim Zugriff auf das Lagersystem stoße, richte ich ein manuelles Protokoll ein, um sicherzustellen, dass ich rechtzeitig Entscheidungen treffen kann.“,
+                „challengeLabel": „Technische Probleme“
+                }},
+                {{
+                „workaround": „Als Produktionsleiter, der auf Bestandsaktualisierungen angewiesen ist, implementiere ich bei Kommunikationsdiskrepanzen mit dem Lagerleiter ein standardisiertes Kommunikationsprotokoll, um zeitnahe und genaue Informationen zu erhalten.“,
+                „challengeLabel": „Kommunikationsdiskrepanzen“
+                }},
+                {{
+                „workaround": „Als Produktionsleiter, der Produktionspläne verwaltet, erstelle ich bei Verspätungen von Lieferanten Notfallproduktionspläne, um die Auswirkungen zu minimieren.“,
+                „challengeLabel": „Lieferantenverzögerungen“
+                }},
+                {{
+                „workaround": „Als Produktionsleiter, der den Lagerbedarf beurteilt, koordiniere ich bei technischen Problemen mit dem System regelmäßige Rücksprachen mit der IT-Abteilung, um schnelle Lösungen zu finden.“,
+                „challengeLabel": „Technical Issues“
+                }},
+                {{
+                „workaround": „Als Produktionsleiter, der die Arbeitsabläufe überwacht, vereinbare ich bei Kommunikationsdiskrepanzen wöchentliche Synchronisierungssitzungen mit dem Lagerleiter.“,
+                „challengeLabel": „Communication Discrepancies“
+                }},
+                {{
+                „workaround": „Als Produktionsleiter, der sich auf den Output konzentriert, führe ich bei Verspätungen von Zulieferern proaktiv regelmäßige Updates mit den Zulieferern durch, um Verspätungen vorzubeugen.“,
+                „challengeLabel": „Supplier Delays“
+                }},
+                {{
+                „workaround": „Als Produktionsleiter, der auf Bestandsinformationen angewiesen ist, fordere ich bei technischen Problemen einen Nur-Lese-Zugriff auf Bestandsdaten für alternative Zugriffsmethoden an.“,
+                „challengeLabel": „Technical Issues“
+                }},
+                {{
+                „workaround": „Als Produktionsleiter, der eine reibungslose Produktion anstrebt, erstelle ich bei Kommunikationsdiskrepanzen ein gemeinsames Online-Dashboard für Echtzeit-Updates.“,
+                „challengeLabel": „Communication Discrepancies“
+                }}
+            ]
+
+            {few_shot_examples}
+
+            }}
+            Gibt die Workarounds als JSON-Objekt im folgenden Format zurück:
+            {{
+            „role1": [
+            {{
+                „workaround": ‚Als [Rolle] [Kontext/Tätigkeit], wenn [Herausforderung], ich [adaptive Aktion] zu [beabsichtigtes Ergebnis].‘,
+                „challengeLabel": „Erste Herausforderung“
+            }},
+            {{
+                „workaround": ‚Die zweite Umgehung zur Bewältigung der Herausforderung...‘,
+                „challengeLabel": „Erste Herausforderung“
+            }},
+            {{
+                „workaround": “Die dritte Abhilfemaßnahme zur Bewältigung der Herausforderung...".
+                „challengeLabel": „Erste Herausforderung“
+            }}
+            ]
+        }}
+
+        """,
         "start_no_image": """
             Sie sind ein erfahrener Prozessanalyst mit umfassender Erfahrung in der Untersuchung von Geschäftsprozessen in verschiedenen Branchen.
 
