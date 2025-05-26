@@ -3,7 +3,7 @@ Flask==3.1.0
 Flask-Limiter==3.12
 langdetect==1.0.9
 numpy==2.2.4
-openai==1.72.0
+openai==1.82.0
 pdf2image==1.17.0
 pillow==11.1.0
 pytesseract==0.3.13
