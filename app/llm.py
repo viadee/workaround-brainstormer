@@ -165,6 +165,7 @@ class LLMService:
 
         # Retrieve the stored few-shot examples from session.
         stored = session.get('few_shot_examples')
+        
         # If stored is not a dict (or is missing), convert if it is a list or use an empty dict.
         if not isinstance(stored, dict):
             stored = {"en": stored} if isinstance(stored, list) else {}

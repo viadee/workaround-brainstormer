@@ -31,8 +31,7 @@ Consider the following process and/or the attached process diagram:
     o	type of employment (e.g. intern, full-time seasonal workers, etc.), 
     o	function/department (e.g. Control tower, Accounting, Production line, Kitchen)
 
-**Examples**
-{few_shot_examples}
+
 
 Finally, from the basic population of roles, minimize the role selection by 
 -	only including roles that can be differentiated by the nature of the role from the other roles, so that any of the final selected roles reflect a unique perspective on the process.
@@ -78,8 +77,7 @@ For each role, let’s systematically analyze unusual potential obstacles, issue
     •	Only include issues that could be solved by the role itself
     •	Think about challenges that are ultra specific in the considered process domain
 
-**Examples**
-{few_shot_examples}
+
 
 Based on this analysis, for each given role, return {challenges_quantity} Challenges as an JSON object in the following format:
 -	Start each sentence with the role e.g. “As a consultant, ”
@@ -420,8 +418,7 @@ Return the workarounds as a JSON object in the following format:
                 o Art der Beschäftigung (z. B. Praktikant, Vollzeit-Saisonarbeiter, usw.), 
                 o Funktion/Abteilung (z. B. Kontrollturm, Buchhaltung, Produktionslinie, Küche)
 
-            **Beispiele**
-            {**Beispiele**}
+
 
             Reduzieren Sie schließlich aus der Grundgesamtheit der Rollen die Rollenauswahl, indem Sie 
             - nur Rollen aufgenommen werden, die sich durch die Art der Rolle von den anderen Rollen unterscheiden lassen, so dass jede der schließlich ausgewählten Rollen eine einzigartige Perspektive auf den Prozess widerspiegelt.
@@ -466,8 +463,7 @@ Return the workarounds as a JSON object in the following format:
                 - Berücksichtigen Sie nur Probleme, die durch die Rolle selbst gelöst werden können.
                 - Denken Sie an Herausforderungen, die für den betrachteten Prozessbereich sehr spezifisch sind
 
-            **Beispiele**
-            {few_shot_examples}
+
 
             Geben Sie auf der Grundlage dieser Analyse für jede gegebene Rolle {challenges_quantity} Herausforderungen als JSON-Objekt im folgenden Format zurück:
             - Beginnen Sie jeden Satz mit der Rolle, z. B. „Als Berater, “
