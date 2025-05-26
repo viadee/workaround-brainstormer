@@ -12,7 +12,7 @@ from werkzeug.utils import secure_filename
 from .prompts import DEFAULT_FEW_SHOT_EXAMPLES
 from .auth import login_required, admin_required, check_credentials, setUserCredentialVariables
 from .utils import save_uploaded_file, process_image, format_workarounds_tree
-from .llm import LLMService, ProcessContext, CostLimitExceeded, RAGService
+from .llm import LLMService, ProcessContext, CostLimitExceeded, RAGService, PromptSettings
 import logging
 from .limiter import limiter
 
@@ -150,6 +150,8 @@ def generateWorkarounds():
     process_description = request.form.get('process_description', '').strip()
     additional_context = request.form.get('additional_context', '').strip()
     misfits = request.form.get('misfits').strip()
+    workarounds_quantity = request.form.get('workarounds_quantity', '').strip()
+
     if(misfits is None):
         raise ValueError()
     
@@ -170,7 +172,8 @@ def generateWorkarounds():
         process = ProcessContext(
             description=process_description,
             additional_context=additional_context,
-            base64_image=base64_image
+            base64_image=base64_image,
+            prompt_settings= PromptSettings(workarounds_quantity=workarounds_quantity) if workarounds_quantity != None else None
         )
         
         # Language detection timing
@@ -223,6 +226,7 @@ def generateMisfits():
     process_description = request.form.get('process_description', '').strip()
     additional_context = request.form.get('additional_context', '').strip()
     roles = request.form.get('roles').strip()
+    challenges_quantity = request.form.get('challenges_quantity', '').strip()
     if(roles is None):
         raise ValueError()
     
@@ -243,7 +247,8 @@ def generateMisfits():
         process = ProcessContext(
             description=process_description,
             additional_context=additional_context,
-            base64_image=base64_image
+            base64_image=base64_image,
+            prompt_settings= PromptSettings(challenges_quantity=challenges_quantity) if challenges_quantity != None else None
         )
         
         # Language detection timing
@@ -293,7 +298,7 @@ def generateRoles():
     start_time = time.time()
     process_description = request.form.get('process_description', '').strip()
     additional_context = request.form.get('additional_context', '').strip()
-    
+    roles_quantity = request.form.get('roles_quantity','').strip()
     current_app.logger.info("Starting map generation")
     base64_image = None
     temp_file_path = None
@@ -311,7 +316,8 @@ def generateRoles():
         process = ProcessContext(
             description=process_description,
             additional_context=additional_context,
-            base64_image=base64_image
+            base64_image=base64_image,
+            prompt_settings= PromptSettings(roles_quantity=roles_quantity) if roles_quantity != None else None
         )
         
         # Language detection timing
