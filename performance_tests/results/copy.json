@@ -1,0 +1,206 @@
+{
+    "results": [
+        {
+            "id": 0,
+            "prompt_strategy": "DivideThree",
+            "process_description": "\n    In a healthcare facility, the patient scheduling process begins when a patient contacts the reception desk to book an appointment with a specialist. \n    The receptionist verifies the patient's information, including insurance details and medical history, \n    before checking the specialist's availability on the electronic health record (EHR) system. If a suitable time is found, \n    the appointment is set, and the patient is informed about pre-appointment procedures, such as fasting or medication adjustments. \n    Confirmation calls or texts are sent to the patient 24 hours before the appointment. If the patient needs to reschedule or cancel, \n    the receptionist updates the appointment in the system and offers alternative dates.\n    ",
+            "workarounds": [
+                {
+                    "text": "As a Receptionist verifying patient information, when patients provide incomplete or inaccurate insurance or medical history data, I proactively prepare a checklist of required documents and gently remind patients before scheduling to ensure complete data for accurate appointment setup.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Receptionist managing data verification, when patient information is incomplete, I double-check existing records in the EHR and clarify or confirm key details with the medical records technician promptly to reduce delays.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Receptionist booking appointments, when patient data is insufficient at first contact, I schedule a preliminary tentative appointment and request the patient to provide missing information within a specified timeframe to avoid long wait times.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Receptionist checking specialist availability, when the EHR system is slow or updates are delayed, I maintain an offline, regularly updated availability log or calendar to cross-check and avoid double bookings.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Receptionist booking appointments, when system performance is an issue, I batch appointment requests for multiple patients and confirm bookings after a fixed reconciliation period to minimize booking errors.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Receptionist verifying appointment slots, when real-time availability is unreliable, I establish a brief buffer time between booked appointments in the system to compensate for any delays or booking conflicts.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Receptionist managing reschedules and cancellations, when many patient requests arrive simultaneously, I triage requests based on appointment urgency and patient condition to prioritize changes effectively and reduce conflicts.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Receptionist handling scheduling changes, when overwhelmed by multiple requests without priority systems, I maintain a simple manual log or digital priority list to track and address requests in order received and importance.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Receptionist responding to reschedule or cancellation requests, I proactively communicate with patients about available slots well in advance and offer automated options (phone menu or messaging) for easy self-service where possible to reduce last-minute pressure.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Specialist Physician concerned about appointment prep, when patients do not comply with pre-appointment instructions, I request the receptionist to provide clear, written and verbal instructions and confirm understanding during booking calls to improve compliance.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Specialist Physician affected by unclear patient prep, I suggest creating standardized pre-appointment checklists that receptionists can easily communicate and patients can review to ensure consistent understanding and follow-through.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Specialist Physician noticing poor prep compliance, I instruct the receptionist to send reminder messages highlighting key prep steps 24 hours before the appointment to reinforce correct patient preparation.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Specialist Physician managing high patient loads, when overbooking reduces quality, I work closely with reception to define realistic time slots per appointment type and request buffer periods to avoid schedule overlaps and reduce wait times.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Specialist Physician, when tight schedules cause stress, I collaborate with the scheduling coordinator and receptionists to monitor appointment flow and dynamically adjust booking rates where possible to maintain consult quality.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Specialist Physician facing booking issues, I request regular feedback from reception on scheduling bottlenecks and patient volumes to anticipate peak times and advocate for additional support or adjustments in scheduling policies.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Specialist Physician requiring timely info on schedule changes, when not notified about cancellations or reschedules, I ask reception to establish a daily briefing or automated notification system summarizing changes to enable workflow adjustments.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Specialist Physician addressing limited feedback, I encourage receptionists to flag urgent cancellations or no-shows immediately via direct messaging to enable rapid rescheduling or patient follow-up.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Specialist Physician wanting better visibility on appointments, I work with the scheduling coordinator to gain read-access to the scheduling system or dashboards to independently monitor schedule updates and cancellations.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Scheduling Coordinator managing dynamic allocations, when lacking real-time data access, I proactively request periodic detailed reports on appointment patterns and cancellations to manually optimize resource allocation offline.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Scheduling Coordinator, when unable to instantly reallocate resources, I develop contingency scheduling templates for urgent cases that can be manually activated by receptionists to increase flexibility within existing protocols.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Scheduling Coordinator focused on utilization, when lacking data authority, I arrange regular coordination meetings with reception and medical records teams to exchange insights and align on improving scheduling efficiency collectively.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Scheduling Coordinator reliant on interdepartmental input, when data is delayed or inaccurate, I set up standardized data submission deadlines and quality checks with corresponding departments to improve timeliness and reliability.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Scheduling Coordinator, when communication gaps occur, I establish a shared communication platform or group (e.g., chat or email list) for rapid information exchange between medical records, reception, and scheduling teams.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Scheduling Coordinator, I design simple process documentation and training sessions that emphasize the importance of timely and accurate data sharing to foster greater interdepartmental collaboration and accountability.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Scheduling Coordinator constrained by rigid protocols, when urgent cases arise, I create a process to flag and escalate exceptions promptly with management approval to allow flexible slot allocation.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Scheduling Coordinator, I develop a categorized priority system for patient appointments that can be used within protocol limits to guide selective flexibility while maintaining overall scheduling discipline.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Scheduling Coordinator, I advocate for periodic protocol reviews with leadership to incorporate lessons learned from urgent cases and improve scheduling flexibility responsibly over time.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Medical Records Technician responsible for data currency, when facing update bottlenecks, I prioritize updates related to upcoming appointments and communicate urgent data needs timely to receptionists to minimize scheduling delays.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Medical Records Technician, I create a daily update checklist focused on active and priority patients to streamline record maintenance and ensure critical information is current for scheduling use.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Medical Records Technician, I coordinate with reception to receive advance notice of scheduled appointments enabling provisional updates in records ahead of patient visits to reduce last-minute verification delays.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Medical Records Technician verifying complex data, I establish standardized data extraction and validation templates to harmonize and reduce errors from multiple inconsistent sources, improving accuracy for scheduling.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Medical Records Technician, I liaise with insurance providers or external data sources proactively to clarify and correct ambiguous patient data before it impacts scheduling decisions.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Medical Records Technician, I maintain a log of recurring data inconsistencies to identify patterns and recommend process or system enhancements to reduce future verification complexities.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Medical Records Technician operating siloed systems, I create a manual cross-reference document shared with reception to bridge gaps between medical records and scheduling modules until system integration improves.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Medical Records Technician, I perform routine sync sessions with scheduling staff to review patient info discrepancies and align data sets despite system limitations to aid smooth scheduling.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Medical Records Technician, I document and share workaround protocols for accessing or updating data across systems to empower receptionists with knowledge on retrieving needed information despite low integration.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Patient preparing for an appointment, when pre-appointment instructions are unclear, I ask the receptionist for written summaries or printed checklists to ensure I understand and comply with requirements properly.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Patient, when receiving vague instructions, I proactively seek clarification through follow-up phone calls or online patient portals to verify important prep details and avoid misunderstanding.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Patient, I request verbal and digital reminder messages including specific prep steps shortly before the appointment to reinforce instructions and improve readiness for consultation.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Patient needing to reschedule, when receptionist processes are cumbersome, I keep a personal log of available specialist slots and propose preferred alternatives directly to streamline rescheduling discussions.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Patient, I use any available self-service tools (e.g., online portals, apps) or request the receptionist to send multiple alternative dates proactively to simplify rescheduling and reduce frustration.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Patient, when alternative slots are limited, I communicate my urgency and constraints clearly to the receptionist so they can prioritize rescheduling efforts accordingly within system limits.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Patient, to prevent missed communications, I verify and update my preferred contact details with reception at each appointment and request confirmation messages via multiple channels if possible (text and call).",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Patient, when confirmation calls or texts are unreliable, I proactively set personal calendar reminders and follow up with the receptionist a day before the appointment to confirm details and prep instructions.",
+                    "test_results": null
+                },
+                {
+                    "text": "As a Patient, I provide feedback to the facility about communication issues and request standardized reminder protocols be implemented to improve reliability and reduce no-shows.",
+                    "test_results": null
+                }
+            ],
+            "token_count": {
+                "completion_tokens": 3478,
+                "prompt_tokens": 3372,
+                "total_tokens": 6850,
+                "completion_tokens_details": {
+                    "accepted_prediction_tokens": 0,
+                    "audio_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "rejected_prediction_tokens": 0
+                },
+                "prompt_tokens_details": {
+                    "audio_tokens": 0,
+                    "cached_tokens": 0
+                }
+            }
+        }
+    ]
+}

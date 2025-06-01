@@ -1,7 +1,7 @@
 from dataclasses import dataclass, asdict
 from typing import List, Optional
 from enum import Enum
-from workaround_metrics import MetricResults
+from metrics import MetricResults, ProcessWorkaroundsMetricResults
 
 
 class PromptStrategys(Enum):
@@ -13,6 +13,7 @@ class WorkaroundAssesmentEntry:
     text: str
     test_results: Optional[MetricResults]
 
+
 @dataclass
 class ProcessWorkaroundsAssesmentEntry:
     id: int
@@ -20,6 +21,7 @@ class ProcessWorkaroundsAssesmentEntry:
     process_description: str
     workarounds: List[WorkaroundAssesmentEntry]
     token_count: Optional[int]
+    test_results: ProcessWorkaroundsMetricResults
 
     # Custom serialization method
     def to_dict(self):

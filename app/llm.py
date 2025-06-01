@@ -1,5 +1,5 @@
 # app/llm.py
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List, Optional, Dict, Any, Union
 import json
 import os
@@ -75,9 +75,9 @@ def setup_logging():
 
 @dataclass
 class PromptSettings:
-    roles_quantity: int = 5 # Defining the type of 'quantity' property
-    workarounds_quantity: int = 3
-    challenges_quantity: int = 3
+    roles_quantity: int = 3 # Defining the type of 'quantity' property
+    workarounds_quantity: int = 2
+    challenges_quantity: int = 2
 
 @dataclass
 class ProcessContext:
@@ -199,7 +199,48 @@ class LLMService:
         )
         self._log_info(f"Language detected: {detected_language}")
         return detected_language
+    def total_token_counts(self, objects):
+        total_counts = {
+            "completion_tokens": 0,
+            "prompt_tokens": 0,
+            "total_tokens": 0,
+            "completion_tokens_details": {
+                "accepted_prediction_tokens": 0,
+                "audio_tokens": 0,
+                "reasoning_tokens": 0,
+                "rejected_prediction_tokens": 0
+            },
+            "prompt_tokens_details": {
+                "audio_tokens": 0,
+                "cached_tokens": 0
+            }
+        }
 
+        # Iterate over each input object
+        for obj in objects:
+            # Accumulate the total counts
+            total_counts["completion_tokens"] += obj["completion_tokens"]
+            total_counts["prompt_tokens"] += obj["prompt_tokens"]
+            total_counts["total_tokens"] += obj["total_tokens"]
+
+            # Accumulate completion tokens details
+            for key in total_counts["completion_tokens_details"].keys():
+                total_counts["completion_tokens_details"][key] += obj["completion_tokens_details"].get(key, 0)
+
+            # Accumulate prompt tokens details
+            for key in total_counts["prompt_tokens_details"].keys():
+                total_counts["prompt_tokens_details"][key] += obj["prompt_tokens_details"].get(key, 0)
+
+        return total_counts
+    
+    def get_workarounds_strategy_divide_into_three(self, process: ProcessContext) -> Union[List[str], Dict] :
+
+        roles_result = self.get_roles(process)
+        misfits_result = self.get_misfits(process, roles_result['roles'])
+
+        workarounds_result = self.get_workarounds_from_misfits(process, misfits_result['misfits'])
+       
+        return {'workarounds': workarounds_result['workarounds'], 'token_usage': self.total_token_counts(objects=[roles_result['token_usage'], misfits_result['token_usage'], workarounds_result['token_usage']])}
     def get_workarounds(self, process: ProcessContext) -> Union[List[str], Dict] :
         """Get initial workaround suggestions for a process."""
         if not self._check_cost_threshold():
@@ -234,7 +275,7 @@ class LLMService:
             logger.error(f"Unexpected error during get_workarounds: {str(e)}")
             return []
         
-    def get_misfits(self, process: ProcessContext, roles):
+    def get_misfits(self, process: ProcessContext, roles) -> Union[List[str], Dict]:
         key = "GenerateMisfitsPrompt"
         prompt = self._get_prompt(key, process, roles=roles)
         messages = self._create_messages(prompt, process)
@@ -251,14 +292,17 @@ class LLMService:
                 output_data=completion.choices[0].message.content,
                 token_usage=completion.usage.model_dump()
             )
-            return json.loads(completion.choices[0].message.content)
-        except openai.error.OpenAIError as e:
+            if(current_app.testing is True):
+                return {'misfits': json.loads(completion.choices[0].message.content), 'token_usage':completion.usage.model_dump() }
+            else:
+                return json.loads(completion.choices[0].message.content)
+        except openai.OpenAIError as e:
             logger.error(f"OpenAI API error on get_misfits: {str(e)}")
             return []
         except Exception as e:
             logger.error(f"Unexpected error during get_misfits: {str(e)}")
             return []
-    def get_workarounds_from_misfits(self, process: ProcessContext, misfits):
+    def get_workarounds_from_misfits(self, process: ProcessContext, misfits) -> Union[List[str], Dict]:
         
         key = "GenerateWorkaroundsPrompt"
         prompt = self._get_prompt(key, process, misfits=misfits)
@@ -276,15 +320,18 @@ class LLMService:
                 output_data=completion.choices[0].message.content,
                 token_usage=completion.usage.model_dump()
             )
-            return json.loads(completion.choices[0].message.content)
-        except openai.error.OpenAIError as e:
+            if(current_app.testing is True):
+                return {'workarounds': json.loads(completion.choices[0].message.content), 'token_usage':completion.usage.model_dump() }
+            else:
+                return json.loads(completion.choices[0].message.content)
+        except openai.OpenAIError as e:
             logger.error(f"OpenAI API error on get_workarounds_from_misfits: {str(e)}")
             return []
         except Exception as e:
             logger.error(f"Unexpected error during get_workarounds_from_misfits: {str(e)}")
             return []
 
-    def get_roles(self, process: ProcessContext) -> List[str]:
+    def get_roles(self, process: ProcessContext) -> Union[List[str], Dict]:
 
         key = "GenerateRolesPrompt"
         prompt = self._get_prompt(key, process)
@@ -302,8 +349,12 @@ class LLMService:
                 output_data=completion.choices[0].message.content,
                 token_usage=completion.usage.model_dump()
             )
-            return json.loads(completion.choices[0].message.content)
-        except openai.error.OpenAIError as e:
+
+            if(current_app.testing is True):
+                return {'roles': json.loads(completion.choices[0].message.content), 'token_usage':completion.usage.model_dump() }
+            else:
+                return json.loads(completion.choices[0].message.content)
+        except openai.OpenAIError as e:
             logger.error(f"OpenAI API error on get_roles: {str(e)}")
             return []
         except Exception as e:
@@ -337,7 +388,7 @@ class LLMService:
             )
             return json.loads(completion.choices[0].message.content)['workarounds']
         
-        except openai.error.OpenAIError as e:
+        except openai.OpenAIError as e:
             logger.error(f"OpenAI API error on get_similar_workarounds: {str(e)}")
             return []
         except Exception as e:
@@ -370,7 +421,7 @@ class LLMService:
 
             return completion.choices[0].message.content.strip()
         
-        except openai.error.OpenAIError as e:
+        except openai.OpenAIError as e:
             logger.error(f"OpenAI API error on generate_node_label: {str(e)}")
             return ""
         except Exception as e:

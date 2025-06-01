@@ -6,30 +6,90 @@
             "process_description": "\n    In a healthcare facility, the patient scheduling process begins when a patient contacts the reception desk to book an appointment with a specialist. \n    The receptionist verifies the patient's information, including insurance details and medical history, \n    before checking the specialist's availability on the electronic health record (EHR) system. If a suitable time is found, \n    the appointment is set, and the patient is informed about pre-appointment procedures, such as fasting or medication adjustments. \n    Confirmation calls or texts are sent to the patient 24 hours before the appointment. If the patient needs to reschedule or cancel, \n    the receptionist updates the appointment in the system and offers alternative dates.\n    ",
             "workarounds": [
                 {
-                    "text": "As a receptionist, when the EHR system is slow or temporarily unavailable, I keep a manual paper log of appointments to ensure no bookings are lost and can be entered later.",
-                    "test_results": null
+                    "text": "As a receptionist, when the EHR system is slow or unresponsive, I maintain a manual logbook of specialist availability to quickly check open slots and reduce patient wait times.",
+                    "test_results": {
+                        "llm_judge_domain_relevance": {
+                            "assessment": {
+                                "assessment": true,
+                                "explaination": "Maintaining a manual logbook of specialist availability is directly related to the patient scheduling process, especially as a contingency when the EHR system is slow, ensuring continuous appointment booking."
+                            },
+                            "assessment_explaination": "Maintaining a manual logbook of specialist availability is directly related to the patient scheduling process, especially as a contingency when the EHR system is slow, ensuring continuous appointment booking."
+                        },
+                        "bert_score": null,
+                        "self_bleu": null,
+                        "distinct": null,
+                        "perplexity": null
+                    }
                 },
                 {
-                    "text": "As a receptionist, when verifying detailed insurance and medical history takes too long during busy times, I prioritize confirming basic patient identity first and complete detailed verification after booking to avoid losing the appointment slot.",
-                    "test_results": null
+                    "text": "As a receptionist, when patients call with incomplete insurance information, I tentatively schedule appointments but flag these cases for follow-up to avoid losing potential bookings.",
+                    "test_results": {
+                        "llm_judge_domain_relevance": {
+                            "assessment": {
+                                "assessment": true,
+                                "explaination": "Tentatively scheduling appointments when insurance information is incomplete addresses a common issue in patient scheduling and helps avoid losing bookings, fitting squarely within the described process."
+                            },
+                            "assessment_explaination": "Tentatively scheduling appointments when insurance information is incomplete addresses a common issue in patient scheduling and helps avoid losing bookings, fitting squarely within the described process."
+                        },
+                        "bert_score": null,
+                        "self_bleu": null,
+                        "distinct": null,
+                        "perplexity": null
+                    }
                 },
                 {
-                    "text": "As a patient, when I cannot reach the receptionist by phone to reschedule, I send a text message or email requesting changes so the receptionist can update my appointment when available.",
-                    "test_results": null
+                    "text": "As a receptionist, when multiple patients need appointments with the same specialist, I create a prioritized waiting list so I can call patients proactively if earlier slots free up.",
+                    "test_results": {
+                        "llm_judge_domain_relevance": {
+                            "assessment": {
+                                "assessment": true,
+                                "explaination": "Creating a prioritized waiting list to manage multiple appointment requests with the same specialist is relevant to managing specialist availability and scheduling efficiency in the healthcare domain."
+                            },
+                            "assessment_explaination": "Creating a prioritized waiting list to manage multiple appointment requests with the same specialist is relevant to managing specialist availability and scheduling efficiency in the healthcare domain."
+                        },
+                        "bert_score": null,
+                        "self_bleu": null,
+                        "distinct": null,
+                        "perplexity": null
+                    }
                 },
                 {
-                    "text": "As a receptionist, when multiple patients request the same specialist during peak hours, I suggest nearby specialists or offer a waiting list down the phone to maximize scheduling efficiency.",
-                    "test_results": null
+                    "text": "As a receptionist, when patients do not respond to confirmation texts or calls, I keep a shortlist of high-risk patients to personally follow up, improving attendance rates.",
+                    "test_results": {
+                        "llm_judge_domain_relevance": {
+                            "assessment": {
+                                "assessment": true,
+                                "explaination": "Following up personally with high-risk patients who do not respond to confirmation calls or texts supports improving attendance rates and aligns with the appointment confirmation steps in the process."
+                            },
+                            "assessment_explaination": "Following up personally with high-risk patients who do not respond to confirmation calls or texts supports improving attendance rates and aligns with the appointment confirmation steps in the process."
+                        },
+                        "bert_score": null,
+                        "self_bleu": null,
+                        "distinct": null,
+                        "perplexity": null
+                    }
                 },
                 {
-                    "text": "As a receptionist, when patients miss confirmation calls, I keep a checklist of patients with upcoming appointments to send quick reminder texts personally and reduce no-show rates.",
-                    "test_results": null
+                    "text": "As a receptionist, when patients request rescheduling outside office hours, I note their preferences in a shared spreadsheet so that scheduling can be updated promptly during business hours.",
+                    "test_results": {
+                        "llm_judge_domain_relevance": {
+                            "assessment": {
+                                "assessment": true,
+                                "explaination": "Using a shared spreadsheet to note rescheduling preferences outside office hours helps manage appointment changes effectively, contributing to patient scheduling continuity."
+                            },
+                            "assessment_explaination": "Using a shared spreadsheet to note rescheduling preferences outside office hours helps manage appointment changes effectively, contributing to patient scheduling continuity."
+                        },
+                        "bert_score": null,
+                        "self_bleu": null,
+                        "distinct": null,
+                        "perplexity": null
+                    }
                 }
             ],
             "token_count": {
-                "completion_tokens": 193,
+                "completion_tokens": 183,
                 "prompt_tokens": 612,
-                "total_tokens": 805,
+                "total_tokens": 795,
                 "completion_tokens_details": {
                     "accepted_prediction_tokens": 0,
                     "audio_tokens": 0,
@@ -40,174 +100,10 @@
                     "audio_tokens": 0,
                     "cached_tokens": 0
                 }
-            }
-        },
-        {
-            "id": 1,
-            "prompt_strategy": "SinglePrompt",
-            "process_description": "\n    In a retail environment, the inventory management process involves monitoring stock levels, tracking product sales, \n    and managing reordering procedures. Store managers use an inventory management system to conduct regular audits, \n    identifying slow-moving items and products nearing expiration. When stock levels fall below a set threshold, \n    the system automatically generates a purchase order to suppliers. Additionally, \n    the team coordinates with the e-commerce department to ensure online inventory reflects available stock in real-time. \n    Upon receiving new shipments, staff conduct checks to ensure the accurate quantity and quality of products, adjusting records as necessary.\n    ",
-            "workarounds": [
-                {
-                    "text": "As a store manager, when the inventory management system delays automatic reorder notifications, I manually monitor slow-moving items using spreadsheets to ensure timely replenishment.",
-                    "test_results": null
-                },
-                {
-                    "text": "As a warehouse staff member, when shipment arrival schedules are unpredictable, I pre-sort similar product categories in the receiving area to speed up quality and quantity checks.",
-                    "test_results": null
-                },
-                {
-                    "text": "As an inventory clerk, when system thresholds don't reflect real-time sales during promotions, I communicate directly with the sales floor to adjust reorder requests informally before official system updates.",
-                    "test_results": null
-                },
-                {
-                    "text": "As a store manager, when coordination with the e-commerce team is hindered by communication delays, I share daily stock snapshots via instant messaging to keep online inventory more accurate.",
-                    "test_results": null
-                },
-                {
-                    "text": "As receiving staff, when discrepancies occur between delivered quantities and system records, I keep a manual log of adjustments and notify purchasing immediately to avoid delays in updating inventory.",
-                    "test_results": null
-                }
-            ],
-            "token_count": {
-                "completion_tokens": 182,
-                "prompt_tokens": 595,
-                "total_tokens": 777,
-                "completion_tokens_details": {
-                    "accepted_prediction_tokens": 0,
-                    "audio_tokens": 0,
-                    "reasoning_tokens": 0,
-                    "rejected_prediction_tokens": 0
-                },
-                "prompt_tokens_details": {
-                    "audio_tokens": 0,
-                    "cached_tokens": 0
-                }
-            }
-        },
-        {
-            "id": 2,
-            "prompt_strategy": "SinglePrompt",
-            "process_description": "\n    The employee performance review process in a corporate environment is a structured approach that occurs biannually. \n    Managers begin by gathering feedback from various sources, including direct reports, peers, and self-assessments. \n    Performance metrics and goals established during the previous review are reviewed and evaluated for progress and outcomes. \n    The manager schedules a one-on-one meeting with the employee to discuss findings, highlight strengths, and identify areas for improvement. \n    Development plans are established to help employees reach their career goals. After the meeting, \n    all notes and action items are documented in the HR management system for future reference and accountability.\n    ",
-            "workarounds": [
-                {
-                    "text": "As a manager, when I experience delays gathering feedback from peers due to their busy schedules, I consolidate questions into a brief digital form to quickly collect input asynchronously to keep the review process moving.",
-                    "test_results": null
-                },
-                {
-                    "text": "As an employee, when the official one-on-one meeting time is limited, I prepare and share a prioritized agenda in advance to focus the discussion on critical development topics and maximize meeting productivity.",
-                    "test_results": null
-                },
-                {
-                    "text": "As a manager, when the HR management system is cumbersome or slow to update, I maintain a parallel personal tracker of notes and action items during the meeting to ensure no details are lost and later transfer them efficiently to the system.",
-                    "test_results": null
-                },
-                {
-                    "text": "As an employee, when self-assessments feel repetitive or misaligned with actual work, I include examples of recent accomplishments and challenges in a shared document beforehand to provide clearer context for my manager.",
-                    "test_results": null
-                },
-                {
-                    "text": "As a manager, when rigid review timelines cause scheduling conflicts, I initiate informal check-in conversations outside the official cycle to address urgent performance issues early and maintain continuous dialogue.",
-                    "test_results": null
-                }
-            ],
-            "token_count": {
-                "completion_tokens": 214,
-                "prompt_tokens": 603,
-                "total_tokens": 817,
-                "completion_tokens_details": {
-                    "accepted_prediction_tokens": 0,
-                    "audio_tokens": 0,
-                    "reasoning_tokens": 0,
-                    "rejected_prediction_tokens": 0
-                },
-                "prompt_tokens_details": {
-                    "audio_tokens": 0,
-                    "cached_tokens": 0
-                }
-            }
-        },
-        {
-            "id": 4,
-            "prompt_strategy": "SinglePrompt",
-            "process_description": "\n    The loan approval process in a bank involves several steps to assess the creditworthiness of applicants. \n    When a customer submits a loan application, the loan officer collects necessary financial documents, including income statements, \n    credit reports, and debt history. The officer inputs this data into an automated underwriting system, \n    which evaluates the application against established criteria. If approved, the loan terms are drafted and presented to the customer for review. \n    Upon agreement, the paperwork is processed, and the loan is funded. If the application is denied, \n    the officer communicates the reasons and suggests alternative financing options or improvements for future applications.\n    ",
-            "workarounds": [
-                {
-                    "text": "As a loan officer, when delays occur in obtaining financial documents from customers, I pre-fill application checklists and share them via email to prompt faster submissions and reduce waiting time.",
-                    "test_results": null
-                },
-                {
-                    "text": "As a loan officer, when the underwriting system experiences downtime or slow processing, I manually review key credit indicators to provide preliminary assessments and keep the process moving.",
-                    "test_results": null
-                },
-                {
-                    "text": "As a loan officer, when customers feel overwhelmed by complex loan terms, I prepare simplified summary sheets in advance to facilitate clearer communication during the review meeting.",
-                    "test_results": null
-                },
-                {
-                    "text": "As a loan officer, when official communication templates are too rigid to explain denials well, I supplement letters with personalized phone calls to better manage customer expectations and maintain relationships.",
-                    "test_results": null
-                },
-                {
-                    "text": "As a loan officer, when the volume of applications exceeds available time, I prioritize collecting complete documents during initial contact to avoid multiple follow-ups and speed up the underwriting step.",
-                    "test_results": null
-                }
-            ],
-            "token_count": {
-                "completion_tokens": 186,
-                "prompt_tokens": 603,
-                "total_tokens": 789,
-                "completion_tokens_details": {
-                    "accepted_prediction_tokens": 0,
-                    "audio_tokens": 0,
-                    "reasoning_tokens": 0,
-                    "rejected_prediction_tokens": 0
-                },
-                "prompt_tokens_details": {
-                    "audio_tokens": 0,
-                    "cached_tokens": 0
-                }
-            }
-        },
-        {
-            "id": 5,
-            "prompt_strategy": "SinglePrompt",
-            "process_description": "\n    As a nurse in a busy hospital I apply care and medications and take measurements when visiting patients. Then I enter them into our IT system right away.\n    ",
-            "workarounds": [
-                {
-                    "text": "As a nurse, when patient visits are back-to-back and I have no immediate time to enter data, I jot down measurements and medication details on a paper notepad to enter them later without missing information.",
-                    "test_results": null
-                },
-                {
-                    "text": "As a nurse, when the IT system is slow or unresponsive during rounds, I briefly record critical patient data mentally or on my phone\u2019s notes app to avoid delaying care.",
-                    "test_results": null
-                },
-                {
-                    "text": "As a nurse, when multiple urgent patients require attention and I cannot enter data immediately, I group patients and enter their information in batches during short breaks to maintain workflow efficiency.",
-                    "test_results": null
-                },
-                {
-                    "text": "As a nurse, when care is provided in noisy or chaotic environments making data entry difficult, I use abbreviations or shorthand in my notes that I can expand upon later during data entry.",
-                    "test_results": null
-                },
-                {
-                    "text": "As a nurse, when interruptions prevent timely IT entry, I hand over my preliminary notes to a trusted colleague at shift end to double-check and assist with data entry, ensuring accuracy without delay.",
-                    "test_results": null
-                }
-            ],
-            "token_count": {
-                "completion_tokens": 207,
-                "prompt_tokens": 507,
-                "total_tokens": 714,
-                "completion_tokens_details": {
-                    "accepted_prediction_tokens": 0,
-                    "audio_tokens": 0,
-                    "reasoning_tokens": 0,
-                    "rejected_prediction_tokens": 0
-                },
-                "prompt_tokens_details": {
-                    "audio_tokens": 0,
-                    "cached_tokens": 0
-                }
+            },
+            "test_results": {
+                "avg_bert_score": null,
+                "llm_judge_domain_relevance_quality": 1.0
             }
         }
     ]
