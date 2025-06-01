@@ -139,7 +139,7 @@ class App {
         }
 
         try {
-            const response = await fetch('/start_map', {
+            const response = await fetch('/api/start_map', {
                 method: 'POST',
                 body: formData,
             });
@@ -221,7 +221,7 @@ class App {
             }
     
             // Make the request
-            const response = await fetch('/get_similar_workarounds', fetchConfig);
+            const response = await fetch('/api/get_similar_workarounds', fetchConfig);
 
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);

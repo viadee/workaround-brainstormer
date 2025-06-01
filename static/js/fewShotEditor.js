@@ -122,7 +122,7 @@ class FewShotEditor {
         const payload = {
             few_shot_examples: this.allExamples
         };
-        fetch('/update_few_shot_examples', {
+        fetch('/api/update_few_shot_examples', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -176,7 +176,7 @@ class FewShotEditor {
         const payload = {
             process_description: this.description.value + (this.additionalContext.value ?? "")
         };
-        fetch('/retreive_similar_few_shot_examples', {
+        fetch('/api/retreive_similar_few_shot_examples', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)

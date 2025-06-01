@@ -131,7 +131,7 @@ class WorkaroundsList {
         } 
 
         try {
-            const response = await fetch('/update_workarounds', {
+            const response = await fetch('/api/update_workarounds', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
