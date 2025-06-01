@@ -1,6 +1,6 @@
 # app/llm.py
 from dataclasses import dataclass
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Union
 import json
 import os
 from flask import session
@@ -187,7 +187,7 @@ class LLMService:
         self._log_info(f"Language detected: {detected_language}")
         return detected_language
 
-    def get_workarounds(self, process: ProcessContext) -> List[str]:
+    def get_workarounds(self, process: ProcessContext) -> Union[List[str], Dict] :
         """Get initial workaround suggestions for a process."""
         if not self._check_cost_threshold():
             raise CostLimitExceeded("Daily cost threshold exceeded")
@@ -209,8 +209,12 @@ class LLMService:
                 output_data=completion.choices[0].message.content,
                 token_usage=completion.usage.model_dump()
             )
-            return json.loads(completion.choices[0].message.content)['workarounds']
-        except openai.error.OpenAIError as e:
+            if(current_app.testing is True):
+                return {'workarounds':json.loads(completion.choices[0].message.content)['workarounds'], "token_usage": completion.usage.model_dump() }
+            else:
+                return json.loads(completion.choices[0].message.content)['workarounds']
+        
+        except openai.OpenAIError as e:
             logger.error(f"OpenAI API error on get_workarounds: {str(e)}")
             return []
         except Exception as e:
