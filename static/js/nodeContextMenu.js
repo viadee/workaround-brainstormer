@@ -4,15 +4,13 @@ class NodeContextMenu{
 
     graphManager
     updateUIHook
-    settings
 
     constructor(
         graphManager, 
-        updateUIHook,
-        workaroundGenerationSettings){
+        updateUIHook
+    ){
         this.graphManager = graphManager;
         this.updateUIHook = updateUIHook;
-        this.settings = workaroundGenerationSettings;
         this.apiService = new ApiService();
         this.spinner = document.getElementById("map-spinner");
     }
@@ -232,23 +230,18 @@ class NodeContextMenu{
             return;
         // collapse node without children
         else if(!d.expanded){
-            this.settings.addUndesirableWorkaround(this.graphManager.getNodes().find(n => n.id == d.id))
             this.graphManager.removeNode(d.id)
 
             const parent = this.graphManager.getNodes().find(n => n.id == d.parent)
             if(parent == undefined){
                 throw new Error("Parentnode is undefined");
             }
-            if(parent.children == undefined || (parent.children?.length == 1 && parent.children?.find(c => c.id == d.id) != undefined )  ){
+            if(parent.children == undefined || parent.children?.length == 0 || (parent.children?.length == 1 && parent.children?.find(c => c.id == d.id) != undefined )  ){
                 parent.expanded = false
             }
             this.updateUIHook()
         // recursive remove children
         }else{
-            const undesirableNodes = this.graphManager.getNodes().filter(n => n.id == d.id || n.parent == d.id)
-            for(const node of undesirableNodes){
-                this.settings.addUndesirableWorkaround(node)
-            }
             const recursiveRemove = (nodeId) => {
                 const children = this.graphManager.getNodes().filter(n => n.parent === nodeId);
                 children.forEach(child => {

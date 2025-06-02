@@ -1,11 +1,12 @@
 // static/js/graphManager.js
+import PromptExtensions from "./PromptExtensions.js";
 class GraphManager {
     constructor() {
         this.nodes = new Map();
         this.links = new Set();
         this.initializeD3();
         this.setupEventHandlers();
-
+        this.promptExtensions = new PromptExtensions;
         this.nextNodeId = 0;
         
     }
@@ -70,6 +71,7 @@ class GraphManager {
     addNode(node) {
         node["id"] = this.nextNodeId++;
         this.nodes.set(node.id, node);
+        this.promptExtensions.handleAddNode(node)
     }
 
     addLink(source, target) {
@@ -93,6 +95,7 @@ class GraphManager {
     }
 
     removeNode(id) {
+        this.promptExtensions.handleRemoveNode(this.getNodeById(id))
         this.nodes.delete(id);
         this.links = new Set(
             Array.from(this.links).filter(link => {
@@ -100,6 +103,7 @@ class GraphManager {
                 return source !== id && target !== id;
             })
         );
+        
     }
 
     updateNodeLabel(id, label) {

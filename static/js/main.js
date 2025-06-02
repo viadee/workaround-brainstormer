@@ -2,8 +2,9 @@ import FileUploadManager from "./fileUpload.js";
 import FewShotEditor from "./fewShotEditor.js";
 import GraphManager from "./graphManager.js";
 import NodeContextMenu from "./nodeContextMenu.js";
-import WorkaroundGenerationSettings from "./WorkaroundGenerationSettings.js";
+
 import WorkaroundsList from "./workaroundsList.js";
+import ApiService from "./apiService.js";
 // static/js/main.js
 class App {
     constructor() {
@@ -20,8 +21,8 @@ class App {
         this.fileUploadManager = new FileUploadManager;
         this.workaroundsList = new WorkaroundsList;
         this.fewShotEditor = new FewShotEditor;
-        this.workaroundGenerationSettings = new WorkaroundGenerationSettings;
-
+        
+        this.apiService = new ApiService
 
 
         this.spinner = document.getElementById("map-spinner");
@@ -145,23 +146,9 @@ class App {
         if (uploadedFile) {
             formData.append('file', uploadedFile);
         }
-
+        this.apiService.setFormData(formData)
         try {
-            const roleResponse = await fetch('/api/generateRoles', {
-                method: 'POST',
-                body: formData,
-            });
-            
-            if (!roleResponse.ok) {
-                throw new Error(`HTTP error! status: ${roleResponse.status}`);
-            }
-            
-            const roleData = await roleResponse.json();
-            if (roleData.error) {
-                throw new Error(roleData.error);
-            }
-
-            const roles = roleData["roles"]
+            const roles = await this.apiService.getRoles(this.graphManager.promptExtensions.getRolesPromptContext())
 
             roles.forEach(role => {
                 const childNode = {
@@ -179,20 +166,7 @@ class App {
 
             formData.append('roles',roles)
 
-            const misfitResponse = await fetch('/api/generateMisfits', {
-                method: 'POST',
-                body: formData,
-            });
-
-            if (!misfitResponse.ok) {
-                throw new Error(`HTTP error! status: ${misfitResponse.status}`);
-            }
-            
-            const misfitData = await misfitResponse.json();
-            if (misfitData.error) {
-                throw new Error(misfitData.error);
-            }
-
+            const misfitData = await this.apiService.getMisfits(roles, this.graphManager.promptExtensions.getMisfitsPromptContext())
 
             for (const role of roles) {
                 try {
@@ -222,19 +196,7 @@ class App {
 
             formData.append("misfits", JSON.stringify(misfitData))
 
-            const workaroundResponse = await fetch('/api/generateWorkarounds', {
-                method: 'POST',
-                body: formData,
-            });
-
-            if (!workaroundResponse.ok) {
-                throw new Error(`HTTP error! status: ${workaroundResponse.status}`);
-            }
-            
-            const workaroundData = await workaroundResponse.json();
-            if (workaroundData.error) {
-                throw new Error(workaroundData.error);
-            }
+            const workaroundData = await this.apiService.getWorkarounds(misfitData, this.graphManager.promptExtensions.getWorkaroundsPromptContext())
 
             const misfitNodes = this.graphManager.getNodes().filter(x => x.category === "misfit")
 

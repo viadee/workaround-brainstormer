@@ -1,41 +1,25 @@
 import FileUploadManager from "./fileUpload.js";
-import WorkaroundGenerationSettings from "./WorkaroundGenerationSettings.js";
 
 class ApiService {
 
     constructor() {
         this.baseUrl = '/api';
         this.fileUploadManager = new FileUploadManager();
-        this.workaroundGenerationSettings = new WorkaroundGenerationSettings();
+        this.formData = new FormData();
     }
 
-    #setupFormData() {
-
-        const formData = new FormData();
-
-        const description = document.getElementById('process-input').value;
-        const additionalContext = document.getElementById('additional-context')?.value || '';
-
-        formData.append('process_description', description);
-        formData.append('additional_context', additionalContext);
-
-        const uploadedFile = this.fileUploadManager.getUploadedFile();
-        if (uploadedFile) {
-            formData.append('file', uploadedFile);
-        }
-
-        return formData
-    
+    setFormData(formData) {
+        this.formData = formData
     }
 
-    async #post(endpoint, formData) {
+    async #post(endpoint) {
         const response = await fetch(`${this.baseUrl}${endpoint}`, {
             method: 'POST',
-            body: formData,
+            body: this.formData,
         })
         
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${misfitResponse.status}`);
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const data = await response.json()
@@ -47,59 +31,56 @@ class ApiService {
         return data
     }
 
-    async getRoles(generatedRoles = null, quantity = null) {
+    async getRoles(additional_context = null, quantity = null) {
 
-        const formData = this.#setupFormData()
-
-
-        if (generatedRoles != null) {
-            formData.append('additional_context',this.workaroundGenerationSettings.getAdditionalPromptContextAdditionalRoles(generatedRoles))
+        if (additional_context) {
+            this.formData.set('additional_context',additional_context)
         }
 
         if (quantity) {
-            formData.append('roles_quantity', quantity)
+            this.formData.set('roles_quantity', quantity)
         }
 
         try {
-            return await this.#post('/generateRoles',formData)
+            const result = await this.#post('/generateRoles')
+            return result['roles']
         } catch (error) {
             console.error('Error generating roles:', error)
         }
 
     }
 
-    async getMisfits(role, generatedMisfits = null, quantity = null) {
-        
-        const formData = this.#setupFormData()
+    async getMisfits(roles, additional_context = null, quantity = null) {
 
-        if (generatedMisfits) {
-            formData.append('additional_context',this.workaroundGenerationSettings.getAdditionalPromptContextAdditionalMisfits(generatedMisfits))
+        if (additional_context) {
+            this.formData.set('additional_context', additional_context)
         }
 
         if (quantity) {
-            formData.append('challenges_quantity', quantity)
+            this.formData.set('challenges_quantity', quantity)
         }
-        formData.append('roles', [role])
+        this.formData.set('roles', [roles])
 
         try {
-            return this.#post('/generateMisfits', formData)
+            return await this.#post('/generateMisfits')
         } catch (error) {
             console.error('Error generating misfits:', error)
         }
 
     }
 
-    async getWorkarounds(misfit, quantity = null) {
-
-        const formData = this.#setupFormData()
+    async getWorkarounds(misfit, additional_context = null, quantity = null) {
 
         if (quantity) {
-            formData.append('workarounds_quantity', quantity)
+            this.formData.set('workarounds_quantity', quantity)
         }
-        formData.append('misfits', JSON.stringify(misfit))
+        if(additional_context){
+            this.formData.set('additional_context', additional_context)
+        }
+        this.formData.set('misfits', JSON.stringify(misfit))
 
         try {
-            return this.#post('/generateWorkarounds', formData)
+            return await this.#post('/generateWorkarounds')
         } catch (error) {
             console.error('Error generating workarounds:', error)
         }
