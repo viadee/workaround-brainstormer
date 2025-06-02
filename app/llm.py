@@ -75,8 +75,8 @@ def setup_logging():
 
 @dataclass
 class PromptSettings:
-    roles_quantity: int = 5 # Defining the type of 'quantity' property
-    workarounds_quantity: int = 3
+    roles_quantity: int = 3 # Defining the type of 'quantity' property
+    workarounds_quantity: int = 2
     challenges_quantity: int = 3
 
 @dataclass

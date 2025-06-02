@@ -5,6 +5,9 @@ class GraphManager {
         this.links = new Set();
         this.initializeD3();
         this.setupEventHandlers();
+
+        this.nextNodeId = 0;
+        
     }
 
     initializeD3() {
@@ -65,6 +68,7 @@ class GraphManager {
     }
 
     addNode(node) {
+        node["id"] = this.nextNodeId++;
         this.nodes.set(node.id, node);
     }
 
@@ -82,6 +86,10 @@ class GraphManager {
 
     getLinks() {
         return Array.from(this.links).map(JSON.parse);
+    }
+
+    getChildren(id) {
+        return Array.from(this.nodes.values()).filter(x => x.parent == id)
     }
 
     removeNode(id) {

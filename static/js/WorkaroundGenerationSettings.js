@@ -4,7 +4,6 @@ class WorkaroundGenerationSettings{
     
     constructor(){
         this.undesirableWorkarounds = []
-        this.undesirableMisfits = []
     }
 
     addUndesirableWorkaround(workaround){
@@ -32,6 +31,36 @@ class WorkaroundGenerationSettings{
             - andere Vorteile erzielt
         `
         }
+        return context;
+    }
+
+    getAdditionalPromptContextAdditionalRoles(generatedRoles){
+        let context = document.getElementById('additional-context')?.value || '';
+
+        context += `
+            Für den betrachteten Prozess wurden bereits folgende Rollen generiert:
+            [
+            ${generatedRoles.map(w => { return  `"` + w + `",`} )}
+            ]
+            Aus diesem Grund sollten Sie bei der Erstellung neuer Rollen darauf achten, dass
+            diese andere involvierte Rollen wiederspiegeln.
+        `
+
+        return context;
+    }
+
+    getAdditionalPromptContextAdditionalMisfits(generatedMisfits){
+        let context = document.getElementById('additional-context')?.value || '';
+
+        context += `
+            Für die betrachtete Rolle wurden bereits folgende Misfits generiert:
+            [
+            ${generatedMisfits.map(w => { return  `"` + w + `",`} )}
+            ]
+            Aus diesem Grund sollten Sie bei der Erstellung neuer Mitsits darauf achten, dass
+            diese andere Arten von Problemen adressiert.
+        `
+
         return context;
     }
 }

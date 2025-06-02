@@ -173,7 +173,7 @@ def generateWorkarounds():
             description=process_description,
             additional_context=additional_context,
             base64_image=base64_image,
-            prompt_settings= PromptSettings(workarounds_quantity=workarounds_quantity) if workarounds_quantity != None else None
+            prompt_settings= PromptSettings(workarounds_quantity=workarounds_quantity if workarounds_quantity != '' else 2)
         )
         
         # Language detection timing
@@ -217,8 +217,6 @@ def generateWorkarounds():
             os.remove(temp_file_path)
 
 
-
-
 @api_bp.route('/generateMisfits', methods=['POST'])
 def generateMisfits():
     
@@ -248,7 +246,7 @@ def generateMisfits():
             description=process_description,
             additional_context=additional_context,
             base64_image=base64_image,
-            prompt_settings= PromptSettings(challenges_quantity=challenges_quantity) if challenges_quantity != None else None
+            prompt_settings= PromptSettings(challenges_quantity=challenges_quantity if challenges_quantity != '' else 2)
         )
         
         # Language detection timing
@@ -304,6 +302,9 @@ def generateRoles():
     temp_file_path = None
     file_processing_start = file_processing_end = None
 
+    print(additional_context == '')
+    print(additional_context)
+
     try:
         # Handle file upload with timing
         if 'file' in request.files and request.files['file'].filename:
@@ -317,7 +318,7 @@ def generateRoles():
             description=process_description,
             additional_context=additional_context,
             base64_image=base64_image,
-            prompt_settings= PromptSettings(roles_quantity=roles_quantity) if roles_quantity != None else None
+            prompt_settings= PromptSettings(roles_quantity=roles_quantity if roles_quantity != '' else 3)
         )
         
         # Language detection timing

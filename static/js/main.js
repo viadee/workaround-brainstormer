@@ -4,11 +4,9 @@ import GraphManager from "./graphManager.js";
 import NodeContextMenu from "./nodeContextMenu.js";
 import WorkaroundGenerationSettings from "./WorkaroundGenerationSettings.js";
 import WorkaroundsList from "./workaroundsList.js";
-import BackendTest from "./backendTest.js";
 // static/js/main.js
 class App {
     constructor() {
-        this.nextNodeId = 1;
         this.isExpanding = false;
         this.currentFilename = null;
         this.fetchWorkaroundsState = false
@@ -24,7 +22,6 @@ class App {
         this.fewShotEditor = new FewShotEditor;
         this.workaroundGenerationSettings = new WorkaroundGenerationSettings;
 
-        this.backendTest = new BackendTest;
 
 
         this.spinner = document.getElementById("map-spinner");
@@ -109,12 +106,6 @@ class App {
 
     async createInitialStructure() {
 
-
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
-
-
         if(this.fetchWorkaroundsState == true){
             return;
         }
@@ -128,7 +119,7 @@ class App {
         try{
             this.fewShotEditor.currentLang = "en";
             this.fewShotEditor.updateLangTabs();
-            this.fewShotEditor.retreiveFewShotExamples();
+            // this.fewShotEditor.retreiveFewShotExamples();
             this.fewShotEditor.updateCurrentLanguageExamples();
             this.fewShotEditor.autoSave();
         } catch (error) {
@@ -174,7 +165,6 @@ class App {
 
             roles.forEach(role => {
                 const childNode = {
-                    id:this.nextNodeId++,
                     text:role,
                     expanded:true,
                     parent:rootNode.id,
@@ -188,8 +178,6 @@ class App {
             this.updateUI();
 
             formData.append('roles',roles)
-
-            formData.append('challenges_quantity',1)
 
             const misfitResponse = await fetch('/api/generateMisfits', {
                 method: 'POST',
@@ -205,8 +193,6 @@ class App {
                 throw new Error(misfitData.error);
             }
 
-            
-            // const misfitResponse = this.backendTest.returnMisfits()
 
             for (const role of roles) {
                 try {
@@ -215,7 +201,6 @@ class App {
 
                     for (const misfit of misfits) {
                         const misfitNode = {
-                            id:this.nextNodeId++,
                             text:misfit.text,
                             label:misfit.label,
                             expanded:true,
@@ -260,7 +245,6 @@ class App {
 
                     for (const workaround of workarounds) {
                         const workaroundNode = {
-                            id: this.nextNodeId++,
                             text: workaround.workaround,
                             expanded: false,
                             parent: misfitNode.id,
@@ -299,7 +283,7 @@ class App {
                 additional_context: this.workaroundGenerationSettings.getAdditionalPromptContext(),
                 similar_workaround: d.text,
                 other_workarounds: this.graphManager.getNodes()
-                    .filter(n => n.id !== 0 && n.id !== d.id)
+                    .filter(n => n.id !== 0 && n.id !== d.id && n.category == "workaround")
                     .map(n => n.text)
             };
     
@@ -349,7 +333,6 @@ class App {
 
             similarWorkarounds.forEach(text => {
                 const childNode = {
-                    id: this.nextNodeId++,
                     text: text,
                     parent: d.id,
                     expanded: false,
@@ -383,7 +366,6 @@ class App {
 
         similarWorkarounds.forEach(text => {
             const childNode = {
-                id: this.nextNodeId++,
                 text: text,
                 parent: d.id,
                 expanded: false
