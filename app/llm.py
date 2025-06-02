@@ -77,7 +77,7 @@ def setup_logging():
 class PromptSettings:
     roles_quantity: int = 3 # Defining the type of 'quantity' property
     workarounds_quantity: int = 2
-    challenges_quantity: int = 3
+    challenges_quantity: int = 2
 
 @dataclass
 class ProcessContext:
@@ -222,7 +222,7 @@ class LLMService:
                 token_usage=completion.usage.model_dump()
             )
             return json.loads(completion.choices[0].message.content)['workarounds']
-        except openai.error.OpenAIError as e:
+        except openai.OpenAIError as e:
             logger.error(f"OpenAI API error on get_workarounds: {str(e)}")
             return []
         except Exception as e:
@@ -247,7 +247,7 @@ class LLMService:
                 token_usage=completion.usage.model_dump()
             )
             return json.loads(completion.choices[0].message.content)
-        except openai.error.OpenAIError as e:
+        except openai.OpenAIError as e:
             logger.error(f"OpenAI API error on get_misfits: {str(e)}")
             return []
         except Exception as e:
@@ -272,7 +272,7 @@ class LLMService:
                 token_usage=completion.usage.model_dump()
             )
             return json.loads(completion.choices[0].message.content)
-        except openai.error.OpenAIError as e:
+        except openai.OpenAIError as e:
             logger.error(f"OpenAI API error on get_workarounds_from_misfits: {str(e)}")
             return []
         except Exception as e:
@@ -298,7 +298,7 @@ class LLMService:
                 token_usage=completion.usage.model_dump()
             )
             return json.loads(completion.choices[0].message.content)
-        except openai.error.OpenAIError as e:
+        except openai.OpenAIError as e:
             logger.error(f"OpenAI API error on get_roles: {str(e)}")
             return []
         except Exception as e:
@@ -332,7 +332,7 @@ class LLMService:
             )
             return json.loads(completion.choices[0].message.content)['workarounds']
         
-        except openai.error.OpenAIError as e:
+        except openai.OpenAIError as e:
             logger.error(f"OpenAI API error on get_similar_workarounds: {str(e)}")
             return []
         except Exception as e:
@@ -365,7 +365,7 @@ class LLMService:
 
             return completion.choices[0].message.content.strip()
         
-        except openai.error.OpenAIError as e:
+        except openai.OpenAIError as e:
             logger.error(f"OpenAI API error on generate_node_label: {str(e)}")
             return ""
         except Exception as e:
