@@ -304,9 +304,6 @@ def generateRoles():
     temp_file_path = None
     file_processing_start = file_processing_end = None
 
-    print(additional_context == '')
-    print(additional_context)
-
     try:
         # Handle file upload with timing
         if 'file' in request.files and request.files['file'].filename:

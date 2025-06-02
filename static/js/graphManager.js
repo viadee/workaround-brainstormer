@@ -258,7 +258,7 @@ class GraphManager {
                         return -6
                 }
             })
-            .attr("class", d => `icon icon-${d.id}`) // Optional classes for the icon
+            .attr("class", d => `graph-icon icon icon-${d.id}`) // Optional classes for the icon
             .raise()
 
         nodeGroup.selectAll("text")
@@ -267,6 +267,7 @@ class GraphManager {
             .attr("dx", 12)
             .attr("dy", ".35em")
             .text(d => d.label)
+            .attr("class", "graph-label")
             .attr("font-size", "10px")
             .attr("fill", "#333");
 
@@ -294,6 +295,16 @@ class GraphManager {
         this.links.clear();
         this.g.selectAll(".node").remove();
         this.g.selectAll(".link").remove();
+        const icons = document.querySelectorAll(".graph-icon")
+        icons?.forEach((i) => {
+            i?.remove()
+        })
+        const labels = document.querySelectorAll(".graph-label")
+        labels?.forEach((l) => {
+            l?.remove()
+        })
+        
+        this.nextNodeId = 0
     }
 
     highlightNode(nodeId) {

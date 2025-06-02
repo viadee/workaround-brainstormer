@@ -45,7 +45,7 @@ class WorkaroundGenerationSettings{
             Aus diesem Grund sollten Sie bei der Erstellung neuer Rollen darauf achten, dass
             diese andere involvierte Rollen wiederspiegeln.
         `
-
+        console.log(context)
         return context;
     }
 

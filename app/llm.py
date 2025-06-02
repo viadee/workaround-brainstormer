@@ -293,7 +293,6 @@ class LLMService:
                 messages=messages,
                 response_format={"type": "json_object"}
             )
-            print("roles:", completion.choices[0].message.content)
             self._log_api_call(
                 function="get_roles",
                 input_data=prompt,
