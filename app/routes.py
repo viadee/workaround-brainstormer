@@ -12,7 +12,7 @@ from werkzeug.utils import secure_filename
 from .prompts import DEFAULT_FEW_SHOT_EXAMPLES
 from .auth import login_required, admin_required, check_credentials, setUserCredentialVariables
 from .utils import save_uploaded_file, process_image, format_workarounds_tree
-from .llm import LLMService, ProcessContext, CostLimitExceeded, RAGService, PromptSettings
+from .llm import LLMService, ProcessContext, CostLimitExceeded, RAGService, PromptSettings, PromptSettings
 import logging
 from .limiter import limiter
 
@@ -20,6 +20,7 @@ from .limiter import limiter
 auth_bp = Blueprint('auth', __name__)
 main_bp = Blueprint('main', __name__)
 info_bp = Blueprint('info', __name__)
+api_bp = Blueprint('api', __name__, url_prefix='/api')
 api_bp = Blueprint('api', __name__, url_prefix='/api')
 
 def add_timing_headers(response, **kwargs):
@@ -120,6 +121,7 @@ def admin():
     )
 
 
+@api_bp.route('/download_logs')
 @api_bp.route('/download_logs')
 @login_required
 @admin_required
@@ -438,6 +440,7 @@ def start_map():
             os.remove(temp_file_path)
 
 @api_bp.route('/get_similar_workarounds', methods=['POST'])
+@api_bp.route('/get_similar_workarounds', methods=['POST'])
 @login_required
 def get_similar_workarounds():
     start_time = time.time()
@@ -531,6 +534,7 @@ def get_similar_workarounds():
 
 
 @api_bp.route('/update_workarounds', methods=['POST'])
+@api_bp.route('/update_workarounds', methods=['POST'])
 @login_required
 def update_workarounds():
     """Update and format workarounds list."""
@@ -550,6 +554,7 @@ def update_workarounds():
         return jsonify({'error': str(e)}), 500
 
 @api_bp.route('/download_workarounds', methods=['GET'])
+@api_bp.route('/download_workarounds', methods=['GET'])
 @login_required
 def download_workarounds():
     """Download formatted workarounds as text file."""
@@ -568,6 +573,7 @@ def download_workarounds():
         flash('Error downloading workarounds file.', 'error')
         return redirect(url_for('main.brainstormer'))
     
+@api_bp.route('/test_logging')
 @api_bp.route('/test_logging')
 @login_required
 @admin_required
@@ -589,6 +595,7 @@ def test_logging():
     return jsonify({'status': 'Logging test complete'})
 
 @api_bp.route('/update_few_shot_examples', methods=['POST'])
+@api_bp.route('/update_few_shot_examples', methods=['POST'])
 @login_required
 def update_few_shot_examples():
     """Update the few shot examples based on user input."""
@@ -603,6 +610,7 @@ def update_few_shot_examples():
         return jsonify({"error": str(e)}), 500
     
 
+@api_bp.route('/retreive_similar_few_shot_examples', methods=['POST'])
 @api_bp.route('/retreive_similar_few_shot_examples', methods=['POST'])
 @login_required
 def retreive_similar_few_shot_examples():
@@ -632,6 +640,7 @@ def retreive_similar_few_shot_examples():
         current_app.logger.exception("Error generating similar few shot examples: %s", e)
         return jsonify({"error": str(e)}), 500
 
+@api_bp.route('/save_workarounds', methods=['POST'])
 @api_bp.route('/save_workarounds', methods=['POST'])
 def save_workarounds():
     try:

@@ -1,5 +1,5 @@
 # app/llm.py
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, field
 from typing import List, Optional, Dict, Any
 import json
 import os
@@ -117,6 +117,7 @@ class LLMService:
             azure_endpoint=azure_endpoint
         )
         
+        
         self.chat_model = current_app.config['AZURE_CHAT_MODEL']
         self.language_service = LanguageService()
         self.session_id = session_id or self._get_session_id()
@@ -165,6 +166,7 @@ class LLMService:
 
         # Retrieve the stored few-shot examples from session.
         stored = session.get('few_shot_examples')
+        
         # If stored is not a dict (or is missing), convert if it is a list or use an empty dict.
         if not isinstance(stored, dict):
             stored = {"en": stored} if isinstance(stored, list) else {}
@@ -184,6 +186,9 @@ class LLMService:
             process_description=process.description,
             additional_context=process.additional_context,
             few_shot_examples=few_shot_str,
+            roles_quantity=process.prompt_settings.roles_quantity,
+            challenges_quantity=process.prompt_settings.challenges_quantity,
+            workarounds_quantity=process.prompt_settings.workarounds_quantity,
             roles_quantity=process.prompt_settings.roles_quantity,
             challenges_quantity=process.prompt_settings.challenges_quantity,
             workarounds_quantity=process.prompt_settings.workarounds_quantity,
