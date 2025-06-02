@@ -1,5 +1,5 @@
 # app/llm.py
-from dataclasses import dataclass, field, field
+from dataclasses import dataclass, field
 from typing import List, Optional, Dict, Any
 import json
 import os
@@ -189,9 +189,6 @@ class LLMService:
             roles_quantity=process.prompt_settings.roles_quantity,
             challenges_quantity=process.prompt_settings.challenges_quantity,
             workarounds_quantity=process.prompt_settings.workarounds_quantity,
-            roles_quantity=process.prompt_settings.roles_quantity,
-            challenges_quantity=process.prompt_settings.challenges_quantity,
-            workarounds_quantity=process.prompt_settings.workarounds_quantity,
             **kwargs
         )
 
@@ -296,6 +293,7 @@ class LLMService:
                 messages=messages,
                 response_format={"type": "json_object"}
             )
+            print("roles:", completion.choices[0].message.content)
             self._log_api_call(
                 function="get_roles",
                 input_data=prompt,

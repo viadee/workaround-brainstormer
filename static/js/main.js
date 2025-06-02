@@ -318,7 +318,6 @@ class App {
     
             // Make the request
             const response = await fetch('/api/get_similar_workarounds', fetchConfig);
-            const response = await fetch('/api/get_similar_workarounds', fetchConfig);
 
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
