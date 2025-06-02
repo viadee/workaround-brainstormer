@@ -19,17 +19,18 @@ Consider the following process and/or the attached process diagram:
     -	think about jobs not mentioned in but indirectly affected by the process
     -	explore diverse types of roles and ensure including roles that are different accordingly to the following dimensions:
         o	Hierarchy level (Management, Supervisor, staff jobs, line jobs), 
-    o	Occupation 
-        	Managers e.g. Production manager in agriculture, IT-Manager)
-        	Professionals e.g. physicist, Architect, Teacher, Medical doctor, Accountant, Lawyer
-        	Technicians e.g. Mechanical Engineering, Biogas technician, 3D printing technician, Network technician
-        	Service and sales workers e.g. Call centre agent, Cook, cleaning specialist
-        	Agricultural, forestry and fishery e.g. Crop farmer, fisher
-        	Craft and related trade e.g. Bricklayer, Carpenter, avionics technician, computer hardware repair technician, Baker
-        	Plant and machine operators e.g. Coating machine operator, Chemical mixer, Assemblers
-        	Elementary e.g. handpacker, Distribution center dispatcher
-    o	type of employment (e.g. intern, full-time seasonal workers, etc.), 
-    o	function/department (e.g. Control tower, Accounting, Production line, Kitchen)
+        o	Occupation 
+            	Managers e.g. Production manager in agriculture, IT-Manager)
+            	Professionals e.g. physicist, Architect, Teacher, Medical doctor, Accountant, Lawyer
+            	Technicians e.g. Mechanical Engineering, Biogas technician, 3D printing technician, Network technician
+            	Service and sales workers e.g. Call centre agent, Cook, cleaning specialist
+            	Agricultural, forestry and fishery e.g. Crop farmer, fisher
+            	Craft and related trade e.g. Bricklayer, Carpenter, avionics technician, computer hardware repair technician, Baker
+            	Plant and machine operators e.g. Coating machine operator, Chemical mixer, Assemblers
+            	Elementary e.g. handpacker, Distribution center dispatcher
+        o	type of employment (e.g. intern, full-time seasonal workers, etc.), 
+        o	function/department (e.g. Control tower, Accounting, Production line, Kitchen)
+    -	make sure the generated roles match the domain of the process
 
 
 

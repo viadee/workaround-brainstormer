@@ -14,10 +14,13 @@ class PromptExtensions{
         switch(node.category){
             case 'role':
                 this.rolesNegativeList.push(node)
+                break;
             case 'misfit':
                 this.misfitsNegativeList.push(node)
+                break;
             case 'workaround':
                 this.workaroundsNegativeList.push(node)
+                break;
         }
     }
     handleRemoveNode(node){
@@ -45,17 +48,16 @@ class PromptExtensions{
     getRolesPromptContext(){
         let context = document.getElementById('additional-context')?.value || '';
 
-        if(this.rolesNegativeList > 0){
+        if(this.rolesNegativeList.length > 0){
             context += `
-                Für den betrachteten Prozess wurden bereits folgende Rollen generiert:
+                Für den betrachteten Prozess wurden bereits folgende Rollen als irrelevant identifiziert:
                 [
-                ${this.rolesNegativeList.map(w => { return  `"` + w + `",`} )}
+                ${this.rolesNegativeList.map(w => { return  `"` + w.text + `",`} )}
                 ]
-                Aus diesem Grund sollten Sie bei der Erstellung neuer Rollen darauf achten, dass
-                diese andere involvierte Rollen wiederspiegeln.
+                Aus diesem Grund sollten Sie bei der Erstellung einer neuen Rolle darauf achten, dass
+                diese sich von denen zuvor genannten unterscheidet.
             `
         }
-        console.log(context)
         return context;
     }
 
@@ -64,12 +66,14 @@ class PromptExtensions{
 
         if(this.misfitsNegativeList.length > 0){
             context += `
-                Für die betrachtete Rolle wurden bereits folgende Misfits generiert:
+                Für die betrachtete Rolle wurden bereits folgende Challenges als irrelevant identifziert:
                 [
-                ${this.misfitsNegativeList.map(w => { return  `"` + w + `",`} )}
+                ${this.misfitsNegativeList.map(w => { return  `"` + w.text + `",`} )}
                 ]
-                Aus diesem Grund sollten Sie bei der Erstellung neuer Mitsits darauf achten, dass
-                diese andere Arten von Problemen adressiert.
+                Aus diesem Grund sollten Sie bei der Erstellung einer neuen Challenge darauf achten, dass
+                diese 
+                    - ein anderes Problem im Prozess beschreibt
+                    - andere Ursachen hat 
             `
         }
         return context;

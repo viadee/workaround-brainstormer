@@ -7,11 +7,12 @@ class NodeContextMenu{
 
     constructor(
         graphManager, 
-        updateUIHook
+        updateUIHook,
+        apiService
     ){
         this.graphManager = graphManager;
         this.updateUIHook = updateUIHook;
-        this.apiService = new ApiService();
+        this.apiService = apiService
         this.spinner = document.getElementById("map-spinner");
     }
 
@@ -79,9 +80,7 @@ class NodeContextMenu{
         try{
             if (d.category === "root") {
 
-                const generatedRoles = this.graphManager.getChildren(d.id).map(x => x.text)
-                const roleData = await this.apiService.getRoles(generatedRoles, numberOfNodes);
-                const roles = roleData["roles"];
+                const roles = await this.apiService.getRoles(this.graphManager.promptExtensions.getRolesPromptContext(), numberOfNodes);
 
                 roles.forEach(role => {
                     const childNode = {
@@ -97,11 +96,9 @@ class NodeContextMenu{
             }
 
             if (d.category === "role") {
-                const misfitData = await this.apiService.getMisfits(d.text, numberOfNodes);
-                const misfits = misfitData[d.text]
-
-                
-                misfits.forEach(misfit => {
+                const misfits = await this.apiService.getMisfits([d.text], this.graphManager.promptExtensions.getMisfitsPromptContext(), numberOfNodes);
+      
+                misfits[d.text].forEach(misfit => {
                     const childNode = {
                         text:misfit.text,
                         expanded:true,
@@ -122,7 +119,7 @@ class NodeContextMenu{
                         label:d.label,
                     }
                 }
-                const workaroundData = await this.apiService.getWorkarounds(misfitInformation, numberOfNodes)
+                const workaroundData = await this.apiService.getWorkarounds(misfitInformation, this.graphManager.promptExtensions.getWorkaroundsPromptContext(), numberOfNodes)
 
                 workaroundData[role.text].forEach(workaround => {
                     const childNode = {

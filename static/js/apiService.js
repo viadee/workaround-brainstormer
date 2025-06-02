@@ -25,7 +25,7 @@ class ApiService {
         const data = await response.json()
 
         if (data.error) {
-            throw new Error(data.error)
+            throw new Error("Error fetching api: " + data.error)
         }
 
         return data

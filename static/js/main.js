@@ -38,7 +38,7 @@ class App {
             });
         }
 
-        this.nodeContextMenu = new NodeContextMenu(this.graphManager, () => this.updateUI(), this.workaroundGenerationSettings)
+        this.nodeContextMenu = new NodeContextMenu(this.graphManager, () => this.updateUI(), this.apiService)
     }
 
     setupEventListeners() {
