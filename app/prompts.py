@@ -502,7 +502,7 @@ Return the workarounds as a JSON object in the following format:
                 - Gibt es gemeinsame Standards oder bewährte Verfahren für Prozesse in diesem Bereich?
                 - Erarbeiten Sie adaptive Maßnahmen, die das konkrete Problem lösen, keine offiziellen Prozessänderungen erfordern, von den beteiligten Personen umgesetzt werden können und im Bereich des Prozesses realistisch sind.
 
-            Formulieren Sie schließlich für jede Herausforderung {Workarounds_Quantity} einzigartige Workarounds, die es der Rolle ermöglichen, die Herausforderung zu überwinden, zu umgehen oder zu minimieren:
+            Formulieren Sie schließlich für jede Herausforderung {workarounds_quantity} einzigartige Workarounds, die es der Rolle ermöglichen, die Herausforderung zu überwinden, zu umgehen oder zu minimieren:
             - Stellen Sie sicher, dass Sie für jede Herausforderung die soeben erwähnte Anzahl ({workarounds_quantity}) von Umgehungslösungen erstellen. Wenn Sie zum Beispiel drei Herausforderungen pro Rolle und insgesamt 3 Rollen haben, müssen Sie insgesamt 3 * 3 * {workarounds_quantity} Workarounds generieren!
             - Stellen Sie jede Problemumgehung als Benutzergeschichte in folgendem Format dar:
             - Vorlage: „Als [Rolle] [Kontext], wenn [Herausforderung], ich [adaptive Aktion] zu [beabsichtigtes Ergebnis].“

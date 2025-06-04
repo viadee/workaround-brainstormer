@@ -242,7 +242,7 @@ class App {
             // Build data object
             const requestData = {
                 process_description: document.getElementById('process-input').value,
-                additional_context: this.workaroundGenerationSettings.getAdditionalPromptContext(),
+                additional_context: this.graphManager.promptExtensions.getWorkaroundsPromptContext(),
                 similar_workaround: d.text,
                 other_workarounds: this.graphManager.getNodes()
                     .filter(n => n.id !== 0 && n.id !== d.id && n.category == "workaround")
