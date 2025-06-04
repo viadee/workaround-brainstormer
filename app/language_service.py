@@ -136,7 +136,7 @@ class LanguageService:
             # Use --oem 1 for LSTM OCR Engine and --psm 3 for automatic page segmentation
             text = pytesseract.image_to_string(
                 image,
-                config='--oem 1 --psm 3'
+                config='--oem 1 --psm 11'
             )
             
             # Detect language from extracted text

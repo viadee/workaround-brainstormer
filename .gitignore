@@ -42,3 +42,5 @@ ENV/
 
 #Quarto
 .quarto
+
+node_modules

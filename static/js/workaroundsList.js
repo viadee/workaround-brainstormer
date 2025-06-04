@@ -131,7 +131,7 @@ class WorkaroundsList {
         } 
 
         try {
-            const response = await fetch('/update_workarounds', {
+            const response = await fetch('/api/update_workarounds', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
@@ -153,4 +153,4 @@ class WorkaroundsList {
 }
 
 // Make available globally
-window.WorkaroundsList = WorkaroundsList;
+export default WorkaroundsList;
