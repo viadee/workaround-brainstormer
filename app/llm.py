@@ -329,14 +329,15 @@ class LLMService:
     def get_similar_workarounds(
         self,
         process: ProcessContext,
-        similar_workaround: str
+        similar_workaround: str,
+        workaround_quantity: int
     ) -> List[str]:
         """Get workarounds similar to a reference workaround."""
         if not self._check_cost_threshold():
             raise CostLimitExceeded("Daily cost threshold exceeded")
         # Get appropriate prompt template
-        key = "similar_with_image" if process.base64_image else "similar_no_image"
-        prompt = self._get_prompt(key, process, similar_workaround=similar_workaround)
+        key = "similar_with_image_or_diagram"
+        prompt = self._get_prompt(key, process, similar_workaround=similar_workaround, workaround_quantity=workaround_quantity)
         messages = self._create_messages(prompt, process)
         
         try:

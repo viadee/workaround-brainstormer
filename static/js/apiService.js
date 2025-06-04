@@ -80,6 +80,18 @@ class ApiService {
         }
     }
 
+    async getSimilarWorkarounds(workaround, additional_context = null){
+        if(additional_context){
+            this.formData.set('additional_context', additional_context)
+        }
+        this.formData.set('similar_workaround', JSON.stringify(workaround))
+
+        try {
+            return await this.#post('/get_similar_workarounds')
+        } catch (error) {
+            console.error('Error generating workarounds:', error)
+        }
+    }
 }
 
 export default ApiService;

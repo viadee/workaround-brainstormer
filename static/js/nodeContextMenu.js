@@ -38,9 +38,10 @@ class NodeContextMenu{
             root: "role",
             role: "misfit",
             misfit: "workaround",
+            workaround: "workaround"
         }
 
-        if(d.category != "workaround" && d.category != "expanded") {
+        if(d.category != "expanded") {
 
             // Add node button with textarea overlay
             const generateOneNodeButton = document.createElement('button');
@@ -54,10 +55,13 @@ class NodeContextMenu{
             contextMenu.appendChild(generateThreeNodesButton);
 
             // Add node button with textarea overlay
-            const expandNodeButton = document.createElement('button');
-            expandNodeButton.innerText = `Add ${childNodeTypeMap[d.category]} manually`
-            expandNodeButton.addEventListener('click', () => this.handleAddNodeManually(event, d), this.removeContextMenu())
-            contextMenu.appendChild(expandNodeButton);
+            if(d.category != "workaround"){
+                const expandNodeButton = document.createElement('button');
+                expandNodeButton.innerText = `Add ${childNodeTypeMap[d.category]} manually`
+                expandNodeButton.addEventListener('click', () => this.handleAddNodeManually(event, d), this.removeContextMenu())
+                contextMenu.appendChild(expandNodeButton);
+            } 
+            
 
         }
 
@@ -93,9 +97,7 @@ class NodeContextMenu{
                     this.graphManager.addNode(childNode);
                     this.graphManager.addLink(d.id, childNode.id);
                 })
-            }
-
-            if (d.category === "role") {
+            }else if (d.category === "role") {
                 const misfits = await this.apiService.getMisfits([d.text], this.graphManager.promptExtensions.getMisfitsPromptContext(), numberOfNodes);
       
                 misfits[d.text].forEach(misfit => {
@@ -109,9 +111,7 @@ class NodeContextMenu{
                     this.graphManager.addNode(childNode);
                     this.graphManager.addLink(d.id, childNode.id);
                 })
-            }
-
-            if (d.category === "misfit") {
+            }else if (d.category === "misfit") {
                 const role = this.graphManager.getNodeById(d.parent)
                 const misfitInformation = {
                     [role.text]:{
@@ -124,6 +124,19 @@ class NodeContextMenu{
                 workaroundData[role.text].forEach(workaround => {
                     const childNode = {
                         text:workaround.workaround,
+                        expanded:false,
+                        parent:d.id,
+                        category: "workaround",
+                    }
+                    this.graphManager.addNode(childNode);
+                    this.graphManager.addLink(d.id, childNode.id);
+                })
+            }else if (d.category === "workaround") {
+                const workaroundData = await this.apiService.getSimilarWorkarounds(d.text, this.graphManager.promptExtensions.getWorkaroundsPromptContext(), numberOfNodes)
+
+                workaroundData['workarounds'].forEach(workaround => {
+                    const childNode = {
+                        text:workaround,
                         expanded:false,
                         parent:d.id,
                         category: "workaround",

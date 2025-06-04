@@ -462,7 +462,8 @@ def get_similar_workarounds():
                 'process_description': request.form.get('process_description', ''),
                 'additional_context': request.form.get('additional_context', ''),
                 'similar_workaround': request.form.get('similar_workaround', ''),
-                'other_workarounds': other_w
+                'other_workarounds': other_w,
+                'workaround_quantity': request.form.get('workaround_quantity', 3)
             }
 
         # Use stored language
@@ -478,7 +479,8 @@ def get_similar_workarounds():
         api_call_start = time.time()
         similar_workarounds = llm_service.get_similar_workarounds(
             process,
-            data['similar_workaround']
+            data['similar_workaround'],
+            data['workaround_quantity']
         )
         similar_workarounds_end = time.time()
 
