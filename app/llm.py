@@ -294,7 +294,7 @@ class LLMService:
             completion = self.client.beta.chat.completions.parse(
                 model= self.chat_model,
                 messages=messages,
-                max_tokens=3000,
+                max_completion_tokens=3000,
                 response_format={"type": "json_object"}
             )
             self._log_api_call(
@@ -306,6 +306,21 @@ class LLMService:
             return json.loads(completion.choices[0].message.content)
         except openai.OpenAIError as e:
             logger.error(f"OpenAI API error on get_roles: {str(e)}")
+            return []
+        except openai.InternalServerError as e:
+            logger.error(f"OpenAI API internal server error on get_roles: {str(e)}")
+            return []
+        except openai.APIStatusError as e:
+            logger.error(f"OpenAI API status error on get_roles: {str(e)}")
+            return []
+        except openai.RateLimitError as e:
+            logger.error(f"OpenAI API rate limit error on get_roles: {str(e)}")
+            return []
+        except openai.APIResponseValidationError as e:
+            logger.error(f"OpenAI API response validation error on get_roles: {str(e)}")
+            return []
+        except openai.BadRequestError as e:
+            logger.error(f"OpenAI API bad request error on get_roles: {str(e)}")
             return []
         except Exception as e:
             logger.error(f"Unexpected error during get_roles: {str(e)}")

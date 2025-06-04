@@ -38,14 +38,13 @@ Finally, from the basic population of roles, minimize the role selection by
 -	only including roles that can be differentiated by the nature of the role from the other roles, so that any of the final selected roles reflect a unique perspective on the process.
 -	decide how many roles to select by weighing up if any role could give a valuable new perspective or if its nature is too similar to another role.
 -	do not include generic role names like “intern” or “Manager”, but “production manager” would be valid
+-   return  a maximum of {roles_quantity} roles 
 
-Return a maximum of {roles_quantity} roles as a JSON array in the following format:
 
+Return the generated roles as a JSON Object with the following format:
 {{
  "roles" : [“Role1“, “Role2“]
 }}
-Minimize your answer length to only return the JSON Array and only two short sentences addressing the selection process.
-
 """,
 
 
@@ -430,9 +429,7 @@ Return the workarounds as a JSON object in the following format:
 
             {{
             „roles„ : [“Role1“, ‚Role2‘]
-            }}
-            Minimieren Sie die Länge Ihrer Antwort, indem Sie nur das JSON-Array und nur zwei kurze Sätze über den Auswahlprozess zurückgeben.
-                    
+            }}                    
         
         """,
         "GenerateMisfitsPrompt": """
