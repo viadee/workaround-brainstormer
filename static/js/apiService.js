@@ -22,12 +22,10 @@ class ApiService {
         }
 
         const data = await response.json()
-        console.log(123, data)
         if (data.error) {
             throw new Error("Error fetching api: " + data.error)
         }
-        // flask backend returns [] in llm.py if internal or connection errors occur
-        // 
+        // flask backend returns [] in llm.py if internal or connection errors occur 
         if(Array.isArray(data) && data.length == 0){
            
             throw new Error("Error fetching API. This usually occurs due to a connection or internal server error.")
