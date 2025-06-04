@@ -145,10 +145,16 @@ class NodeContextMenu{
 
     handleAddNodeManually(event, d){
 
-        const placeholderMap = {
-            root: "Role",
-            role: `As a ${d.text}, when [situation], I [complication].`,
-            misfit: `As a ${this.graphManager.getNodeById(d.parent).text}, when [situation], I [complication].`
+        let placeholder;
+
+        if(d.category == 'root'){
+            placeholder = 'Role'
+        }
+        if(d.category == 'role') {
+            placeholder = `As a ${d.text}, when [situation], I [complication].`
+        }
+        if(d.category == 'misfit') {
+            placeholder = `As a ${this.graphManager.getNodeById(d.parent).text}, when [situation], I [complication].`
         }
 
         const categoryMap = {
@@ -163,7 +169,7 @@ class NodeContextMenu{
 
         const textArea = document.createElement('textarea')
         textArea.classList = 'addnode-textarea'
-        textArea.placeholder = placeholderMap[d.category]
+        textArea.placeholder = placeholder
         textArea.id = 'textArea_addNode'
         dialog.appendChild(textArea)
 
