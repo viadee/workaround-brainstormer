@@ -57,11 +57,12 @@ def create_app(testing: bool = False) -> Flask:
         configure_logging(app)
     
     # Register blueprints
-    from .routes import auth_bp, main_bp, info_bp
+    from .routes import auth_bp, main_bp, info_bp, api_bp
     
     app.register_blueprint(auth_bp)
     app.register_blueprint(main_bp)
     app.register_blueprint(info_bp)
+    app.register_blueprint(api_bp)
     limiter.limit(override_defaults=True, limit_value="2 per second;2000/hour")(main_bp)
 
 

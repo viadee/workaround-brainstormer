@@ -12,7 +12,7 @@ from werkzeug.utils import secure_filename
 from .prompts import DEFAULT_FEW_SHOT_EXAMPLES
 from .auth import login_required, admin_required, check_credentials, setUserCredentialVariables
 from .utils import save_uploaded_file, process_image, format_workarounds_tree
-from .llm import LLMService, ProcessContext, CostLimitExceeded, RAGService
+from .llm import LLMService, ProcessContext, CostLimitExceeded, RAGService, PromptSettings, PromptSettings
 import logging
 from .limiter import limiter
 
@@ -20,7 +20,8 @@ from .limiter import limiter
 auth_bp = Blueprint('auth', __name__)
 main_bp = Blueprint('main', __name__)
 info_bp = Blueprint('info', __name__)
-
+api_bp = Blueprint('api', __name__, url_prefix='/api')
+api_bp = Blueprint('api', __name__, url_prefix='/api')
 
 def add_timing_headers(response, **kwargs):
     """Add timing information to response headers."""
@@ -120,7 +121,8 @@ def admin():
     )
 
 
-@main_bp.route('/download_logs')
+@api_bp.route('/download_logs')
+@api_bp.route('/download_logs')
 @login_required
 @admin_required
 def download_logs():
@@ -143,7 +145,217 @@ def download_logs():
         flash('Error downloading log file.', 'error')
         return redirect(url_for('main.brainstormer'))
 
-@main_bp.route('/start_map', methods=['POST'])
+@api_bp.route('/generateWorkarounds', methods=['POST'])
+def generateWorkarounds():
+    
+    start_time = time.time()
+    process_description = request.form.get('process_description', '').strip()
+    additional_context = request.form.get('additional_context', '').strip()
+    misfits = request.form.get('misfits').strip()
+    workarounds_quantity = request.form.get('workarounds_quantity', '').strip()
+
+    if(misfits is None):
+        raise ValueError()
+    
+    current_app.logger.info("Starting workaround generation")
+    base64_image = None
+    temp_file_path = None
+    file_processing_start = file_processing_end = None
+
+    try:
+        # Handle file upload with timing
+        if 'file' in request.files and request.files['file'].filename:
+            file_processing_start = time.time()
+            temp_file_path, filename = save_uploaded_file(request.files['file'])
+            base64_image = process_image(temp_file_path, filename)
+            file_processing_end = time.time()
+
+        llm_service = LLMService(session_id=session.get('id'))
+        process = ProcessContext(
+            description=process_description,
+            additional_context=additional_context,
+            base64_image=base64_image,
+            prompt_settings= PromptSettings(workarounds_quantity=workarounds_quantity if workarounds_quantity != '' else 2)
+        )
+        
+        # Language from session
+        # logically, this route is fetched after /generateRoles
+        process.language = session['detected_language']
+        
+        # API call timing
+        api_call_start = time.time()
+        workarounds = llm_service.get_workarounds_from_misfits(process, misfits)
+        api_call_end = time.time()
+        
+        session['workarounds'] = workarounds
+        
+        current_app.logger.info("Successfully generated workarounds")
+        response = jsonify(workarounds)
+        
+        # Add all timing headers including file processing if present
+        timing_headers = {
+            'API_Call_Start': api_call_start,
+            'API_Call_End': api_call_end
+        }
+        
+        if file_processing_start and file_processing_end:
+            timing_headers.update({
+                'File_Processing_Start': file_processing_start,
+                'File_Processing_End': file_processing_end
+            })
+            
+        return add_timing_headers(response, **timing_headers)
+    
+    except Exception as e:
+        current_app.logger.exception("Error in workarounds generation: %s", e)
+        return jsonify({'error': str(e)}), 500
+
+    finally:
+        if temp_file_path and os.path.exists(temp_file_path):
+            os.remove(temp_file_path)
+
+
+@api_bp.route('/generateMisfits', methods=['POST'])
+def generateMisfits():
+    
+    start_time = time.time()
+    process_description = request.form.get('process_description', '').strip()
+    additional_context = request.form.get('additional_context', '').strip()
+    roles = request.form.get('roles').strip()
+    challenges_quantity = request.form.get('challenges_quantity', '').strip()
+    if(roles is None):
+        raise ValueError()
+    
+    current_app.logger.info("Starting misfits generation")
+    base64_image = None
+    temp_file_path = None
+    file_processing_start = file_processing_end = None
+
+    try:
+        # Handle file upload with timing
+        if 'file' in request.files and request.files['file'].filename:
+            file_processing_start = time.time()
+            temp_file_path, filename = save_uploaded_file(request.files['file'])
+            base64_image = process_image(temp_file_path, filename)
+            file_processing_end = time.time()
+
+        llm_service = LLMService(session_id=session.get('id'))
+        process = ProcessContext(
+            description=process_description,
+            additional_context=additional_context,
+            base64_image=base64_image,
+            prompt_settings= PromptSettings(challenges_quantity=challenges_quantity if challenges_quantity != '' else 2)
+        )
+        
+        # Language from session
+        # logically, this route is fetched after /generateRoles
+        process.language = session['detected_language']
+
+        # API call timing
+        api_call_start = time.time()
+        misfits = llm_service.get_misfits(process, roles)
+        api_call_end = time.time()
+        
+        session['misfits'] = misfits
+        
+        current_app.logger.info("Successfully generated misfits")
+        response = jsonify(misfits)
+        
+        # Add all timing headers including file processing if present
+        timing_headers = {
+            'API_Call_Start': api_call_start,
+            'API_Call_End': api_call_end
+        }
+        
+        if file_processing_start and file_processing_end:
+            timing_headers.update({
+                'File_Processing_Start': file_processing_start,
+                'File_Processing_End': file_processing_end
+            })
+            
+        return add_timing_headers(response, **timing_headers)
+    
+    except Exception as e:
+        current_app.logger.exception("Error in misfits generation: %s", e)
+        return jsonify({'error': str(e)}), 500
+
+    finally:
+        if temp_file_path and os.path.exists(temp_file_path):
+            os.remove(temp_file_path)
+
+
+
+@api_bp.route('/generateRoles', methods=['POST'])
+def generateRoles():
+    start_time = time.time()
+    process_description = request.form.get('process_description', '').strip()
+    additional_context = request.form.get('additional_context', '').strip()
+    roles_quantity = request.form.get('roles_quantity','').strip()
+    current_app.logger.info("Starting roles generation")
+    base64_image = None
+    temp_file_path = None
+    file_processing_start = file_processing_end = None
+
+    try:
+        # Handle file upload with timing
+        if 'file' in request.files and request.files['file'].filename:
+            file_processing_start = time.time()
+            temp_file_path, filename = save_uploaded_file(request.files['file'])
+            base64_image = process_image(temp_file_path, filename)
+            file_processing_end = time.time()
+
+        llm_service = LLMService(session_id=session.get('id'))
+        process = ProcessContext(
+            description=process_description,
+            additional_context=additional_context,
+            base64_image=base64_image,
+            prompt_settings= PromptSettings(roles_quantity=roles_quantity if roles_quantity != '' else 3)
+        )
+        
+        # Language detection timing
+        lang_detect_start = time.time()
+        session['detected_language'] = llm_service.detect_language(process)
+        process.language = session['detected_language']
+        lang_detect_end = time.time()
+        
+        # API call timing
+        api_call_start = time.time()
+        roles = llm_service.get_roles(process)
+        api_call_end = time.time()
+        
+        session['roles'] = roles
+        
+        current_app.logger.info("Successfully generated roles")
+        response = jsonify(roles)
+        
+        # Add all timing headers including file processing if present
+        timing_headers = {
+            'Language_Detection_Start': lang_detect_start,
+            'Language_Detection_End': lang_detect_end,
+            'API_Call_Start': api_call_start,
+            'API_Call_End': api_call_end
+        }
+        
+        if file_processing_start and file_processing_end:
+            timing_headers.update({
+                'File_Processing_Start': file_processing_start,
+                'File_Processing_End': file_processing_end
+            })
+            
+        return add_timing_headers(response, **timing_headers)
+    
+    except Exception as e:
+        current_app.logger.exception("Error in roles generation: %s", e)
+        return jsonify({'error': str(e)}), 500
+
+    finally:
+        if temp_file_path and os.path.exists(temp_file_path):
+            os.remove(temp_file_path)
+
+
+
+
+@api_bp.route('/start_map', methods=['POST'])
 @login_required
 def start_map():
     """Initialize workaround map generation."""
@@ -216,7 +428,8 @@ def start_map():
         if temp_file_path and os.path.exists(temp_file_path):
             os.remove(temp_file_path)
 
-@main_bp.route('/get_similar_workarounds', methods=['POST'])
+@api_bp.route('/get_similar_workarounds', methods=['POST'])
+@api_bp.route('/get_similar_workarounds', methods=['POST'])
 @login_required
 def get_similar_workarounds():
     start_time = time.time()
@@ -309,7 +522,8 @@ def get_similar_workarounds():
 
 
 
-@main_bp.route('/update_workarounds', methods=['POST'])
+@api_bp.route('/update_workarounds', methods=['POST'])
+@api_bp.route('/update_workarounds', methods=['POST'])
 @login_required
 def update_workarounds():
     """Update and format workarounds list."""
@@ -328,7 +542,8 @@ def update_workarounds():
         current_app.logger.exception("Error updating workarounds: %s", e)
         return jsonify({'error': str(e)}), 500
 
-@main_bp.route('/download_workarounds', methods=['GET'])
+@api_bp.route('/download_workarounds', methods=['GET'])
+@api_bp.route('/download_workarounds', methods=['GET'])
 @login_required
 def download_workarounds():
     """Download formatted workarounds as text file."""
@@ -347,7 +562,8 @@ def download_workarounds():
         flash('Error downloading workarounds file.', 'error')
         return redirect(url_for('main.brainstormer'))
     
-@main_bp.route('/test_logging')
+@api_bp.route('/test_logging')
+@api_bp.route('/test_logging')
 @login_required
 @admin_required
 def test_logging():
@@ -367,7 +583,8 @@ def test_logging():
     
     return jsonify({'status': 'Logging test complete'})
 
-@main_bp.route('/update_few_shot_examples', methods=['POST'])
+@api_bp.route('/update_few_shot_examples', methods=['POST'])
+@api_bp.route('/update_few_shot_examples', methods=['POST'])
 @login_required
 def update_few_shot_examples():
     """Update the few shot examples based on user input."""
@@ -382,7 +599,8 @@ def update_few_shot_examples():
         return jsonify({"error": str(e)}), 500
     
 
-@main_bp.route('/retreive_similar_few_shot_examples', methods=['POST'])
+@api_bp.route('/retreive_similar_few_shot_examples', methods=['POST'])
+@api_bp.route('/retreive_similar_few_shot_examples', methods=['POST'])
 @login_required
 def retreive_similar_few_shot_examples():
     """Retreive few shot examples based on user input."""
@@ -411,7 +629,8 @@ def retreive_similar_few_shot_examples():
         current_app.logger.exception("Error generating similar few shot examples: %s", e)
         return jsonify({"error": str(e)}), 500
 
-@main_bp.route('/save_workarounds', methods=['POST'])
+@api_bp.route('/save_workarounds', methods=['POST'])
+@api_bp.route('/save_workarounds', methods=['POST'])
 def save_workarounds():
     try:
         data = request.get_json()

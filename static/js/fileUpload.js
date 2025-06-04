@@ -33,7 +33,9 @@ class FileUploadManager {
         // Browse link handler
         this.browseLink.addEventListener("click", (e) => {
             e.preventDefault();
+            e.stopImmediatePropagation()
             this.fileInput.click();
+            
         });
 
         // File input change handler
@@ -171,5 +173,4 @@ class FileUploadManager {
     }
 }
 
-// Make available globally
-window.FileUploadManager = FileUploadManager;
+export default FileUploadManager;

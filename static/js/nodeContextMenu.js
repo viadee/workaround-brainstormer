@@ -1,16 +1,19 @@
+import ApiService from "./apiService.js";
+
 class NodeContextMenu{
 
     graphManager
     updateUIHook
-    settings
 
     constructor(
         graphManager, 
         updateUIHook,
-        workaroundGenerationSettings){
+        apiService
+    ){
         this.graphManager = graphManager;
         this.updateUIHook = updateUIHook;
-        this.settings = workaroundGenerationSettings
+        this.apiService = apiService
+        this.spinner = document.getElementById("map-spinner");
     }
 
     showNodeContextMenu(event, d){
@@ -23,25 +26,44 @@ class NodeContextMenu{
         contextMenu.style.top = event.clientY + 'px'
         contextMenu.className = 'node-contextmenu'
         
-        const collapseNodeButton = document.createElement('button');
-        collapseNodeButton.innerText = 'Remove Node'
-        collapseNodeButton.addEventListener('click', () => this.collapseNode(event, d), this.removeContextMenu(), {once: true})
-        
-        const collapseWithFeedbackButton = document.createElement('button')
-        collapseWithFeedbackButton.innerText = 'Collapse with feedback'
-        collapseWithFeedbackButton.addEventListener('click', () => this.handleCollapseWithFeedback())
+        // Add remove node button, if not root node
+        if (d.category != "root"){
+            const collapseNodeButton = document.createElement('button');
+            collapseNodeButton.innerText = 'Remove Node'
+            collapseNodeButton.addEventListener('click', () => this.collapseNode(event, d), this.removeContextMenu(), {once: true})
+            contextMenu.appendChild(collapseNodeButton);
+        }
 
-        const expandNodeButton = document.createElement('button');
-        expandNodeButton.innerText = 'Add Node'
-        expandNodeButton.addEventListener('click', () => this.handleAddNode(event, d), this.removeContextMenu())
-        contextMenu.appendChild(collapseNodeButton);
-        contextMenu.appendChild(expandNodeButton);
+        const childNodeTypeMap = {
+            root: "role",
+            role: "misfit",
+            misfit: "workaround",
+        }
+
+        if(d.category != "workaround" && d.category != "expanded") {
+
+            // Add node button with textarea overlay
+            const generateOneNodeButton = document.createElement('button');
+            generateOneNodeButton.innerText = `Generate 1 more ${childNodeTypeMap[d.category]}`
+            generateOneNodeButton.addEventListener('click', () => this.handleAddNode(event, d, 1), this.removeContextMenu())
+            contextMenu.appendChild(generateOneNodeButton);
+
+            const generateThreeNodesButton = document.createElement('button');
+            generateThreeNodesButton.innerText = `Generate 3 more ${childNodeTypeMap[d.category]}s`
+            generateThreeNodesButton.addEventListener('click', () => this.handleAddNode(event, d, 3), this.removeContextMenu())
+            contextMenu.appendChild(generateThreeNodesButton);
+
+            // Add node button with textarea overlay
+            const expandNodeButton = document.createElement('button');
+            expandNodeButton.innerText = `Add ${childNodeTypeMap[d.category]} manually`
+            expandNodeButton.addEventListener('click', () => this.handleAddNodeManually(event, d), this.removeContextMenu())
+            contextMenu.appendChild(expandNodeButton);
+
+        }
 
         contextMenu.addEventListener('mouseenter', () => contextMenu.addEventListener('mouseleave', this.removeContextMenu))
         document.body.addEventListener('click', this.removeContextMenu, {once: true}) 
-
-        
-        
+  
         document.body.appendChild(contextMenu)
     }
     removeContextMenu(){
@@ -51,14 +73,97 @@ class NodeContextMenu{
         }
         menu.remove()
     }
-    handleAddNode(event, d){
+
+    async handleAddNode(event, d, numberOfNodes) {
+        this.spinner.style.display = "block";
+
+        try{
+            if (d.category === "root") {
+
+                const roles = await this.apiService.getRoles(this.graphManager.promptExtensions.getRolesPromptContext(), numberOfNodes);
+
+                roles.forEach(role => {
+                    const childNode = {
+                        text:role,
+                        expanded:true,
+                        parent:d.id,
+                        category: "role",
+                        label:role
+                    }
+                    this.graphManager.addNode(childNode);
+                    this.graphManager.addLink(d.id, childNode.id);
+                })
+            }
+
+            if (d.category === "role") {
+                const misfits = await this.apiService.getMisfits([d.text], this.graphManager.promptExtensions.getMisfitsPromptContext(), numberOfNodes);
+      
+                misfits[d.text].forEach(misfit => {
+                    const childNode = {
+                        text:misfit.text,
+                        expanded:true,
+                        parent:d.id,
+                        category: "misfit",
+                        label:misfit.label
+                    }
+                    this.graphManager.addNode(childNode);
+                    this.graphManager.addLink(d.id, childNode.id);
+                })
+            }
+
+            if (d.category === "misfit") {
+                const role = this.graphManager.getNodeById(d.parent)
+                const misfitInformation = {
+                    [role.text]:{
+                        misfit:d.text,
+                        label:d.label,
+                    }
+                }
+                const workaroundData = await this.apiService.getWorkarounds(misfitInformation, this.graphManager.promptExtensions.getWorkaroundsPromptContext(), numberOfNodes)
+
+                workaroundData[role.text].forEach(workaround => {
+                    const childNode = {
+                        text:workaround.workaround,
+                        expanded:false,
+                        parent:d.id,
+                        category: "workaround",
+                    }
+                    this.graphManager.addNode(childNode);
+                    this.graphManager.addLink(d.id, childNode.id);
+                })
+            }
+
+            this.updateUIHook();
+
+            this.spinner.style.display = "none";
+
+        } catch(error) {
+            console.error('Error generating additional nodes', error)
+            this.spinner.style.display = "none";
+        }
+    }
+
+    handleAddNodeManually(event, d){
+
+        const placeholderMap = {
+            root: "Role",
+            role: `As a ${d.text}, when [situation], I [complication].`,
+            misfit: `As a ${this.graphManager.getNodeById(d.parent).text}, when [situation], I [complication].`
+        }
+
+        const categoryMap = {
+            root: "role",
+            role: "misfit",
+            misfit: "workaround",
+        }
+
         const dialog = document.createElement('div')
         dialog.id = 'addnode-dialog'
         dialog.className = 'addnode-dialog'
 
         const textArea = document.createElement('textarea')
         textArea.classList = 'addnode-textarea'
-        textArea.placeholder = 'As a [role], when [situation], I [action] to [outcome].'
+        textArea.placeholder = placeholderMap[d.category]
         textArea.id = 'textArea_addNode'
         dialog.appendChild(textArea)
 
@@ -85,21 +190,22 @@ class NodeContextMenu{
             if(textAreaEl == null){
                 throw new Error('Textarea Element not found')
             }
-            const workaroundDescription = textArea.value
+            const description = textArea.value
             
             
             const newNode = {
-                id: gM.getNodes().reduce((max, obj) => {
-                    return obj.id > max ? obj.id : max;
-                }, 0) + 1,
-                text: workaroundDescription,
+                text: description,
                 parent: d.id,
-                expanded: false
+                expanded: false,
+                category: categoryMap[d.category]
             };
+            
+            if (d.category == "root") {
+                newNode["label"] = description;
+            }
+
             gM.addNode(newNode);
             gM.addLink(d.id, newNode.id);
-        
-            d.expanded = true;
            
             self.updateUIHook();
             self.removeContextMenu()
@@ -121,23 +227,18 @@ class NodeContextMenu{
             return;
         // collapse node without children
         else if(!d.expanded){
-            this.settings.addUndesirableWorkaround(this.graphManager.getNodes().find(n => n.id == d.id))
             this.graphManager.removeNode(d.id)
 
             const parent = this.graphManager.getNodes().find(n => n.id == d.parent)
             if(parent == undefined){
                 throw new Error("Parentnode is undefined");
             }
-            if(parent.children == undefined || (parent.children?.length == 1 && parent.children?.find(c => c.id == d.id) != undefined )  ){
+            if(parent.children == undefined || parent.children?.length == 0 || (parent.children?.length == 1 && parent.children?.find(c => c.id == d.id) != undefined )  ){
                 parent.expanded = false
             }
             this.updateUIHook()
         // recursive remove children
         }else{
-            const undesirableNodes = this.graphManager.getNodes().filter(n => n.id == d.id || n.parent == d.id)
-            for(const node of undesirableNodes){
-                this.settings.addUndesirableWorkaround(node)
-            }
             const recursiveRemove = (nodeId) => {
                 const children = this.graphManager.getNodes().filter(n => n.parent === nodeId);
                 children.forEach(child => {
@@ -147,10 +248,10 @@ class NodeContextMenu{
             };
 
             recursiveRemove(d.id);
-            d.expanded = false;
+            this.graphManager.removeNode(d.id);
             this.updateUIHook();
             }
     }
 }
 
-window.NodeContextMenu = NodeContextMenu
+export default NodeContextMenu;
