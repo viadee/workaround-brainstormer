@@ -1,8 +1,13 @@
+import FileUploadManager from "./fileUpload.js";
+import FewShotEditor from "./fewShotEditor.js";
+import GraphManager from "./graphManager.js";
+import NodeContextMenu from "./nodeContextMenu.js";
 
+import WorkaroundsList from "./workaroundsList.js";
+import ApiService from "./apiService.js";
 // static/js/main.js
 class App {
     constructor() {
-        this.nextNodeId = 1;
         this.isExpanding = false;
         this.currentFilename = null;
         this.fetchWorkaroundsState = false
@@ -12,11 +17,13 @@ class App {
 
 
     setupComponents() {
-        this.graphManager = window.graphManager;
-        this.fileUploadManager = window.fileUploadManager;
-        this.workaroundsList = window.workaroundsList;
-        this.fewShotEditor = window.fewShotEditor;
-        this.workaroundGenerationSettings = window.workaroundGenerationSettings
+        this.graphManager = new GraphManager;
+        this.fileUploadManager = new FileUploadManager;
+        this.workaroundsList = new WorkaroundsList;
+        this.fewShotEditor = new FewShotEditor;
+        
+        this.apiService = new ApiService
+
 
         this.spinner = document.getElementById("map-spinner");
         
@@ -31,7 +38,7 @@ class App {
             });
         }
 
-        this.nodeContextMenu = new window.NodeContextMenu(this.graphManager, () => this.updateUI(), this.workaroundGenerationSettings)
+        this.nodeContextMenu = new NodeContextMenu(this.graphManager, () => this.updateUI(), this.apiService)
     }
 
     setupEventListeners() {
@@ -99,6 +106,7 @@ class App {
     }
 
     async createInitialStructure() {
+
         if(this.fetchWorkaroundsState == true){
             return;
         }
@@ -111,10 +119,10 @@ class App {
 
         try{
             this.fewShotEditor.currentLang = "en";
-            await this.fewShotEditor.updateLangTabs();
-            await this.fewShotEditor.retreiveFewShotExamples();
-            await this.fewShotEditor.updateCurrentLanguageExamples();
-            await this.fewShotEditor.autoSave();
+            this.fewShotEditor.updateLangTabs();
+            // this.fewShotEditor.retreiveFewShotExamples();
+            this.fewShotEditor.updateCurrentLanguageExamples();
+            this.fewShotEditor.autoSave();
         } catch (error) {
             console.error('Error loading similar few-shot examples:', error);
         }
@@ -124,7 +132,8 @@ class App {
             id: 0, 
             text: this.currentFilename || description,
             description: description, // Store original description
-            expanded: false 
+            expanded: false,
+            category: "root"
         };
         this.graphManager.addNode(rootNode);
 
@@ -137,34 +146,83 @@ class App {
         if (uploadedFile) {
             formData.append('file', uploadedFile);
         }
-
+        this.apiService.setFormData(formData)
         try {
-            const response = await fetch('/api/start_map', {
-                method: 'POST',
-                body: formData,
-            });
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            const workarounds = await response.json();
-            if (workarounds.error) {
-                throw new Error(workarounds.error);
-            }
-            
-            workarounds.forEach(text => {
+            const roles = await this.apiService.getRoles(this.graphManager.promptExtensions.getRolesPromptContext())
+
+            roles.forEach(role => {
                 const childNode = {
-                    id: this.nextNodeId++,
-                    text,
-                    expanded: false,
-                    parent: rootNode.id
-                };
+                    text:role,
+                    expanded:true,
+                    parent:rootNode.id,
+                    category: "role",
+                    label:role
+                }
                 this.graphManager.addNode(childNode);
                 this.graphManager.addLink(rootNode.id, childNode.id);
-            });
+            })
 
             this.updateUI();
+
+            formData.append('roles',roles)
+
+            const misfitData = await this.apiService.getMisfits(roles, this.graphManager.promptExtensions.getMisfitsPromptContext())
+
+            for (const role of roles) {
+                try {
+                    const misfits = misfitData[role];
+                    const parentNode = this.graphManager.getNodes().filter(node => node.text === role)[0]
+
+                    for (const misfit of misfits) {
+                        const misfitNode = {
+                            text:misfit.text,
+                            label:misfit.label,
+                            expanded:true,
+                            parent:parentNode.id,
+                            category:"misfit"
+                        }
+                        this.graphManager.addNode(misfitNode);
+                        this.graphManager.addLink(parentNode.id, misfitNode.id);
+                    }
+
+                } catch (error) {
+                    // Handle the error or log it
+                    console.error(`Error retrieving role: ${role}`, error);
+                    continue; // Only if you want to skip to the next one
+                }
+            }
+
+            this.updateUI();
+
+            formData.append("misfits", JSON.stringify(misfitData))
+
+            const workaroundData = await this.apiService.getWorkarounds(misfitData, this.graphManager.promptExtensions.getWorkaroundsPromptContext())
+
+            const misfitNodes = this.graphManager.getNodes().filter(x => x.category === "misfit")
+
+            for (const misfitNode of misfitNodes) {
+                try {
+                    const role = this.graphManager.getNodeById(misfitNode.parent)
+                    const workarounds = workaroundData[role.label].filter(x => x.challengeLabel === misfitNode.label)
+
+                    for (const workaround of workarounds) {
+                        const workaroundNode = {
+                            text: workaround.workaround,
+                            expanded: false,
+                            parent: misfitNode.id,
+                            category: "workaround"
+                        }
+                        this.graphManager.addNode(workaroundNode);
+                        this.graphManager.addLink(misfitNode.id, workaroundNode.id);
+                    }
+                } catch (error) {
+                    console.error(`Error retrieving workaround for misfit: ${misfitNode.label}`, error)
+                    continue
+                }
+            }
+
+            this.updateUI()
+
         } catch (error) {
             console.error('Error creating initial structure:', error);
             alert(error.message || 'Error retrieving initial workarounds.');
@@ -184,10 +242,10 @@ class App {
             // Build data object
             const requestData = {
                 process_description: document.getElementById('process-input').value,
-                additional_context: this.workaroundGenerationSettings.getAdditionalPromptContext(),
+                additional_context: this.graphManager.promptExtensions.getWorkaroundsPromptContext(),
                 similar_workaround: d.text,
                 other_workarounds: this.graphManager.getNodes()
-                    .filter(n => n.id !== 0 && n.id !== d.id)
+                    .filter(n => n.id !== 0 && n.id !== d.id && n.category == "workaround")
                     .map(n => n.text)
             };
     
@@ -237,15 +295,16 @@ class App {
 
             similarWorkarounds.forEach(text => {
                 const childNode = {
-                    id: this.nextNodeId++,
                     text: text,
                     parent: d.id,
-                    expanded: false
+                    expanded: false,
+                    category: "workaround"
                 };
                 this.graphManager.addNode(childNode);
                 this.graphManager.addLink(d.id, childNode.id);
             });
 
+            d.category = "expanded";
             d.expanded = true;
             this.graphManager.updateNodeLabel(d.id, nodeLabel);
             this.updateUI();
@@ -269,7 +328,6 @@ class App {
 
         similarWorkarounds.forEach(text => {
             const childNode = {
-                id: this.nextNodeId++,
                 text: text,
                 parent: d.id,
                 expanded: false
@@ -295,12 +353,6 @@ class App {
 window.addEventListener('load', () => {
     console.log('Initializing components...');
     
-    // Create global instances
-    window.graphManager = new window.GraphManager();
-    window.fileUploadManager = new window.FileUploadManager();
-    window.workaroundsList = new window.WorkaroundsList();
-    window.workaroundGenerationSettings = new window.WorkaroundGenerationSettings()
-    window.fewShotEditor = new window.FewShotEditor();
     // Initialize the main app
     window.app = new App();
     

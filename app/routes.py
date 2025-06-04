@@ -12,7 +12,7 @@ from werkzeug.utils import secure_filename
 from .prompts import DEFAULT_FEW_SHOT_EXAMPLES
 from .auth import login_required, admin_required, check_credentials, setUserCredentialVariables
 from .utils import save_uploaded_file, process_image, format_workarounds_tree
-from .llm import LLMService, ProcessContext, CostLimitExceeded, RAGService, PromptSettings
+from .llm import LLMService, ProcessContext, CostLimitExceeded, RAGService, PromptSettings, PromptSettings
 import logging
 from .limiter import limiter
 
@@ -20,6 +20,7 @@ from .limiter import limiter
 auth_bp = Blueprint('auth', __name__)
 main_bp = Blueprint('main', __name__)
 info_bp = Blueprint('info', __name__)
+api_bp = Blueprint('api', __name__, url_prefix='/api')
 api_bp = Blueprint('api', __name__, url_prefix='/api')
 
 def add_timing_headers(response, **kwargs):
@@ -121,6 +122,7 @@ def admin():
 
 
 @api_bp.route('/download_logs')
+@api_bp.route('/download_logs')
 @login_required
 @admin_required
 def download_logs():
@@ -155,7 +157,7 @@ def generateWorkarounds():
     if(misfits is None):
         raise ValueError()
     
-    current_app.logger.info("Starting map generation")
+    current_app.logger.info("Starting workaround generation")
     base64_image = None
     temp_file_path = None
     file_processing_start = file_processing_end = None
@@ -173,14 +175,12 @@ def generateWorkarounds():
             description=process_description,
             additional_context=additional_context,
             base64_image=base64_image,
-            prompt_settings= PromptSettings(workarounds_quantity=workarounds_quantity) if workarounds_quantity != None else None
+            prompt_settings= PromptSettings(workarounds_quantity=workarounds_quantity if workarounds_quantity != '' else 2)
         )
         
-        # Language detection timing
-        lang_detect_start = time.time()
-        session['detected_language'] = llm_service.detect_language(process)
+        # Language from session
+        # logically, this route is fetched after /generateRoles
         process.language = session['detected_language']
-        lang_detect_end = time.time()
         
         # API call timing
         api_call_start = time.time()
@@ -194,8 +194,6 @@ def generateWorkarounds():
         
         # Add all timing headers including file processing if present
         timing_headers = {
-            'Language_Detection_Start': lang_detect_start,
-            'Language_Detection_End': lang_detect_end,
             'API_Call_Start': api_call_start,
             'API_Call_End': api_call_end
         }
@@ -217,8 +215,6 @@ def generateWorkarounds():
             os.remove(temp_file_path)
 
 
-
-
 @api_bp.route('/generateMisfits', methods=['POST'])
 def generateMisfits():
     
@@ -230,7 +226,7 @@ def generateMisfits():
     if(roles is None):
         raise ValueError()
     
-    current_app.logger.info("Starting map generation")
+    current_app.logger.info("Starting misfits generation")
     base64_image = None
     temp_file_path = None
     file_processing_start = file_processing_end = None
@@ -248,15 +244,13 @@ def generateMisfits():
             description=process_description,
             additional_context=additional_context,
             base64_image=base64_image,
-            prompt_settings= PromptSettings(challenges_quantity=challenges_quantity) if challenges_quantity != None else None
+            prompt_settings= PromptSettings(challenges_quantity=challenges_quantity if challenges_quantity != '' else 2)
         )
         
-        # Language detection timing
-        lang_detect_start = time.time()
-        session['detected_language'] = llm_service.detect_language(process)
+        # Language from session
+        # logically, this route is fetched after /generateRoles
         process.language = session['detected_language']
-        lang_detect_end = time.time()
-        
+
         # API call timing
         api_call_start = time.time()
         misfits = llm_service.get_misfits(process, roles)
@@ -264,13 +258,11 @@ def generateMisfits():
         
         session['misfits'] = misfits
         
-        current_app.logger.info("Successfully generated workarounds")
+        current_app.logger.info("Successfully generated misfits")
         response = jsonify(misfits)
         
         # Add all timing headers including file processing if present
         timing_headers = {
-            'Language_Detection_Start': lang_detect_start,
-            'Language_Detection_End': lang_detect_end,
             'API_Call_Start': api_call_start,
             'API_Call_End': api_call_end
         }
@@ -284,7 +276,7 @@ def generateMisfits():
         return add_timing_headers(response, **timing_headers)
     
     except Exception as e:
-        current_app.logger.exception("Error in map generation: %s", e)
+        current_app.logger.exception("Error in misfits generation: %s", e)
         return jsonify({'error': str(e)}), 500
 
     finally:
@@ -299,7 +291,7 @@ def generateRoles():
     process_description = request.form.get('process_description', '').strip()
     additional_context = request.form.get('additional_context', '').strip()
     roles_quantity = request.form.get('roles_quantity','').strip()
-    current_app.logger.info("Starting map generation")
+    current_app.logger.info("Starting roles generation")
     base64_image = None
     temp_file_path = None
     file_processing_start = file_processing_end = None
@@ -317,7 +309,7 @@ def generateRoles():
             description=process_description,
             additional_context=additional_context,
             base64_image=base64_image,
-            prompt_settings= PromptSettings(roles_quantity=roles_quantity) if roles_quantity != None else None
+            prompt_settings= PromptSettings(roles_quantity=roles_quantity if roles_quantity != '' else 3)
         )
         
         # Language detection timing
@@ -437,6 +429,7 @@ def start_map():
             os.remove(temp_file_path)
 
 @api_bp.route('/get_similar_workarounds', methods=['POST'])
+@api_bp.route('/get_similar_workarounds', methods=['POST'])
 @login_required
 def get_similar_workarounds():
     start_time = time.time()
@@ -469,7 +462,8 @@ def get_similar_workarounds():
                 'process_description': request.form.get('process_description', ''),
                 'additional_context': request.form.get('additional_context', ''),
                 'similar_workaround': request.form.get('similar_workaround', ''),
-                'other_workarounds': other_w
+                'other_workarounds': other_w,
+                'workaround_quantity': request.form.get('workaround_quantity', 3)
             }
 
         # Use stored language
@@ -485,7 +479,8 @@ def get_similar_workarounds():
         api_call_start = time.time()
         similar_workarounds = llm_service.get_similar_workarounds(
             process,
-            data['similar_workaround']
+            data['similar_workaround'],
+            data['workaround_quantity']
         )
         similar_workarounds_end = time.time()
 
@@ -530,6 +525,7 @@ def get_similar_workarounds():
 
 
 @api_bp.route('/update_workarounds', methods=['POST'])
+@api_bp.route('/update_workarounds', methods=['POST'])
 @login_required
 def update_workarounds():
     """Update and format workarounds list."""
@@ -549,6 +545,7 @@ def update_workarounds():
         return jsonify({'error': str(e)}), 500
 
 @api_bp.route('/download_workarounds', methods=['GET'])
+@api_bp.route('/download_workarounds', methods=['GET'])
 @login_required
 def download_workarounds():
     """Download formatted workarounds as text file."""
@@ -567,6 +564,7 @@ def download_workarounds():
         flash('Error downloading workarounds file.', 'error')
         return redirect(url_for('main.brainstormer'))
     
+@api_bp.route('/test_logging')
 @api_bp.route('/test_logging')
 @login_required
 @admin_required
@@ -588,6 +586,7 @@ def test_logging():
     return jsonify({'status': 'Logging test complete'})
 
 @api_bp.route('/update_few_shot_examples', methods=['POST'])
+@api_bp.route('/update_few_shot_examples', methods=['POST'])
 @login_required
 def update_few_shot_examples():
     """Update the few shot examples based on user input."""
@@ -602,6 +601,7 @@ def update_few_shot_examples():
         return jsonify({"error": str(e)}), 500
     
 
+@api_bp.route('/retreive_similar_few_shot_examples', methods=['POST'])
 @api_bp.route('/retreive_similar_few_shot_examples', methods=['POST'])
 @login_required
 def retreive_similar_few_shot_examples():
@@ -631,6 +631,7 @@ def retreive_similar_few_shot_examples():
         current_app.logger.exception("Error generating similar few shot examples: %s", e)
         return jsonify({"error": str(e)}), 500
 
+@api_bp.route('/save_workarounds', methods=['POST'])
 @api_bp.route('/save_workarounds', methods=['POST'])
 def save_workarounds():
     try:

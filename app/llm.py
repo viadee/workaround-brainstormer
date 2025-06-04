@@ -117,6 +117,7 @@ class LLMService:
             azure_endpoint=azure_endpoint
         )
         
+        
         self.chat_model = current_app.config['AZURE_CHAT_MODEL']
         self.language_service = LanguageService()
         self.session_id = session_id or self._get_session_id()
@@ -254,6 +255,7 @@ class LLMService:
         try:
             completion = self.client.beta.chat.completions.parse(
                 model=self.chat_model,
+                max_tokens=20000,
                 messages=messages,
                 response_format={"type": "json_object"},
             )
@@ -284,6 +286,7 @@ class LLMService:
             completion = self.client.beta.chat.completions.parse(
                 model= self.chat_model,
                 messages=messages,
+                max_tokens=20000,
                 response_format={"type": "json_object"}
             )
             self._log_api_call(
@@ -312,6 +315,7 @@ class LLMService:
             completion = self.client.beta.chat.completions.parse(
                 model= self.chat_model,
                 messages=messages,
+                max_tokens=20000,
                 response_format={"type": "json_object"}
             )
             self._log_api_call(
@@ -341,6 +345,7 @@ class LLMService:
             completion = self.client.beta.chat.completions.parse(
                 model= self.chat_model,
                 messages=messages,
+                max_completion_tokens=3000,
                 response_format={"type": "json_object"}
             )
             self._log_api_call(
@@ -357,6 +362,21 @@ class LLMService:
         except openai.OpenAIError as e:
             logger.error(f"OpenAI API error on get_roles: {str(e)}")
             return []
+        except openai.InternalServerError as e:
+            logger.error(f"OpenAI API internal server error on get_roles: {str(e)}")
+            return []
+        except openai.APIStatusError as e:
+            logger.error(f"OpenAI API status error on get_roles: {str(e)}")
+            return []
+        except openai.RateLimitError as e:
+            logger.error(f"OpenAI API rate limit error on get_roles: {str(e)}")
+            return []
+        except openai.APIResponseValidationError as e:
+            logger.error(f"OpenAI API response validation error on get_roles: {str(e)}")
+            return []
+        except openai.BadRequestError as e:
+            logger.error(f"OpenAI API bad request error on get_roles: {str(e)}")
+            return []
         except Exception as e:
             logger.error(f"Unexpected error during get_roles: {str(e)}")
             return []
@@ -364,14 +384,15 @@ class LLMService:
     def get_similar_workarounds(
         self,
         process: ProcessContext,
-        similar_workaround: str
+        similar_workaround: str,
+        workaround_quantity: int
     ) -> List[str]:
         """Get workarounds similar to a reference workaround."""
         if not self._check_cost_threshold():
             raise CostLimitExceeded("Daily cost threshold exceeded")
         # Get appropriate prompt template
-        key = "similar_with_image" if process.base64_image else "similar_no_image"
-        prompt = self._get_prompt(key, process, similar_workaround=similar_workaround)
+        key = "similar_with_image_or_diagram"
+        prompt = self._get_prompt(key, process, similar_workaround=similar_workaround, workaround_quantity=workaround_quantity)
         messages = self._create_messages(prompt, process)
         
         try:

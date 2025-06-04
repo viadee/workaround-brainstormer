@@ -213,5 +213,4 @@ class FewShotEditor {
     }
 }
 
-// Attach the class to the window object for global access
-window.FewShotEditor = FewShotEditor;
+export default FewShotEditor;

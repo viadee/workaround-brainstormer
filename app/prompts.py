@@ -19,17 +19,18 @@ Consider the following process and/or the attached process diagram:
     -	think about jobs not mentioned in but indirectly affected by the process
     -	explore diverse types of roles and ensure including roles that are different accordingly to the following dimensions:
         o	Hierarchy level (Management, Supervisor, staff jobs, line jobs), 
-    o	Occupation 
-        	Managers e.g. Production manager in agriculture, IT-Manager)
-        	Professionals e.g. physicist, Architect, Teacher, Medical doctor, Accountant, Lawyer
-        	Technicians e.g. Mechanical Engineering, Biogas technician, 3D printing technician, Network technician
-        	Service and sales workers e.g. Call centre agent, Cook, cleaning specialist
-        	Agricultural, forestry and fishery e.g. Crop farmer, fisher
-        	Craft and related trade e.g. Bricklayer, Carpenter, avionics technician, computer hardware repair technician, Baker
-        	Plant and machine operators e.g. Coating machine operator, Chemical mixer, Assemblers
-        	Elementary e.g. handpacker, Distribution center dispatcher
-    o	type of employment (e.g. intern, full-time seasonal workers, etc.), 
-    o	function/department (e.g. Control tower, Accounting, Production line, Kitchen)
+        o	Occupation 
+            	Managers e.g. Production manager in agriculture, IT-Manager)
+            	Professionals e.g. physicist, Architect, Teacher, Medical doctor, Accountant, Lawyer
+            	Technicians e.g. Mechanical Engineering, Biogas technician, 3D printing technician, Network technician
+            	Service and sales workers e.g. Call centre agent, Cook, cleaning specialist
+            	Agricultural, forestry and fishery e.g. Crop farmer, fisher
+            	Craft and related trade e.g. Bricklayer, Carpenter, avionics technician, computer hardware repair technician, Baker
+            	Plant and machine operators e.g. Coating machine operator, Chemical mixer, Assemblers
+            	Elementary e.g. handpacker, Distribution center dispatcher
+        o	type of employment (e.g. intern, full-time seasonal workers, etc.), 
+        o	function/department (e.g. Control tower, Accounting, Production line, Kitchen)
+    -	make sure the generated roles match the domain of the process
 
 
 
@@ -37,14 +38,13 @@ Finally, from the basic population of roles, minimize the role selection by
 -	only including roles that can be differentiated by the nature of the role from the other roles, so that any of the final selected roles reflect a unique perspective on the process.
 -	decide how many roles to select by weighing up if any role could give a valuable new perspective or if its nature is too similar to another role.
 -	do not include generic role names like “intern” or “Manager”, but “production manager” would be valid
+-   return  a maximum of {roles_quantity} roles 
 
-Return a maximum of {roles_quantity} roles as a JSON array in the following format:
 
+Return the generated roles as a JSON Object with the following format:
 {{
  "roles" : [“Role1“, “Role2“]
 }}
-Minimize your answer length to only return the JSON Array and only two short sentences addressing the selection process.
-
 """,
 
 
@@ -279,6 +279,7 @@ Return the workarounds as a JSON object in the following format:
                 ]
             }}
             """,
+            
         "similar_no_image": """
             You are an expert process analyst with extensive experience investigating business processes across various industries.
 
@@ -314,7 +315,7 @@ Return the workarounds as a JSON object in the following format:
             **Instructions for Similar Workaround Generation:**
             - Present each workaround as a user story using the following format:
             - **Template:** "As a [role], when [situation], I [action] to [outcome]."
-            - Provide **4 unique** workarounds that are similar in nature to the example.
+            - Provide **{workaround_quantity}** workarounds that are similar in nature to the example.
 
             **Example of Similar Workarounds:**
             Original:
@@ -333,6 +334,62 @@ Return the workarounds as a JSON object in the following format:
                 ]
             }}
             """,
+              "similar_with_image_or_diagram": """
+            You are an expert process analyst with extensive experience investigating business processes across various industries.
+
+            Consider the following process and/or the attached process diagram: 
+            {process_description}
+
+            **Additional Context:**
+            {additional_context}
+
+            We are exploring workarounds similar to the following example:
+            "{similar_workaround}"
+
+            Let's systematically generate similar workarounds:
+
+            1. First, analyze the given workaround:
+            - Identify the core problem it addresses
+            - Understand the key resources or tools it uses
+            - Consider the main constraints it works within
+            - Note the specific benefits it achieves
+
+            2. Then, explore variations:
+            - Consider similar problems in different roles
+            - Think about alternative tools or resources
+            - Reflect on different ways to achieve similar benefits
+            - Look for related constraints that might need similar solutions
+
+            3. Generate workarounds that:
+            - Address similar types of problems
+            - Use comparable resources or approaches
+            - Achieve related benefits
+            - Maintain the same level of practicality
+            - Reflect the same domain
+
+            **Instructions for Similar Workaround Generation:**
+            - Present each workaround as a user story using the following format:
+            - **Template:** "As a [role], when [situation], I [action] to [outcome]."
+            - Provide **{workaround_quantity}** workarounds that are similar in nature to the example.
+
+            **Example of Similar Workarounds:**
+            Original:
+            "As a warehouse worker, when the scanning system is slow, I batch scan items at the end of my shift to save time."
+
+            Similar workarounds:
+            - "As a warehouse worker, when the inventory system lags during peak hours, I record items on paper first and enter them during quiet periods to maintain workflow speed."
+            - "As a warehouse worker, when system updates interrupt operations, I group similar items together and process them in bulk when the system is back to reduce total scanning time."
+            - "As a warehouse worker, when network connectivity is unstable, I take photos of barcodes with my phone to scan them later in a location with better connection."
+
+            Return the workarounds as a JSON object in the following format:
+            {{
+                "workarounds": [
+                    "As a [role], when [situation], I [action] to [outcome].",
+                    "... (more workarounds) ..."
+                ]
+            }}
+            """,
+
         "similar_with_image": """
             You are an expert process analyst with extensive experience investigating business processes across various industries.
 
@@ -429,9 +486,7 @@ Return the workarounds as a JSON object in the following format:
 
             {{
             „roles„ : [“Role1“, ‚Role2‘]
-            }}
-            Minimieren Sie die Länge Ihrer Antwort, indem Sie nur das JSON-Array und nur zwei kurze Sätze über den Auswahlprozess zurückgeben.
-                    
+            }}                    
         
         """,
         "GenerateMisfitsPrompt": """
@@ -504,7 +559,7 @@ Return the workarounds as a JSON object in the following format:
                 - Gibt es gemeinsame Standards oder bewährte Verfahren für Prozesse in diesem Bereich?
                 - Erarbeiten Sie adaptive Maßnahmen, die das konkrete Problem lösen, keine offiziellen Prozessänderungen erfordern, von den beteiligten Personen umgesetzt werden können und im Bereich des Prozesses realistisch sind.
 
-            Formulieren Sie schließlich für jede Herausforderung {Workarounds_Quantity} einzigartige Workarounds, die es der Rolle ermöglichen, die Herausforderung zu überwinden, zu umgehen oder zu minimieren:
+            Formulieren Sie schließlich für jede Herausforderung {workarounds_quantity} einzigartige Workarounds, die es der Rolle ermöglichen, die Herausforderung zu überwinden, zu umgehen oder zu minimieren:
             - Stellen Sie sicher, dass Sie für jede Herausforderung die soeben erwähnte Anzahl ({workarounds_quantity}) von Umgehungslösungen erstellen. Wenn Sie zum Beispiel drei Herausforderungen pro Rolle und insgesamt 3 Rollen haben, müssen Sie insgesamt 3 * 3 * {workarounds_quantity} Workarounds generieren!
             - Stellen Sie jede Problemumgehung als Benutzergeschichte in folgendem Format dar:
             - Vorlage: „Als [Rolle] [Kontext], wenn [Herausforderung], ich [adaptive Aktion] zu [beabsichtigtes Ergebnis].“
@@ -663,10 +718,11 @@ Return the workarounds as a JSON object in the following format:
                 ]
             }}
             """,
-        "similar_no_image": """
+        "similar_with_image_or_diagram": """
             Sie sind ein erfahrener Prozessanalyst mit umfassender Erfahrung in der Untersuchung von Geschäftsprozessen in verschiedenen Branchen.
 
-            Betrachten Sie den folgenden Prozess: {process_description}
+            Betrachten Sie den folgenden Prozess und/oder das angehandende Prozess Diagram: 
+            {process_description}
 
             **Zusätzlicher Kontext:**
             {additional_context}
@@ -694,6 +750,60 @@ Return the workarounds as a JSON object in the following format:
             - Ähnliche Vorteile erzielen
             - Den gleichen Grad an Praktikabilität beibehalten
             - Sich auf die gleiche Domäne bezieht
+
+            **Anweisungen für die Erstellung ähnlicher Workarounds:**
+            - Präsentieren Sie jeden Workaround als User Story unter Verwendung des folgenden Formats:
+            - **Vorlage:** "Als [Rolle], wenn [Situation], handle ich [Aktion], um [Ergebnis] zu erreichen."
+            - Geben Sie **{workarounds_quantity}** Workarounds an, die in ihrer Art dem Beispiel ähneln.
+
+            **Beispiel für ähnliche Workarounds:**
+            Original:
+            "Als Lagerarbeiter, wenn das Scan-System langsam ist, erfasse ich Artikel am Ende meiner Schicht in einem Schwung, um Zeit zu sparen."
+
+            Ähnliche Workarounds:
+            - "Als Lagerarbeiter, wenn das Warenwirtschaftssystem während der Stoßzeiten verzögert reagiert, notiere ich Artikel zuerst auf Papier und gebe sie in ruhigeren Zeiten ein, um die Geschwindigkeit der Arbeitsabläufe aufrechtzuerhalten."
+            - "Als Lagerarbeiter, wenn Systemaktualisierungen den Betrieb unterbrechen, fasse ich ähnliche Artikel zusammen und verarbeite sie in großen Mengen, wenn das System wieder verfügbar ist, um die Gesamtzeit beim Scannen zu reduzieren."
+            - "Als Lagerarbeiter, wenn die Netzwerkverbindung instabil ist, fotografiere ich Barcodes mit meinem Handy, um sie später an einem Ort mit besserer Verbindung einzuscannen."
+
+            Geben Sie die Workarounds als JSON-Objekt im folgenden Format zurück:
+            {{
+                "workarounds": [
+                    "Als [Rolle], wenn [Situation], handle ich [Aktion], um [Ergebnis] zu erreichen.",
+                    "... (weitere Workarounds) ..."
+                ]
+            }}
+            """,
+              "similar_with_image": """
+            Sie sind ein erfahrener Prozessanalyst mit umfassender Erfahrung in der Untersuchung von Geschäftsprozessen in verschiedenen Branchen.
+
+            Betrachten Sie den Prozess des beigefügten Prozessdiagramms.
+
+            **Zusätzlicher Kontext:**
+            {additional_context}
+
+            Wir untersuchen Workarounds, die dem folgenden Beispiel ähneln:
+            "{similar_workaround}"
+
+            Lassen Sie uns ähnliche Workarounds systematisch generieren:
+
+            1. Analysieren Sie zunächst den gegebenen Workaround:
+            - Ermitteln Sie das Kernproblem, das er löst
+            - Verstehen Sie die wichtigsten Ressourcen oder Werkzeuge, die er nutzt
+            - Betrachten Sie die wesentlichen Einschränkungen, innerhalb derer er funktioniert
+            - Notieren Sie die spezifischen Vorteile, die er erzielt
+
+            2. Untersuchen Sie anschließend Variationen:
+            - Berücksichtigen Sie ähnliche Probleme in unterschiedlichen Rollen
+            - Denken Sie über alternative Werkzeuge oder Ressourcen nach
+            - Reflektieren Sie verschiedene Möglichkeiten, ähnliche Vorteile zu erreichen
+            - Suchen Sie nach verwandten Einschränkungen, die ähnliche Lösungen erfordern könnten
+
+            3. Erstellen Sie Workarounds, die:
+            - Ähnliche Arten von Problemen adressieren
+            - Vergleichbare Ressourcen oder Vorgehensweisen nutzen
+            - Ähnliche Vorteile erzielen
+            - Den gleichen Grad an Praktikabilität beibehalten
+            - Sich auf die gleiche Domäne bezieht, wie die Prozessbeschreibung
 
             **Anweisungen für die Erstellung ähnlicher Workarounds:**
             - Präsentieren Sie jeden Workaround als User Story unter Verwendung des folgenden Formats:
