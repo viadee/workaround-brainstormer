@@ -303,7 +303,7 @@ class LLMService:
                 output_data=completion.choices[0].message.content,
                 token_usage=completion.usage.model_dump()
             )
-            return json.loads(completion.choices[0].message.content)
+            return json.loads(completion.choices[0].message.content)['roles']
         except openai.OpenAIError as e:
             logger.error(f"OpenAI API error on get_roles: {str(e)}")
             return []
