@@ -5,7 +5,6 @@ class ApiService {
     constructor() {
         this.baseUrl = '/api';
         this.fileUploadManager = new FileUploadManager();
-        this.formData = new FormData();
     }
 
     setFormData(formData) {

@@ -214,6 +214,7 @@ class LLMService:
         try:
             completion = self.client.beta.chat.completions.parse(
                 model=self.chat_model,
+                max_tokens=20000,
                 messages=messages,
                 response_format={"type": "json_object"},
             )
@@ -240,6 +241,7 @@ class LLMService:
             completion = self.client.beta.chat.completions.parse(
                 model= self.chat_model,
                 messages=messages,
+                max_tokens=20000,
                 response_format={"type": "json_object"}
             )
             self._log_api_call(
@@ -265,6 +267,7 @@ class LLMService:
             completion = self.client.beta.chat.completions.parse(
                 model= self.chat_model,
                 messages=messages,
+                max_tokens=20000,
                 response_format={"type": "json_object"}
             )
             self._log_api_call(
@@ -291,6 +294,7 @@ class LLMService:
             completion = self.client.beta.chat.completions.parse(
                 model= self.chat_model,
                 messages=messages,
+                max_tokens=3000,
                 response_format={"type": "json_object"}
             )
             self._log_api_call(

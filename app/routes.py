@@ -157,7 +157,7 @@ def generateWorkarounds():
     if(misfits is None):
         raise ValueError()
     
-    current_app.logger.info("Starting map generation")
+    current_app.logger.info("Starting workaround generation")
     base64_image = None
     temp_file_path = None
     file_processing_start = file_processing_end = None
@@ -178,11 +178,9 @@ def generateWorkarounds():
             prompt_settings= PromptSettings(workarounds_quantity=workarounds_quantity if workarounds_quantity != '' else 2)
         )
         
-        # Language detection timing
-        lang_detect_start = time.time()
-        session['detected_language'] = llm_service.detect_language(process)
+        # Language from session
+        # logically, this route is fetched after /generateRoles
         process.language = session['detected_language']
-        lang_detect_end = time.time()
         
         # API call timing
         api_call_start = time.time()
@@ -196,8 +194,6 @@ def generateWorkarounds():
         
         # Add all timing headers including file processing if present
         timing_headers = {
-            'Language_Detection_Start': lang_detect_start,
-            'Language_Detection_End': lang_detect_end,
             'API_Call_Start': api_call_start,
             'API_Call_End': api_call_end
         }
@@ -230,7 +226,7 @@ def generateMisfits():
     if(roles is None):
         raise ValueError()
     
-    current_app.logger.info("Starting map generation")
+    current_app.logger.info("Starting misfits generation")
     base64_image = None
     temp_file_path = None
     file_processing_start = file_processing_end = None
@@ -251,12 +247,10 @@ def generateMisfits():
             prompt_settings= PromptSettings(challenges_quantity=challenges_quantity if challenges_quantity != '' else 2)
         )
         
-        # Language detection timing
-        lang_detect_start = time.time()
-        session['detected_language'] = llm_service.detect_language(process)
+        # Language from session
+        # logically, this route is fetched after /generateRoles
         process.language = session['detected_language']
-        lang_detect_end = time.time()
-        
+
         # API call timing
         api_call_start = time.time()
         misfits = llm_service.get_misfits(process, roles)
@@ -264,13 +258,11 @@ def generateMisfits():
         
         session['misfits'] = misfits
         
-        current_app.logger.info("Successfully generated workarounds")
+        current_app.logger.info("Successfully generated misfits")
         response = jsonify(misfits)
         
         # Add all timing headers including file processing if present
         timing_headers = {
-            'Language_Detection_Start': lang_detect_start,
-            'Language_Detection_End': lang_detect_end,
             'API_Call_Start': api_call_start,
             'API_Call_End': api_call_end
         }
@@ -284,7 +276,7 @@ def generateMisfits():
         return add_timing_headers(response, **timing_headers)
     
     except Exception as e:
-        current_app.logger.exception("Error in map generation: %s", e)
+        current_app.logger.exception("Error in misfits generation: %s", e)
         return jsonify({'error': str(e)}), 500
 
     finally:
@@ -299,7 +291,7 @@ def generateRoles():
     process_description = request.form.get('process_description', '').strip()
     additional_context = request.form.get('additional_context', '').strip()
     roles_quantity = request.form.get('roles_quantity','').strip()
-    current_app.logger.info("Starting map generation")
+    current_app.logger.info("Starting roles generation")
     base64_image = None
     temp_file_path = None
     file_processing_start = file_processing_end = None
