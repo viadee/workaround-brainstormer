@@ -333,7 +333,8 @@ def generateRoles():
             'Language_Detection_Start': lang_detect_start,
             'Language_Detection_End': lang_detect_end,
             'API_Call_Start': api_call_start,
-            'API_Call_End': api_call_end
+            'API_Call_End': api_call_end,
+            'Language': session['detected_language']
         }
         
         if file_processing_start and file_processing_end:

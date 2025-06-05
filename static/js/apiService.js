@@ -5,6 +5,8 @@ class ApiService {
     constructor() {
         this.baseUrl = '/api';
         this.fileUploadManager = new FileUploadManager();
+        this.language = "en"
+
     }
 
     setFormData(formData) {
@@ -27,8 +29,10 @@ class ApiService {
         }
         // flask backend returns [] in llm.py if internal or connection errors occur 
         if(Array.isArray(data) && data.length == 0){
-           
             throw new Error("Error fetching API. This usually occurs due to a connection or internal server error.")
+        }
+        if(response.headers.get('X-Language') != null){
+            this.language = response.headers.get('X-Language')
         }
 
         return data

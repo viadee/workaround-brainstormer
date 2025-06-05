@@ -166,10 +166,10 @@ class NodeContextMenu{
             placeholder = 'Role'
         }
         if(d.category == 'role') {
-            placeholder = `As a ${d.text}, when [situation], I [complication].`
+            placeholder = this.apiService.language == 'en' ? `As a ${d.text}, when [situation], I [complication].` : `Als ${d.text}, wenn [Situation], habe ich [Herausforderung].`
         }
         if(d.category == 'misfit') {
-            placeholder = `As a ${this.graphManager.getNodeById(d.parent).text}, when [situation], I [complication].`
+            placeholder = this.apiService.language == 'en' ? `As a ${this.graphManager.getNodeById(d.parent).text}, when [${d.label}], I [adaptive action], to [outcome]` : `Als ${this.graphManager.getNodeById(d.parent).text}, wenn [${d.label}], handle ich [Aktion], um [Ergebnis] zu erreichen..`
         }
 
         const categoryMap = {

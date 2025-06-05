@@ -8,7 +8,6 @@ class GraphManager {
         this.setupEventHandlers();
         this.promptExtensions = new PromptExtensions;
         this.nextNodeId = 0;
-        
     }
 
     initializeD3() {
