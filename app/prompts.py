@@ -511,6 +511,7 @@ Return the workarounds as a JSON object in the following format:
             2.	Rekonstruieren Sie alle Abhängigkeiten, auf die die Rolle angewiesen ist, um ihre Aufgaben zu erfüllen:
                 - Welche externen Faktoren könnten sich negativ auf die Ausführung des Prozesses oder Arbeitsablaufs auswirken?
                 - Welche internen Faktoren könnten die Arbeit der Rolle beeinflussen?
+                - Welche Überraschungen könnten während der Ausführung der Aufgaben auftreten?
             3.	Bewerten Sie schließlich mögliche Herausforderungen, die während der Aktivitäten auftreten und das Erreichen des gewünschten Ergebnisses behindern könnten.
                 - Suchen Sie nach Punkten, an denen die Ressourcen eingeschränkt sein könnten
                 - Berücksichtigen Sie Bereiche, in denen die offiziellen Verfahren zu starr sein könnten.

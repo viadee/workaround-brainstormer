@@ -6,14 +6,14 @@
             "process_description": "\n    In a healthcare facility, the patient scheduling process begins when a patient contacts the reception desk to book an appointment with a specialist. \n    The receptionist verifies the patient's information, including insurance details and medical history, \n    before checking the specialist's availability on the electronic health record (EHR) system. If a suitable time is found, \n    the appointment is set, and the patient is informed about pre-appointment procedures, such as fasting or medication adjustments. \n    Confirmation calls or texts are sent to the patient 24 hours before the appointment. If the patient needs to reschedule or cancel, \n    the receptionist updates the appointment in the system and offers alternative dates.\n    ",
             "workarounds": [
                 {
-                    "text": "As a receptionist, when the EHR system is slow or unresponsive, I maintain a manual logbook of specialist availability to quickly check open slots and reduce patient wait times.",
+                    "text": "As a receptionist, when the EHR system is slow or down, I use a paper logbook or spreadsheet to temporarily track appointments to avoid delays and keep the schedule orderly.",
                     "test_results": {
                         "llm_judge_domain_relevance": {
                             "assessment": {
                                 "assessment": true,
-                                "explaination": "Maintaining a manual logbook of specialist availability is directly related to the patient scheduling process, especially as a contingency when the EHR system is slow, ensuring continuous appointment booking."
+                                "explaination": "Using a paper logbook or spreadsheet when the EHR system is down directly relates to the appointment scheduling process and helps maintain scheduling continuity."
                             },
-                            "assessment_explaination": "Maintaining a manual logbook of specialist availability is directly related to the patient scheduling process, especially as a contingency when the EHR system is slow, ensuring continuous appointment booking."
+                            "assessment_explaination": "Using a paper logbook or spreadsheet when the EHR system is down directly relates to the appointment scheduling process and helps maintain scheduling continuity."
                         },
                         "bert_score": null,
                         "self_bleu": null,
@@ -22,14 +22,14 @@
                     }
                 },
                 {
-                    "text": "As a receptionist, when patients call with incomplete insurance information, I tentatively schedule appointments but flag these cases for follow-up to avoid losing potential bookings.",
+                    "text": "As a receptionist, when patients provide incomplete or unclear insurance information, I call the insurance provider directly during the scheduling call to quickly verify coverage and reduce appointment cancellations.",
                     "test_results": {
                         "llm_judge_domain_relevance": {
                             "assessment": {
                                 "assessment": true,
-                                "explaination": "Tentatively scheduling appointments when insurance information is incomplete addresses a common issue in patient scheduling and helps avoid losing bookings, fitting squarely within the described process."
+                                "explaination": "Calling the insurance provider during scheduling to verify unclear insurance information is part of verifying patient information to reduce cancellations, which fits the described process."
                             },
-                            "assessment_explaination": "Tentatively scheduling appointments when insurance information is incomplete addresses a common issue in patient scheduling and helps avoid losing bookings, fitting squarely within the described process."
+                            "assessment_explaination": "Calling the insurance provider during scheduling to verify unclear insurance information is part of verifying patient information to reduce cancellations, which fits the described process."
                         },
                         "bert_score": null,
                         "self_bleu": null,
@@ -38,14 +38,14 @@
                     }
                 },
                 {
-                    "text": "As a receptionist, when multiple patients need appointments with the same specialist, I create a prioritized waiting list so I can call patients proactively if earlier slots free up.",
+                    "text": "As a receptionist, when specialist availability is limited, I keep a separate informal list of potential cancellation or emergency slots to offer patients faster alternatives without waiting for the official system update.",
                     "test_results": {
                         "llm_judge_domain_relevance": {
                             "assessment": {
                                 "assessment": true,
-                                "explaination": "Creating a prioritized waiting list to manage multiple appointment requests with the same specialist is relevant to managing specialist availability and scheduling efficiency in the healthcare domain."
+                                "explaination": "Maintaining an informal list of cancellation or emergency slots helps manage limited specialist availability and offers alternative scheduling options consistent with the domain."
                             },
-                            "assessment_explaination": "Creating a prioritized waiting list to manage multiple appointment requests with the same specialist is relevant to managing specialist availability and scheduling efficiency in the healthcare domain."
+                            "assessment_explaination": "Maintaining an informal list of cancellation or emergency slots helps manage limited specialist availability and offers alternative scheduling options consistent with the domain."
                         },
                         "bert_score": null,
                         "self_bleu": null,
@@ -54,14 +54,14 @@
                     }
                 },
                 {
-                    "text": "As a receptionist, when patients do not respond to confirmation texts or calls, I keep a shortlist of high-risk patients to personally follow up, improving attendance rates.",
+                    "text": "As a receptionist, when patients have difficulty understanding pre-appointment instructions, I create and hand out printed checklists to ensure they clearly know what to do before the visit.",
                     "test_results": {
                         "llm_judge_domain_relevance": {
                             "assessment": {
                                 "assessment": true,
-                                "explaination": "Following up personally with high-risk patients who do not respond to confirmation calls or texts supports improving attendance rates and aligns with the appointment confirmation steps in the process."
+                                "explaination": "Providing printed checklists for pre-appointment instructions assists in ensuring patients understand preparatory procedures, directly supporting the pre-appointment communication step."
                             },
-                            "assessment_explaination": "Following up personally with high-risk patients who do not respond to confirmation calls or texts supports improving attendance rates and aligns with the appointment confirmation steps in the process."
+                            "assessment_explaination": "Providing printed checklists for pre-appointment instructions assists in ensuring patients understand preparatory procedures, directly supporting the pre-appointment communication step."
                         },
                         "bert_score": null,
                         "self_bleu": null,
@@ -70,14 +70,14 @@
                     }
                 },
                 {
-                    "text": "As a receptionist, when patients request rescheduling outside office hours, I note their preferences in a shared spreadsheet so that scheduling can be updated promptly during business hours.",
+                    "text": "As a receptionist, when confirmation calls or texts cannot be delivered due to communication barriers, I ask family members or emergency contacts for alternative ways to confirm appointments and reduce no-shows.",
                     "test_results": {
                         "llm_judge_domain_relevance": {
                             "assessment": {
                                 "assessment": true,
-                                "explaination": "Using a shared spreadsheet to note rescheduling preferences outside office hours helps manage appointment changes effectively, contributing to patient scheduling continuity."
+                                "explaination": "Contacting family members or emergency contacts when confirmation calls or texts fail addresses communication barriers in appointment confirmation, which is part of the scheduling process."
                             },
-                            "assessment_explaination": "Using a shared spreadsheet to note rescheduling preferences outside office hours helps manage appointment changes effectively, contributing to patient scheduling continuity."
+                            "assessment_explaination": "Contacting family members or emergency contacts when confirmation calls or texts fail addresses communication barriers in appointment confirmation, which is part of the scheduling process."
                         },
                         "bert_score": null,
                         "self_bleu": null,
@@ -87,9 +87,9 @@
                 }
             ],
             "token_count": {
-                "completion_tokens": 183,
+                "completion_tokens": 194,
                 "prompt_tokens": 612,
-                "total_tokens": 795,
+                "total_tokens": 806,
                 "completion_tokens_details": {
                     "accepted_prediction_tokens": 0,
                     "audio_tokens": 0,
