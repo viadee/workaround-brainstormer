@@ -144,6 +144,8 @@ class NodeContextMenu{
                     this.graphManager.addNode(childNode);
                     this.graphManager.addLink(d.id, childNode.id);
                 })
+                this.graphManager.updateNodeLabel(d.id, workaroundData['label']);
+                d.expanded = true
             }
 
             this.updateUIHook();

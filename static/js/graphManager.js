@@ -44,6 +44,7 @@ class GraphManager {
             root: '#ff7f0e',
             expanded: '#1f77b4',
             collapsed: '#2ca02c',
+            workaround: '#2ca02c',
             highlight: '#ff0000',
             stroke: '#333',
             role: "#58ade1",
@@ -202,8 +203,8 @@ class GraphManager {
                         return this.colors.role
                     case "misfit":
                         return this.colors.misfit
-                    case "expanded":
-                        return this.colors.expanded
+                    case "workaround":
+                        return this.colors.workaround
                     default:
                         return this.colors.collapsed
                 }

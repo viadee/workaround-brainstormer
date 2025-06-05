@@ -233,62 +233,16 @@ class App {
     }
 
     // in main.js, update the expandNode method
+    // only avaible for workarounds
     async expandNode(event, d) {
         if (this.isExpanding || d.expanded || d.id === 0) return;
         this.isExpanding = true;
         this.spinner.style.display = "block";
     
         try {
-            // Build data object
-            const requestData = {
-                process_description: document.getElementById('process-input').value,
-                additional_context: this.graphManager.promptExtensions.getWorkaroundsPromptContext(),
-                similar_workaround: d.text,
-                other_workarounds: this.graphManager.getNodes()
-                    .filter(n => n.id !== 0 && n.id !== d.id && n.category == "workaround")
-                    .map(n => n.text)
-            };
-    
-            // Get the uploaded file if any
-            const uploadedFile = this.fileUploadManager?.getUploadedFile();
-    
-            // Choose request configuration based on whether there's a file
-            let fetchConfig;
-            if (uploadedFile) {
-                const formData = new FormData();
-                // Add all data fields individually
-                formData.append('process_description', requestData.process_description);
-                formData.append('additional_context', requestData.additional_context);
-                formData.append('similar_workaround', requestData.similar_workaround);
-                formData.append('other_workarounds', JSON.stringify(requestData.other_workarounds));
-                // Then add the file
-                formData.append('file', uploadedFile);
-    
-                fetchConfig = {
-                    method: 'POST',
-                    body: formData
-                };
-            } else {
-                fetchConfig = {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(requestData)
-                };
-            }
-    
+      
             // Make the request
-            const response = await fetch('/api/get_similar_workarounds', fetchConfig);
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            if (data.error) {
-                throw new Error(data.error);
-            }
+            const data = await this.apiService.getSimilarWorkarounds(d.text, this.graphManager.promptExtensions.getWorkaroundsPromptContext())
 
             // Update the graph with the response
             const { workarounds: similarWorkarounds, label: nodeLabel } = data;
@@ -303,8 +257,6 @@ class App {
                 this.graphManager.addNode(childNode);
                 this.graphManager.addLink(d.id, childNode.id);
             });
-
-            d.category = "expanded";
             d.expanded = true;
             this.graphManager.updateNodeLabel(d.id, nodeLabel);
             this.updateUI();
