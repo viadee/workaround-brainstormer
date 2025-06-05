@@ -82,7 +82,7 @@ For each role, let’s systematically analyze unusual potential obstacles, issue
 Based on this analysis, for each given role, return {challenges_quantity} Challenges as an JSON object in the following format:
 -	Start each sentence with the role e.g. “As a consultant, ”
 -	Continue with the context or action e.g. “As a consultant, when I am in a workshop with my client”
--	Finish with the identified challenge:  “As a consultant, when I am in a workshop with my client and can’t find the issue in the information system.”
+-	Finish with the identified challenge:  “As a consultant, when I am in a workshop with my client, I can’t find the issue in the information system.”
 {{
 “role1”: [{{label: "short label of the challenge", text: "sentence"}}, {{label: "short label of the challenge", text: "sentence"}}, {{label: "short label of the challenge", text: "sentence"}}],
 “role2”: [{{label: "short label of the challenge", text: "sentence"}}, {{label: "short label of the challenge", text: "sentence"}}]
@@ -523,7 +523,7 @@ Return the workarounds as a JSON object in the following format:
             Geben Sie auf der Grundlage dieser Analyse für jede gegebene Rolle {challenges_quantity} Herausforderungen als JSON-Objekt im folgenden Format zurück:
             - Beginnen Sie jeden Satz mit der Rolle, z. B. „Als Berater, “
             - Fahren Sie mit dem Kontext oder der Aktion fort, z. B. „Als Berater, wenn ich in einem Workshop mit meinem Kunden bin“.
-            - Schließen Sie mit der identifizierten Herausforderung ab: „Als Berater, wenn ich in einem Workshop mit meinem Kunden bin und das Problem im Informationssystem nicht finden kann.“
+            - Schließen Sie mit der identifizierten Herausforderung ab: „Als Berater, wenn ich in einem Workshop mit meinem Kunden bin, kann ich das Problem im Informationssystem nicht finden.“
             {{
             „role1": [{{label: „Kurzbezeichnung der Herausforderung“, text: „Satz"}}, {{label: „Kurzbezeichnung der Herausforderung“, text: „Satz"}}, {{label: „Kurzbezeichnung der Herausforderung“, Text: „Satz"}}],
             „role2": [{{label: „Kurzbezeichnung der Herausforderung“, text: „Satz"}}, {{label: „Kurzbezeichnung der Herausforderung“, text: „sentence"}}]
