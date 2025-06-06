@@ -105,11 +105,28 @@ class App {
         });
     }
 
+    processDescriptionIsDefined(){
+         const description = document.getElementById('process-input').value;
+         const uploadedFile = this.fileUploadManager.getUploadedFile();
+
+         console.log
+         if(!description && !uploadedFile){
+            return false
+         }
+         return true
+    }
+
     async createInitialStructure() {
 
         if(this.fetchWorkaroundsState == true){
             return;
         }
+
+        if(!this.processDescriptionIsDefined()){
+            alert("Please insert a process decription or a bpmn diagram to start the workaround generation.")
+            return;
+        }
+
         this.fetchWorkaroundsState = true
         this.graphManager.clearGraph();
         this.spinner.style.display = "block";
