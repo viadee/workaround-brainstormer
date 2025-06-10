@@ -41,29 +41,25 @@ class NodeContextMenu{
             workaround: "workaround"
         }
 
-        if(d.category != "expanded") {
 
-            // Add node button with textarea overlay
-            const generateOneNodeButton = document.createElement('button');
-            generateOneNodeButton.innerText = `Generate 1 more ${childNodeTypeMap[d.category]}`
-            generateOneNodeButton.addEventListener('click', () => this.handleAddNode(event, d, 1), this.removeContextMenu())
-            contextMenu.appendChild(generateOneNodeButton);
+        // Add node button with textarea overlay
+        const generateOneNodeButton = document.createElement('button');
+        generateOneNodeButton.innerText = `Generate 1 more ${childNodeTypeMap[d.category]}`
+        generateOneNodeButton.addEventListener('click', () => this.handleAddNode(event, d, 1), this.removeContextMenu())
+        contextMenu.appendChild(generateOneNodeButton);
 
-            const generateThreeNodesButton = document.createElement('button');
-            generateThreeNodesButton.innerText = `Generate 3 more ${childNodeTypeMap[d.category]}s`
-            generateThreeNodesButton.addEventListener('click', () => this.handleAddNode(event, d, 3), this.removeContextMenu())
-            contextMenu.appendChild(generateThreeNodesButton);
+        const generateThreeNodesButton = document.createElement('button');
+        generateThreeNodesButton.innerText = `Generate 3 more ${childNodeTypeMap[d.category]}s`
+        generateThreeNodesButton.addEventListener('click', () => this.handleAddNode(event, d, 3), this.removeContextMenu())
+        contextMenu.appendChild(generateThreeNodesButton);
 
-            // Add node button with textarea overlay
-            if(d.category != "workaround"){
-                const expandNodeButton = document.createElement('button');
-                expandNodeButton.innerText = `Add ${childNodeTypeMap[d.category]} manually`
-                expandNodeButton.addEventListener('click', () => this.handleAddNodeManually(event, d), this.removeContextMenu())
-                contextMenu.appendChild(expandNodeButton);
-            } 
-            
-
-        }
+        // Add node button with textarea overlay
+        if(d.category != "workaround"){
+            const expandNodeButton = document.createElement('button');
+            expandNodeButton.innerText = `Add ${childNodeTypeMap[d.category]} manually`
+            expandNodeButton.addEventListener('click', () => this.handleAddNodeManually(event, d), this.removeContextMenu())
+            contextMenu.appendChild(expandNodeButton);
+        } 
 
         contextMenu.addEventListener('mouseenter', () => contextMenu.addEventListener('mouseleave', this.removeContextMenu))
         document.body.addEventListener('click', this.removeContextMenu, {once: true}) 
@@ -158,7 +154,9 @@ class NodeContextMenu{
         }
     }
 
-    handleAddNodeManually(event, d){
+    async handleAddNodeManually(event, d){
+
+        const apiService = this.apiService
 
         let placeholder;
 
@@ -206,7 +204,7 @@ class NodeContextMenu{
         const gM = this.graphManager
         const self = this;
         
-        function handleSubmit(){
+        async function handleSubmit(){
             const textAreaEl = document.getElementById('textArea_addNode')
             if(textAreaEl == null){
                 throw new Error('Textarea Element not found')
@@ -223,6 +221,25 @@ class NodeContextMenu{
             
             if (d.category == "root") {
                 newNode["label"] = description;
+                newNode["expanded"] = true;
+            }
+
+            if (d.category == "role"){
+
+                const spinner = document.getElementById("map-spinner");
+                spinner.style.display = "block";
+                try{
+                    // const apiService = new ApiService;
+                    const response = await apiService.getManualMisfitNodeLabel(description);
+                    const misfit_label = response["label"];
+
+                    newNode["label"] = misfit_label;
+                    newNode["expanded"] = true;
+                    spinner.style.display = "none";
+                } catch(error) {
+                    console.error('Error generating additional nodes', error)
+                    spinner.style.display = "none";
+                }
             }
 
             gM.addNode(newNode);

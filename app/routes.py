@@ -524,6 +524,28 @@ def get_similar_workarounds():
             os.remove(temp_file_path)
 
 
+    
+@api_bp.route('/generate_manual_misfit_node_label', methods=['POST'])
+@login_required
+def get_manual_misfit_label():
+    """Update and format workarounds list."""
+    try:
+
+        misfit_description = request.form.get('misfit_description')
+
+        llm_service = LLMService(session_id=session.get('id'))
+        misfit_label = llm_service.generate_manual_misfit_node_label(misfit_description=misfit_description)
+        
+        response = jsonify({
+            'label': misfit_label,
+        })
+
+        return response
+
+    except Exception as e:
+        current_app.logger.exception("Error generating manual misfit label: %s", e)
+        return jsonify({'error': str(e)}), 500
+
 
 @api_bp.route('/update_workarounds', methods=['POST'])
 @api_bp.route('/update_workarounds', methods=['POST'])
@@ -544,6 +566,7 @@ def update_workarounds():
     except Exception as e:
         current_app.logger.exception("Error updating workarounds: %s", e)
         return jsonify({'error': str(e)}), 500
+
 
 @api_bp.route('/download_workarounds', methods=['GET'])
 @api_bp.route('/download_workarounds', methods=['GET'])
