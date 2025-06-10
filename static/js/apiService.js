@@ -38,7 +38,7 @@ class ApiService {
         return data
     }
 
-    async getRoles(additional_context = null, quantity = null) {
+    async getRoles(additional_context = null, quantity = 3) {
 
         if (additional_context) {
             this.formData.set('additional_context',additional_context)
@@ -51,7 +51,7 @@ class ApiService {
 
     }
 
-    async getMisfits(roles, additional_context = null, quantity = null) {
+    async getMisfits(roles, additional_context = null, quantity = 2) {
 
         if (additional_context) {
             this.formData.set('additional_context', additional_context)
@@ -67,7 +67,7 @@ class ApiService {
 
     }
 
-    async getWorkarounds(misfit, additional_context = null, quantity = null) {
+    async getWorkarounds(misfit, additional_context = null, quantity = 2) {
 
         if (quantity) {
             this.formData.set('workarounds_quantity', quantity)
@@ -96,8 +96,7 @@ class ApiService {
             console.error('Error generating workarounds:', error)
         }
     }
-
-    async getManualMisfitNodeLabel(misfit_description){
+     async getManualMisfitNodeLabel(misfit_description){
         if(misfit_description){
             this.formData.set('misfit_description', misfit_description)
         }

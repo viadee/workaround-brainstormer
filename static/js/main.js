@@ -59,7 +59,7 @@ class App {
         });
 
         // Node events
-        window.addEventListener('nodeClick', (e) => this.expandNode(e.detail.event, e.detail.node));
+        window.addEventListener('nodeClick', async (e) => await this.expandNode(e.detail.event, e.detail.node));
         window.addEventListener('nodeContextMenu', (e) => this.nodeContextMenu.showNodeContextMenu(e.detail.event, e.detail.node));
         window.addEventListener('highlightNode', (e) => this.graphManager.highlightNode(e.detail.nodeId));
 
@@ -165,80 +165,15 @@ class App {
         }
         this.apiService.setFormData(formData)
         try {
-            const roles = await this.apiService.getRoles(this.graphManager.promptExtensions.getRolesPromptContext())
+            const { roles, rolesData } = await this.expandRootNodeWithRoles(rootNode)
+           
+            formData.append('roles',rolesData)
 
-            roles.forEach(role => {
-                const childNode = {
-                    text:role,
-                    expanded:true,
-                    parent:rootNode.id,
-                    category: "role",
-                    label:role
-                }
-                this.graphManager.addNode(childNode);
-                this.graphManager.addLink(rootNode.id, childNode.id);
-            })
+            const { misfits, misfitsData } = await this.expandNodesWithMisfits(roles)
 
-            this.updateUI();
+            formData.append("misfits", JSON.stringify(misfitsData))
 
-            formData.append('roles',roles)
-
-            const misfitData = await this.apiService.getMisfits(roles, this.graphManager.promptExtensions.getMisfitsPromptContext())
-
-            for (const role of roles) {
-                try {
-                    const misfits = misfitData[role];
-                    const parentNode = this.graphManager.getNodes().filter(node => node.text === role)[0]
-
-                    for (const misfit of misfits) {
-                        const misfitNode = {
-                            text:misfit.text,
-                            label:misfit.label,
-                            expanded:true,
-                            parent:parentNode.id,
-                            category:"misfit"
-                        }
-                        this.graphManager.addNode(misfitNode);
-                        this.graphManager.addLink(parentNode.id, misfitNode.id);
-                    }
-
-                } catch (error) {
-                    // Handle the error or log it
-                    console.error(`Error retrieving role: ${role}`, error);
-                    continue; // Only if you want to skip to the next one
-                }
-            }
-
-            this.updateUI();
-
-            formData.append("misfits", JSON.stringify(misfitData))
-
-            const workaroundData = await this.apiService.getWorkarounds(misfitData, this.graphManager.promptExtensions.getWorkaroundsPromptContext())
-
-            const misfitNodes = this.graphManager.getNodes().filter(x => x.category === "misfit")
-
-            for (const misfitNode of misfitNodes) {
-                try {
-                    const role = this.graphManager.getNodeById(misfitNode.parent)
-                    const workarounds = workaroundData[role.label].filter(x => x.challengeLabel === misfitNode.label)
-
-                    for (const workaround of workarounds) {
-                        const workaroundNode = {
-                            text: workaround.workaround,
-                            expanded: false,
-                            parent: misfitNode.id,
-                            category: "workaround"
-                        }
-                        this.graphManager.addNode(workaroundNode);
-                        this.graphManager.addLink(misfitNode.id, workaroundNode.id);
-                    }
-                } catch (error) {
-                    console.error(`Error retrieving workaround for misfit: ${misfitNode.label}`, error)
-                    continue
-                }
-            }
-
-            this.updateUI()
+            const {workaroundData, workarounds } = await this.expandMisfitNodesWithWorkarounds(misfits)
 
         } catch (error) {
             console.error('Error creating initial structure:', error);
@@ -248,16 +183,94 @@ class App {
             this.fetchWorkaroundsState = false
         }
     }
+    
 
-    // in main.js, update the expandNode method
-    // only avaible for workarounds
-    async expandNode(event, d) {
-        if (this.isExpanding || d.expanded || d.id === 0) return;
+    async expandNodesWithMisfits(roles){
+        const misfitData = await this.apiService.getMisfits(roles.map(roleNode => {return roleNode.label}), this.graphManager.promptExtensions.getMisfitsPromptContext())
+        let misfitNodes = []
+        for (const role of roles) {
+                const misfits = misfitData[role.text];
+                const parentNode = this.graphManager.getNodes().filter(node => node.text === role.text)[0]
+
+                for (const misfit of misfits) {
+                    const misfitNode = {
+                        text:misfit.text,
+                        label:misfit.label,
+                        expanded:true,
+                        parent:parentNode.id,
+                        category:"misfit"
+                    }
+                    misfitNodes.push(this.graphManager.addNode(misfitNode));
+                    this.graphManager.addLink(parentNode.id, misfitNode.id);
+                }
+                roles.expanded = true
+        }
+
+        this.updateUI();
+        return { misfitsData: misfitData, misfits: misfitNodes }
+    }
+    async expandRootNodeWithRoles(rootNode){
+        const rolesData = await this.apiService.getRoles(this.graphManager.promptExtensions.getRolesPromptContext())
+        let roles = []
+            rolesData.forEach(role => {
+                const childNode = {
+                    text:role,
+                    expanded:true,
+                    parent:rootNode.id,
+                    category: "role",
+                    label:role
+                }
+                roles.push(this.graphManager.addNode(childNode));
+                this.graphManager.addLink(rootNode.id, childNode.id);
+                rootNode.expanded = true;
+            })
+
+            this.updateUI();
+            return {rolesData: rolesData, roles: roles}
+    }
+    async expandMisfitNodesWithWorkarounds(misfits){
+        const misfitsData = {}
+
+        for(const misfitNode of misfits){
+            const parent = this.graphManager.getNodeById(misfitNode.parent)
+            if(!misfitsData[parent.label]){
+                misfitsData[parent.label] = []
+            }
+            misfitsData[parent.label].push({
+                label: misfitNode.label,
+                text: misfitNode.text
+            })
+        }
+
+        const workaroundData = await this.apiService.getWorkarounds(misfitsData, this.graphManager.promptExtensions.getWorkaroundsPromptContext())
+        let workaroundNodes = []
+        for (const misfitNode of misfits) {
+                const role = this.graphManager.getNodeById(misfitNode.parent)
+                const workarounds = workaroundData[role.label].filter(x => x.challengeLabel === misfitNode.label)
+
+                for (const workaround of workarounds) {
+                    const workaroundNode = {
+                        text: workaround.workaround,
+                        expanded: false,
+                        parent: misfitNode.id,
+                        category: "workaround"
+                    }
+                    workaroundNodes.push(this.graphManager.addNode(workaroundNode));
+                    this.graphManager.addLink(misfitNode.id, workaroundNode.id);
+                }
+                misfitNode.expanded = true;
+
+        }
+        this.updateUI()
+
+        return { workaroundData, workarounds: workaroundNodes}
+    }
+
+    async expandWorkaroundWithWorkarounds(d){
+      
         this.isExpanding = true;
         this.spinner.style.display = "block";
-    
-        try {
-      
+        let workarounds = []
             // Make the request
             const data = await this.apiService.getSimilarWorkarounds(d.text, this.graphManager.promptExtensions.getWorkaroundsPromptContext())
 
@@ -271,46 +284,50 @@ class App {
                     expanded: false,
                     category: "workaround"
                 };
-                this.graphManager.addNode(childNode);
+                workarounds.push(this.graphManager.addNode(childNode));
                 this.graphManager.addLink(d.id, childNode.id);
             });
-            d.expanded = true;
             this.graphManager.updateNodeLabel(d.id, nodeLabel);
+            d.expanded = true
             this.updateUI();
-
-        } catch (error) {
-            console.error('Error in expandNode:', error);
-            alert(error.message || 'Error fetching similar workarounds.');
-        } finally {
-            this.spinner.style.display = "none";
-            this.isExpanding = false;
+        return {workaroundData: data, workarounds: workarounds}
+    }
+    // in main.js, update the expandNode method
+    // only avaible for workarounds
+    async expandNode(event, d) {
+        if (this.isExpanding ) return;
+        this.isExpanding = true;
+        this.spinner.style.display = "block";
+    
+        switch(d.category){
+            case 'root':
+                await this.expandRootNodeWithRoles(d);
+                this.isExpanding = false;
+                this.spinner.style.display = "none";
+                break;
+            case 'workaround':
+                await this.expandWorkaroundWithWorkarounds(d)
+                this.isExpanding = false;
+                this.spinner.style.display = "none";
+                break;
+            case 'misfit':
+                await this.expandMisfitNodesWithWorkarounds([d])
+                this.isExpanding = false;
+                this.spinner.style.display = "none";
+                break;
+            case 'role':
+                await this.expandNodesWithMisfits([d])
+                this.isExpanding = false;
+                this.spinner.style.display = "none";
+                break;
+            default:
+                return;
+        
         }
+        this.isExpanding = false;
     }
 
-    // Add helper method to handle response
-    async handleSimilarWorkaroundsResponse(data, d) {
-        if (data.error) {
-            throw new Error(data.error);
-        }
-
-        const { workarounds: similarWorkarounds, label: nodeLabel } = data;
-
-        similarWorkarounds.forEach(text => {
-            const childNode = {
-                text: text,
-                parent: d.id,
-                expanded: false
-            };
-            this.graphManager.addNode(childNode);
-            this.graphManager.addLink(d.id, childNode.id);
-        });
-
-        d.expanded = true;
-        this.graphManager.updateNodeLabel(d.id, nodeLabel);
-        this.updateUI();
-    }
-
-    updateUI() {
+    updateUI(){
         this.graphManager.updateGraph();
         this.workaroundsList.updateList(this.graphManager.getNodes());
     }

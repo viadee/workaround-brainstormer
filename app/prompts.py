@@ -361,6 +361,7 @@ Return the workarounds as a JSON object in the following format:
             - Look for related constraints that might need similar solutions
 
             3. Generate workarounds that:
+            - Refer to the same role as the example above. If the example says “As warehouse employee”, for example, all generated workarounds must refer to the warehouse employee
             - Address similar types of problems
             - Use comparable resources or approaches
             - Achieve related benefits
@@ -745,6 +746,7 @@ Return the workarounds as a JSON object in the following format:
             - Suchen Sie nach verwandten Einschränkungen, die ähnliche Lösungen erfordern könnten
 
             3. Erstellen Sie Workarounds, die:
+            - Sich auf die selbe Rolle wie das zuvor aufgeführte Beispiel beziehen. Steht in dem Beispiel z.B. "Als Lagermitarbeiter", müssen sich alle generierten Workarounds auf den Lagermitarbeiter beziehen
             - Ähnliche Arten von Problemen adressieren
             - Vergleichbare Ressourcen oder Vorgehensweisen nutzen
             - Ähnliche Vorteile erzielen

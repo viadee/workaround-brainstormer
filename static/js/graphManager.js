@@ -72,6 +72,7 @@ class GraphManager {
         node["id"] = this.nextNodeId++;
         this.nodes.set(node.id, node);
         this.promptExtensions.handleAddNode(node)
+        return node;
     }
 
     addLink(source, target) {
@@ -181,9 +182,7 @@ class GraphManager {
             .on("mouseout", (event, d) => this.handleMouseOut(event, d))
             .on("mousemove", (event) => this.handleMouseMove(event))
             .on("click", (event, d) => {
-                if (d.id !== 0) {
                     window.dispatchEvent(new CustomEvent('nodeClick', { detail: { event, node: d } }));
-                }
             })
             .on("contextmenu", (event, d) => {
                 window.dispatchEvent(new CustomEvent('nodeContextMenu', { detail: { event, node: d } }));

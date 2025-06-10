@@ -294,7 +294,7 @@ class LLMService:
             completion = self.client.beta.chat.completions.parse(
                 model= self.chat_model,
                 messages=messages,
-                max_completion_tokens=3000,
+                max_completion_tokens=10000,
                 response_format={"type": "json_object"}
             )
             self._log_api_call(
