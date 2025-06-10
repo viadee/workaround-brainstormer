@@ -19,7 +19,7 @@ class App {
     setupComponents() {
         this.graphManager = new GraphManager;
         this.fileUploadManager = new FileUploadManager;
-        this.workaroundsList = new WorkaroundsList;
+        this.workaroundsList = new WorkaroundsList(this.graphManager);
         this.fewShotEditor = new FewShotEditor;
         
         this.apiService = new ApiService

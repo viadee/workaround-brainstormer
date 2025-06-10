@@ -1,8 +1,9 @@
 // static/js/workaroundsList.js
 class WorkaroundsList {
-    constructor() {
+    constructor(graphManager) {
         this.container = document.getElementById('workarounds-list');
         this.expandedNodes = new Set();
+        this.graphManager = graphManager
         this.setupEventListeners();
     }
 
@@ -124,7 +125,7 @@ class WorkaroundsList {
 
     async handleDownload() {
 
-        const nodes = graphManager.getNodes()
+        const nodes = this.graphManager.getNodes()
 
         if (nodes.length == 0){
             return
@@ -143,7 +144,7 @@ class WorkaroundsList {
             
             const data = await response.json();
             if (data.status === 'success') {
-                window.location.href = '/download_workarounds';
+                window.location.href = '/api/download_workarounds';
             }
         } catch (error) {
             console.error('Download error:', error);
