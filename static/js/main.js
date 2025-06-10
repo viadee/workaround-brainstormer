@@ -137,7 +137,7 @@ class App {
         try{
             this.fewShotEditor.currentLang = "en";
             this.fewShotEditor.updateLangTabs();
-            // this.fewShotEditor.retreiveFewShotExamples();
+            this.fewShotEditor.retreiveFewShotExamples();
             this.fewShotEditor.updateCurrentLanguageExamples();
             this.fewShotEditor.autoSave();
         } catch (error) {

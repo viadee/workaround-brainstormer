@@ -96,6 +96,18 @@ class ApiService {
             console.error('Error generating workarounds:', error)
         }
     }
+
+    async getManualMisfitNodeLabel(misfit_description){
+        if(misfit_description){
+            this.formData.set('misfit_description', misfit_description)
+        }
+
+        try {
+            return await this.#post('/generate_manual_misfit_node_label')
+        } catch (error) {
+            console.error('Error generating manual misfit label:', error)
+        }
+    }
 }
 
 export default ApiService;

@@ -393,6 +393,38 @@ class LLMService:
         except Exception as e:
             logger.error(f"Unexpected error during generate_node_label: {str(e)}")
             return ""
+        
+    def generate_manual_misfit_node_label(
+        self,
+        misfit_description: str,
+    ) -> str:
+        """Generate a label for a workaround node."""
+        if not self._check_cost_threshold():
+            raise CostLimitExceeded("Daily cost threshold exceeded")
+
+        prompt = get_manual_misfit_node_label_prompt(misfit_description)
+
+        try:
+            completion = self.client.chat.completions.create(
+                model=self.chat_model,
+                messages=[{"role": "user", "content": prompt}]
+            )
+
+            self._log_api_call(
+                function="generate_manual_misfit_node_label",
+                input_data=prompt,
+                output_data=completion.choices[0].message.content,
+                token_usage=completion.usage.model_dump()
+            )
+
+            return completion.choices[0].message.content.strip()
+        
+        except openai.OpenAIError as e:
+            logger.error(f"OpenAI API error on generate_node_label: {str(e)}")
+            return ""
+        except Exception as e:
+            logger.error(f"Unexpected error during generate_node_label: {str(e)}")
+            return ""
 
     def _check_cost_threshold(self) -> bool:
         """Check if API usage is within daily cost threshold."""
@@ -459,6 +491,16 @@ def get_node_label_prompt(workaround, other_workarounds):
 
         Other Workarounds:
         {formatted_other_workarounds}
+        """
+    return prompt
+
+def get_manual_misfit_node_label_prompt(misfit_description):
+    prompt = f"""
+        You are a helpful assistant that generates short, descriptive labels for misfits. Generate a concise label (maximum of 3 words) that highlights what is unique or distinctive about the following misfit. The label should be clear, problem-oriented and should summarize the underlying problem of the misfit.
+        It is crucial, that the label is the same language as the current misfit.
+
+        Current Misfit:
+        {misfit_description}
         """
     return prompt
 
