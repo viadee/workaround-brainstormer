@@ -756,7 +756,7 @@ Return the workarounds as a JSON object in the following format:
             **Anweisungen für die Erstellung ähnlicher Workarounds:**
             - Präsentieren Sie jeden Workaround als User Story unter Verwendung des folgenden Formats:
             - **Vorlage:** "Als [Rolle], wenn [Situation], handle ich [Aktion], um [Ergebnis] zu erreichen."
-            - Geben Sie **{workarounds_quantity}** Workarounds an, die in ihrer Art dem Beispiel ähneln.
+            - Geben Sie **{workaround_quantity}** Workarounds an, die in ihrer Art dem Beispiel ähneln.
 
             **Beispiel für ähnliche Workarounds:**
             Original:
