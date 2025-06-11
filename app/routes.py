@@ -464,7 +464,7 @@ def get_similar_workarounds():
                 'additional_context': request.form.get('additional_context', ''),
                 'similar_workaround': request.form.get('similar_workaround', ''),
                 'other_workarounds': other_w,
-                'workaround_quantity': request.form.get('workaround_quantity', 3)
+                'workarounds_quantity': request.form.get('workarounds_quantity', 3)
             }
 
         # Use stored language
@@ -472,7 +472,7 @@ def get_similar_workarounds():
             description=data['process_description'],
             additional_context=data['additional_context'],
             base64_image=base64_image,
-            language=session.get('detected_language', 'en')
+            language=session.get('detected_language', 'en'),
         )
 
         llm_service = LLMService(session_id=session.get('id'))
@@ -481,7 +481,7 @@ def get_similar_workarounds():
         similar_workarounds = llm_service.get_similar_workarounds(
             process,
             data['similar_workaround'],
-            data['workaround_quantity']
+            data['workarounds_quantity']
         )
         similar_workarounds_end = time.time()
 

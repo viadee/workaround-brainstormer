@@ -84,7 +84,11 @@ class ApiService {
         }
     }
 
-    async getSimilarWorkarounds(workaround, additional_context = null){
+    async getSimilarWorkarounds(workaround, additional_context = null, quantity = 2){
+
+        if (quantity) {
+            this.formData.set('workarounds_quantity', quantity)
+        }
         if(additional_context){
             this.formData.set('additional_context', additional_context)
         }
