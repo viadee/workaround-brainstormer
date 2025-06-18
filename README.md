@@ -19,7 +19,7 @@ Both the [CWA Corpus](rag/workarounds_corpus.csv) and the software tool are lice
 
 ## How it works
 
-https://github.com/user-attachments/assets/cb4db8b1-3041-4e84-a225-20d2dee6df62
+https://github.com/user-attachments/assets/dd0d4a32-e647-4089-b7b8-37ae73847dd8
 
 
 
