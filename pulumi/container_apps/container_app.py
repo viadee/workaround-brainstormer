@@ -42,11 +42,11 @@ class ContainerApp(pulumi.ComponentResource):
         container_name: str,
         identity: azure_native.managedidentity.UserAssignedIdentity,
         environment_variables: Optional[
-            List[azure_native.app.v20230501.EnvironmentVarArgs]
+            List[azure_native.app.EnvironmentVarArgs]
         ] = None,
         host_name: Optional[str] = None,
         certificate_id: Optional[str] = None,
-        secrets: Optional[List[azure_native.app.v20230501.SecretArgs]] = None,
+        secrets: Optional[List[azure_native.app.SecretArgs]] = None,
         exposed_port: Optional[bool] = None,
         opts: Optional[pulumi.ResourceOptions] = None,
         min_replicas: int = 0,
@@ -63,47 +63,45 @@ class ContainerApp(pulumi.ComponentResource):
         )
 
         _secrets = [
-            azure_native.app.v20230501.SecretArgs(
-                name="registry-pwd", value=acr_password
-            )
+            azure_native.app.SecretArgs(name="registry-pwd", value=acr_password)
         ]
 
         if secrets:
             _secrets.extend(secrets)
 
-        self.container_app = azure_native.app.v20230501.ContainerApp(
+        self.container_app = azure_native.app.ContainerApp(
             name,
             container_app_name=name,
             location=location,
             resource_group_name=resource_group_name,
             environment_id=environment_id,
-            identity=azure_native.app.v20230501.ManagedServiceIdentityArgs(
+            identity=azure_native.app.ManagedServiceIdentityArgs(
                 type=azure_native.app.ManagedServiceIdentityType.USER_ASSIGNED,
                 user_assigned_identities=[identity.id],
             ),
-            configuration=azure_native.app.v20230501.ConfigurationArgs(
-                ingress=azure_native.app.v20230501.IngressArgs(
+            configuration=azure_native.app.ConfigurationArgs(
+                ingress=azure_native.app.IngressArgs(
                     allow_insecure=False,
                     exposed_port=exposed_port,
                     target_port=target_port,
                     external=external,
                     custom_domains=[
-                        azure_native.app.v20230501.CustomDomainArgs(
-                            binding_type=azure_native.app.v20230501.BindingType.SNI_ENABLED,
+                        azure_native.app.CustomDomainArgs(
+                            binding_type=azure_native.app.BindingType.SNI_ENABLED,
                             certificate_id=certificate_id,
                             name=host_name,
                         )
                     ]
                     if host_name and certificate_id
                     else None,
-                    cors_policy=azure_native.app.v20230501.CorsPolicyArgs(
+                    cors_policy=azure_native.app.CorsPolicyArgs(
                         allow_credentials=True,
                         allowed_origins=["*"],
                         allowed_headers=["*"],
                     ),
                 ),
                 registries=[
-                    azure_native.app.v20230501.RegistryCredentialsArgs(
+                    azure_native.app.RegistryCredentialsArgs(
                         server=acr_login_server,
                         username=acr_username,
                         password_secret_ref="registry-pwd",
@@ -111,24 +109,24 @@ class ContainerApp(pulumi.ComponentResource):
                 ],
                 secrets=_secrets,
             ),
-            template=azure_native.app.v20230501.TemplateArgs(
+            template=azure_native.app.TemplateArgs(
                 containers=[
-                    azure_native.app.v20230501.ContainerArgs(
+                    azure_native.app.ContainerArgs(
                         name=container_name,
                         image=latest_image,
-                        resources=azure_native.app.v20230501.ContainerResourcesArgs(
+                        resources=azure_native.app.ContainerResourcesArgs(
                             cpu=cpu, memory=memory
                         ),
                         env=environment_variables,
                     )
                 ],
-                scale=azure_native.app.v20230501.ScaleArgs(
+                scale=azure_native.app.ScaleArgs(
                     min_replicas=min_replicas,
                     max_replicas=max_replicas,
                     rules=[
-                        azure_native.app.v20230501.ScaleRuleArgs(
+                        azure_native.app.ScaleRuleArgs(
                             name="http-scaler",
-                            custom=azure_native.app.v20230501.CustomScaleRuleArgs(
+                            custom=azure_native.app.CustomScaleRuleArgs(
                                 metadata={"concurrentRequests": "4"}, type="http"
                             ),
                         )

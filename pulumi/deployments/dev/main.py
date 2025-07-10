@@ -48,7 +48,7 @@ class DevDeployment:
             "QDRANT-WORKAROUNDS-READ-KEY"
         )
         qdrant_full_access_key = config.require_secret("QDRANT-FULL-ACCESS-KEY")
-        login_required = config.require('AUTH_LOGIN_REQUIRED')
+        login_required = config.require("AUTH_LOGIN_REQUIRED")
 
         ApplicationRegistration(
             name=f"{self.project_name}-{self.environment}",
@@ -169,32 +169,32 @@ class DevDeployment:
         )
 
         secrets = [
-            azure_native.app.v20230501.SecretArgs(
+            azure_native.app.SecretArgs(
                 name=openai_key_secret_name,
                 key_vault_url=openai_key_secret.properties.secret_uri,
                 identity=managed_identity.identity.id,
             ),
-            azure_native.app.v20230501.SecretArgs(
+            azure_native.app.SecretArgs(
                 name=app_secret_key_name,
                 key_vault_url=app_secret_key_secret.properties.secret_uri,
                 identity=managed_identity.identity.id,
             ),
-            azure_native.app.v20230501.SecretArgs(
+            azure_native.app.SecretArgs(
                 name=wa_password_hash_name,
                 key_vault_url=wa_password_hash_secret.properties.secret_uri,
                 identity=managed_identity.identity.id,
             ),
-            azure_native.app.v20230501.SecretArgs(
+            azure_native.app.SecretArgs(
                 name=admin_password_hash_name,
                 key_vault_url=admin_password_hash_secret.properties.secret_uri,
                 identity=managed_identity.identity.id,
             ),
-            azure_native.app.v20230501.SecretArgs(
+            azure_native.app.SecretArgs(
                 name=qdrant_workarounds_read_key_name,
                 key_vault_url=qdrant_workarounds_read_key_secret.properties.secret_uri,
                 identity=managed_identity.identity.id,
             ),
-            azure_native.app.v20230501.SecretArgs(
+            azure_native.app.SecretArgs(
                 name=qdrant_full_access_key_name,
                 key_vault_url=qdrant_full_access_key_secret.properties.secret_uri,
                 identity=managed_identity.identity.id,
@@ -202,55 +202,50 @@ class DevDeployment:
         ]
 
         environment_variables = [
-            azure_native.app.v20230501.EnvironmentVarArgs(
+            azure_native.app.EnvironmentVarArgs(
                 name="AZURE_OPENAI_API_KEY", secret_ref=openai_key_secret_name
             ),
-            azure_native.app.v20230501.EnvironmentVarArgs(
+            azure_native.app.EnvironmentVarArgs(
                 name="APPSECRETKEY", secret_ref=app_secret_key_name
             ),
-            azure_native.app.v20230501.EnvironmentVarArgs(
+            azure_native.app.EnvironmentVarArgs(
                 name="WAPASSWORDHASH", secret_ref=wa_password_hash_name
             ),
-            azure_native.app.v20230501.EnvironmentVarArgs(
+            azure_native.app.EnvironmentVarArgs(
                 name="ADMINPASSWORDHASH", secret_ref=admin_password_hash_name
             ),
-            azure_native.app.v20230501.EnvironmentVarArgs(
+            azure_native.app.EnvironmentVarArgs(
                 name="QDRANT_WORKAROUNDS_READ_KEY",
                 secret_ref=qdrant_workarounds_read_key_name,
             ),
-            azure_native.app.v20230501.EnvironmentVarArgs(
+            azure_native.app.EnvironmentVarArgs(
                 name="QDRANT_FULL_ACCESS_KEY",
                 secret_ref=qdrant_full_access_key_name,
             ),
-            azure_native.app.v20230501.EnvironmentVarArgs(
+            azure_native.app.EnvironmentVarArgs(
                 name="AZURE_OPENAI_API_URL", value=openai_url
             ),
-            azure_native.app.v20230501.EnvironmentVarArgs(
-                name="WAUSERNAME", value=wa_username
-            ),
-            azure_native.app.v20230501.EnvironmentVarArgs(
+            azure_native.app.EnvironmentVarArgs(name="WAUSERNAME", value=wa_username),
+            azure_native.app.EnvironmentVarArgs(
                 name="DAILYCOSTTHRESHOLD", value=daily_cost_threshold
             ),
-            azure_native.app.v20230501.EnvironmentVarArgs(
-                name="QDRANT_URL", value=qdrant_url
-            ),
-            azure_native.app.v20230501.EnvironmentVarArgs(
+            azure_native.app.EnvironmentVarArgs(name="QDRANT_URL", value=qdrant_url),
+            azure_native.app.EnvironmentVarArgs(
                 name="AZURE_OPENAI_API_VERSION",
                 value=openai_version if openai_version else "v1",
             ),
-            azure_native.app.v20230501.EnvironmentVarArgs(
+            azure_native.app.EnvironmentVarArgs(
                 name="AZURE_OPENAI_CHAT_MODEL",
                 value=chat_model,
             ),
-            azure_native.app.v20230501.EnvironmentVarArgs(
+            azure_native.app.EnvironmentVarArgs(
                 name="AZURE_OPENAI_EMBEDDING_MODEL",
                 value=embedding_model,
             ),
-            azure_native.app.v20230501.EnvironmentVarArgs(
+            azure_native.app.EnvironmentVarArgs(
                 name="AUTH_LOGIN_REQUIRED",
                 value=login_required,
-            )
-            
+            ),
         ]
 
         ContainerApp(
