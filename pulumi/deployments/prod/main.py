@@ -1,4 +1,9 @@
-import pulumi
+import pulumi_azure_native as azure_native
+from analytics_workspace.alerts import (
+    create_action_group,
+    create_cpu_usage_alert,
+    create_requests_alert,
+)
 from analytics_workspace.workspace import AnalyticsWorkspace
 from application.application_registration import ApplicationRegistration
 from container_apps.container_app import ContainerApp
@@ -7,7 +12,8 @@ from container_registry.acr import ContainerRegistry
 from key_vaults.key_vault import KeyVault
 from key_vaults.secret import create_secret
 from managed_identity.identity import Identity
-import pulumi_azure_native as azure_native
+
+import pulumi
 
 HOSTNAME = "brainstormer.cwa.viadee.cloud"
 
@@ -247,7 +253,7 @@ class ProdDeployment:
             ),
         ]
 
-        ContainerApp(
+        container_app = ContainerApp(
             name=f"{self.project_name}-{self.environment}",
             project_name=self.project_name,
             resource_group_name=self.rg_name,
@@ -266,5 +272,33 @@ class ProdDeployment:
             certificate_id=f"/subscriptions/{self.subscription_id}/resourceGroups/{self.rg_name}/providers/Microsoft.App/managedEnvironments/wa-brainstormer-container-app-environment-prod/managedCertificates/brainstormer.cwa.viadee.clou-wa-brain-250429061001",
             environment_variables=environment_variables,
             secrets=secrets,
+            opts=self.opts,
+        )
+
+        action_group = create_action_group(
+            name=f"{self.project_name}-{self.environment}-action-group",
+            rg_name=self.rg_name,
+            location="germanywestcentral",
+            group_short_name="bs-ag",
+            opts=self.opts,
+        )
+
+        create_cpu_usage_alert(
+            name=f"{self.project_name}-{self.environment}-cpu-usage-alert",
+            rg_name=self.rg_name,
+            location="global",
+            threshold=70000000,
+            scopes=[container_app.container_app.id],
+            action_group=action_group,
+            opts=self.opts,
+        )
+
+        create_requests_alert(
+            name=f"{self.project_name}-{self.environment}-requests-alert",
+            rg_name=self.rg_name,
+            location="global",
+            threshold=100,
+            scopes=[container_app.container_app.id],
+            action_group=action_group,
             opts=self.opts,
         )
