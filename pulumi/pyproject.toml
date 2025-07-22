@@ -7,6 +7,6 @@ build-backend = "poetry.core.masonry.api"
 package-mode = false
 [tool.poetry.dependencies]
 pulumi = ">=3.0.0,<4.0.0"
-pulumi-azure-native = ">=2.0.0,<3.0.0"
+pulumi-azure-native = "3.5.1"
 python = "^3.9"
 pulumi-azuread = "^6.4.0"

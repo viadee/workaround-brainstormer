@@ -1,4 +1,9 @@
-import pulumi
+import pulumi_azure_native as azure_native
+from analytics_workspace.alerts import (
+    create_action_group,
+    create_cpu_usage_alert,
+    create_requests_alert,
+)
 from analytics_workspace.workspace import AnalyticsWorkspace
 from application.application_registration import ApplicationRegistration
 from container_apps.container_app import ContainerApp
@@ -7,7 +12,8 @@ from container_registry.acr import ContainerRegistry
 from key_vaults.key_vault import KeyVault
 from key_vaults.secret import create_secret
 from managed_identity.identity import Identity
-import pulumi_azure_native as azure_native
+
+import pulumi
 
 HOSTNAME = "brainstormer.cwa.viadee.cloud"
 
@@ -42,7 +48,7 @@ class ProdDeployment:
         daily_cost_threshold = config.require("DAILY-COST-THRESHOLD")
         chat_model = config.require("AZURE_OPENAI_CHAT_MODEL")
         embedding_model = config.require("AZURE_OPENAI_EMBEDDING_MODEL")
-        login_required = config.require('AUTH_LOGIN_REQUIRED')
+        login_required = config.require("AUTH_LOGIN_REQUIRED")
         qdrant_url = config.require("QDRANT-URL")
         qdrant_workarounds_read_key = config.require_secret(
             "QDRANT-WORKAROUNDS-READ-KEY"
@@ -168,32 +174,32 @@ class ProdDeployment:
         )
 
         secrets = [
-            azure_native.app.v20230501.SecretArgs(
+            azure_native.app.SecretArgs(
                 name=openai_key_secret_name,
                 key_vault_url=openai_key_secret.properties.secret_uri,
                 identity=managed_identity.identity.id,
             ),
-            azure_native.app.v20230501.SecretArgs(
+            azure_native.app.SecretArgs(
                 name=app_secret_key_name,
                 key_vault_url=app_secret_key_secret.properties.secret_uri,
                 identity=managed_identity.identity.id,
             ),
-            azure_native.app.v20230501.SecretArgs(
+            azure_native.app.SecretArgs(
                 name=wa_password_hash_name,
                 key_vault_url=wa_password_hash_secret.properties.secret_uri,
                 identity=managed_identity.identity.id,
             ),
-            azure_native.app.v20230501.SecretArgs(
+            azure_native.app.SecretArgs(
                 name=admin_password_hash_name,
                 key_vault_url=admin_password_hash_secret.properties.secret_uri,
                 identity=managed_identity.identity.id,
             ),
-            azure_native.app.v20230501.SecretArgs(
+            azure_native.app.SecretArgs(
                 name=qdrant_workarounds_read_key_name,
                 key_vault_url=qdrant_workarounds_read_key_secret.properties.secret_uri,
                 identity=managed_identity.identity.id,
             ),
-            azure_native.app.v20230501.SecretArgs(
+            azure_native.app.SecretArgs(
                 name=qdrant_full_access_key_name,
                 key_vault_url=qdrant_full_access_key_secret.properties.secret_uri,
                 identity=managed_identity.identity.id,
@@ -201,57 +207,53 @@ class ProdDeployment:
         ]
 
         environment_variables = [
-            azure_native.app.v20230501.EnvironmentVarArgs(
+            azure_native.app.EnvironmentVarArgs(
                 name="AZURE_OPENAI_API_KEY", secret_ref=openai_key_secret_name
             ),
-            azure_native.app.v20230501.EnvironmentVarArgs(
+            azure_native.app.EnvironmentVarArgs(
                 name="APPSECRETKEY", secret_ref=app_secret_key_name
             ),
-            azure_native.app.v20230501.EnvironmentVarArgs(
+            azure_native.app.EnvironmentVarArgs(
                 name="WAPASSWORDHASH", secret_ref=wa_password_hash_name
             ),
-            azure_native.app.v20230501.EnvironmentVarArgs(
+            azure_native.app.EnvironmentVarArgs(
                 name="ADMINPASSWORDHASH", secret_ref=admin_password_hash_name
             ),
-            azure_native.app.v20230501.EnvironmentVarArgs(
+            azure_native.app.EnvironmentVarArgs(
                 name="QDRANT_WORKAROUNDS_READ_KEY",
                 secret_ref=qdrant_workarounds_read_key_name,
             ),
-            azure_native.app.v20230501.EnvironmentVarArgs(
+            azure_native.app.EnvironmentVarArgs(
                 name="QDRANT_FULL_ACCESS_KEY",
                 secret_ref=qdrant_full_access_key_name,
             ),
-            azure_native.app.v20230501.EnvironmentVarArgs(
+            azure_native.app.EnvironmentVarArgs(
                 name="AZURE_OPENAI_API_URL", value=openai_url
             ),
-            azure_native.app.v20230501.EnvironmentVarArgs(
-                name="WAUSERNAME", value=wa_username
-            ),
-            azure_native.app.v20230501.EnvironmentVarArgs(
+            azure_native.app.EnvironmentVarArgs(name="WAUSERNAME", value=wa_username),
+            azure_native.app.EnvironmentVarArgs(
                 name="DAILYCOSTTHRESHOLD", value=daily_cost_threshold
             ),
-            azure_native.app.v20230501.EnvironmentVarArgs(
-                name="QDRANT_URL", value=qdrant_url
-            ),
-            azure_native.app.v20230501.EnvironmentVarArgs(
+            azure_native.app.EnvironmentVarArgs(name="QDRANT_URL", value=qdrant_url),
+            azure_native.app.EnvironmentVarArgs(
                 name="AZURE_OPENAI_API_VERSION",
                 value=openai_version if openai_version else "v1",
             ),
-                        azure_native.app.v20230501.EnvironmentVarArgs(
+            azure_native.app.EnvironmentVarArgs(
                 name="AZURE_OPENAI_CHAT_MODEL",
                 value=chat_model,
             ),
-            azure_native.app.v20230501.EnvironmentVarArgs(
+            azure_native.app.EnvironmentVarArgs(
                 name="AZURE_OPENAI_EMBEDDING_MODEL",
                 value=embedding_model,
             ),
-            azure_native.app.v20230501.EnvironmentVarArgs(
+            azure_native.app.EnvironmentVarArgs(
                 name="AUTH_LOGIN_REQUIRED",
                 value=login_required,
             ),
         ]
 
-        ContainerApp(
+        container_app = ContainerApp(
             name=f"{self.project_name}-{self.environment}",
             project_name=self.project_name,
             resource_group_name=self.rg_name,
@@ -270,5 +272,33 @@ class ProdDeployment:
             certificate_id=f"/subscriptions/{self.subscription_id}/resourceGroups/{self.rg_name}/providers/Microsoft.App/managedEnvironments/wa-brainstormer-container-app-environment-prod/managedCertificates/brainstormer.cwa.viadee.clou-wa-brain-250429061001",
             environment_variables=environment_variables,
             secrets=secrets,
+            opts=self.opts,
+        )
+
+        action_group = create_action_group(
+            name=f"{self.project_name}-{self.environment}-action-group",
+            rg_name=self.rg_name,
+            location="germanywestcentral",
+            group_short_name="bs-ag",
+            opts=self.opts,
+        )
+
+        create_cpu_usage_alert(
+            name=f"{self.project_name}-{self.environment}-cpu-usage-alert",
+            rg_name=self.rg_name,
+            location="global",
+            threshold=150000000,
+            scopes=[container_app.container_app.id],
+            action_group=action_group,
+            opts=self.opts,
+        )
+
+        create_requests_alert(
+            name=f"{self.project_name}-{self.environment}-requests-alert",
+            rg_name=self.rg_name,
+            location="global",
+            threshold=500,
+            scopes=[container_app.container_app.id],
+            action_group=action_group,
             opts=self.opts,
         )
