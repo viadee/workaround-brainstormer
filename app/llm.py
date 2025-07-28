@@ -7,9 +7,10 @@ from flask import session
 from datetime import datetime, timedelta
 import logging
 import openai
-from flask import current_app, session, has_request_context
+from flask import current_app, has_request_context
 from .language_service import LanguageService
 from .prompts import PROMPTS, DEFAULT_FEW_SHOT_EXAMPLES
+from pydantic import BaseModel, create_model, Field
 
 # RAG dependencies
 from qdrant_client import QdrantClient
@@ -89,6 +90,17 @@ class ProcessContext:
 
     prompt_settings: PromptSettings = field(default_factory=PromptSettings)
 
+class Misfit(BaseModel):
+    label: str = Field(min_length=3)
+    text: str = Field(min_length=3)
+
+class Workaround(BaseModel):
+    workaround: str = Field(min_length=3)
+    challengeLabel: str = Field(min_length=3)
+
+class GenerateRolesResponse(BaseModel):
+    roles: list[str]
+
 class CostLimitExceeded(Exception):
     """Raised when daily API cost threshold is exceeded."""
     pass
@@ -116,7 +128,6 @@ class LLMService:
             api_version=api_version,
             azure_endpoint=azure_endpoint
         )
-        
         
         self.chat_model = current_app.config['AZURE_CHAT_MODEL']
         self.language_service = LanguageService()
@@ -236,13 +247,15 @@ class LLMService:
         key = "GenerateMisfitsPrompt"
         prompt = self._get_prompt(key, process, roles=roles)
         messages = self._create_messages(prompt, process)
+        parsed_roles = roles.split(",")
+        ResponseModel = create_model("misfit_response_model",**{field_name:(list[Misfit],...) for field_name in parsed_roles})
 
         try:
             completion = self.client.beta.chat.completions.parse(
                 model= self.chat_model,
                 messages=messages,
                 max_tokens=20000,
-                response_format={"type": "json_object"}
+                response_format=ResponseModel
             )
             self._log_api_call(
                 function="get_misfits",
@@ -262,13 +275,14 @@ class LLMService:
         key = "GenerateWorkaroundsPrompt"
         prompt = self._get_prompt(key, process, misfits=misfits)
         messages = self._create_messages(prompt, process)
-
+        parsed_misfits = json.loads(misfits)
+        ResponseModel = create_model("workaround_response_model",**{field_name:(list[Workaround],...) for field_name in parsed_misfits.keys()})
         try:
             completion = self.client.beta.chat.completions.parse(
                 model= self.chat_model,
                 messages=messages,
                 max_tokens=20000,
-                response_format={"type": "json_object"}
+                response_format=ResponseModel
             )
             self._log_api_call(
                 function="get_workarounds_from_misfits",
@@ -295,7 +309,7 @@ class LLMService:
                 model= self.chat_model,
                 messages=messages,
                 max_completion_tokens=10000,
-                response_format={"type": "json_object"}
+                response_format=GenerateRolesResponse
             )
             self._log_api_call(
                 function="get_roles",
