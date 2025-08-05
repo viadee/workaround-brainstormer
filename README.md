@@ -5,6 +5,8 @@ Workaround Brainstormer is a web application designed to facilitate the identifi
 
 It`s a generative AI approach that helps to identify workarounds in situations where no process data is available for process mining.
 
+You can try out the tool at the following link: **https://brainstormer.cwa.viadee.cloud/index.html**
+
 > [!NOTE]  
 > The tool was created as part of the [Change.WorkAROUND](https://www.changeworkaround.de) research project by the [viadee](https://www.viadee.de) Data & AI-Team. The project Change.WorkAROUND is supported by the German [BMBF](https://www.bmbf.de/) since 2023 in the ["Zukunft der Wertschöpfung"](https://www.zukunft-der-wertschoepfung.de) program with the goal to improve the abiblity to adapt and innovate in a dynamic context. 
 
