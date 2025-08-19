@@ -287,7 +287,7 @@ class ProdDeployment:
             name=f"{self.project_name}-{self.environment}-cpu-usage-alert",
             rg_name=self.rg_name,
             location="global",
-            threshold=150000000,
+            threshold=900000000,
             scopes=[container_app.container_app.id],
             action_group=action_group,
             opts=self.opts,
