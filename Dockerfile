@@ -11,14 +11,14 @@ RUN apt-get update && apt-get install -y \
     # Additional dependencies for SVG handling
     pkg-config \
     libpango1.0-dev \
-    libgdk-pixbuf2.0-dev \
+    libgdk-pixbuf-2.0-dev \
     libtiff5-dev \
     libxml2-dev \
     libxslt1-dev \
     # PDF handling dependencies
     poppler-utils \
     libpangocairo-1.0-0 \
-    libgdk-pixbuf2.0-0 \
+    libgdk-pixbuf-2.0-0 \
     shared-mime-info \
     # Tesseract OCR dependencies
     tesseract-ocr \
