@@ -14,4 +14,4 @@ rlPyCairo==0.3.0
 dotenv==0.9.9
 qdrant-client==1.14.2
 langchain-qdrant==0.2.0
-langchain-openai==0.3.18
+langchain-openai==1.0.0
