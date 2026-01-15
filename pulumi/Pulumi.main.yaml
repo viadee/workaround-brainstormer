@@ -8,7 +8,7 @@ config:
   brainstormer:AZURE-API-URL: https://cwa-azure-openai.openai.azure.com/
   brainstormer:AZURE_OPENAI_EMBEDDING_MODEL: text-embedding-3-small
   brainstormer:AZURE_OPENAI_CHAT_MODEL: gpt-4.1-mini
-  brainstormer:AUTH_LOGIN_REQUIRED: False
+  brainstormer:AUTH_LOGIN_REQUIRED: "false"
   brainstormer:APP-SECRET-KEY:
     secure: v1:1YU2t3uhyX3J0fNi:STwX2YmV7tbW+FSEm5RR8s0i/GVqgP1fQfTt+s3MO2I9GJosCzhDY0YxjilnXAL066RDcfQZ
   brainstormer:WA-PASSWORD-HASH:
@@ -22,10 +22,10 @@ config:
   brainstormer:subscription_id_dev: 884a05db-4240-4cd7-8077-005ed2d11c35
   brainstormer:subscription_id_prod: c831f919-0183-4e77-8f7b-70e03074768f
   brainstormer:AZURE-API-VERSION: 2024-12-01-preview
-  brainstormer:QDRANT-URL: https://940c8ec4-219e-4ced-9fef-2e9bf388e7ce.europe-west3-0.gcp.cloud.qdrant.io
+  brainstormer:QDRANT-URL: https://71da20bd-0a2b-4c58-ab96-7936ebdf9f66.europe-west3-0.gcp.cloud.qdrant.io
   brainstormer:QDRANT-WORKAROUNDS-READ-KEY:
-    secure: v1:IEWd5wCB7+CD97q6:RgYryq9NRiXyawoR0RwwmjgamPPlyPPde/UKgSDhPm4bpvyB4DlypFdCV0KTCEy+HbZCZlVmhk3dnA5G0jX1ow6vOj3z49qRu8JGmwPVHeMV1/eH2KIKkTworQjuR2/QyEBlBJSCADPnLHLj81O11aDim8Ay6P8d681HVjoYTzl1xFmJlz+PVhR8aoBLera3lzTw49xS1hAe9+bTiIOrNJC1K2qkp++QNRhj
+    secure: v1:JsZ0xjqwphl1NEUv:ZYLL75BqJ86n9yj7hbxvPZAbIZ2k4B4CUetqv4zr3N5cPOk9qdOZW0AT75iQJX9YHtVxxEsDlgyGDcmfe1N7E8f6uI76ps2PmgsZ9owhuPc/j5A7M8090eFZqy4rZsoMhrr5TDPymUTpkLV6U5qPiRT9M0Y=
   brainstormer:QDRANT-FULL-ACCESS-KEY:
-    secure: v1:rmbw0aY41usTZs+O:R+0Gk1TJO+3BfjvmuhNLYBFFWjB5ytsFlfSszh/+NilDR5KCKt8jMCoBoWRkZIqDIJMFD/gOzm+5jQhWqjTtP7NiShY7GMVMVQQFNvB5xzDwpsJYNjahdCeh17pMfepwyv0hFvuseku/phNLgr/T83+P0q0=
+    secure: v1:+Fw7SGNw1A1R1Y4V:HjYWcW2FGcUTsHF3/ucuPuVUbSlKDPplFnArc3lIUOqYYxZWf6MLh+t+7m7n7AemqHH2fGF9P0lJpBBe2Lj+iHJDP9Jmpccl0udbKT+Zg1eKt8iVSUbqgQXHyA7Wy3ejKciHKf3fA1ovMOqxrWkIiEskvqM=
   pulumi:tags:
     pulumi:template: azure-python
