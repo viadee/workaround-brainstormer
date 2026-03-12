@@ -1,0 +1,25 @@
+[project]
+name = "workaround-brainstormer"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10, <3.14"
+dependencies = [
+    "aiohttp==3.11.16",
+    "dotenv==0.9.9",
+    "flask==3.1.1",
+    "flask-limiter==3.12",
+    "langchain-openai==0.3.18",
+    "langchain-qdrant==0.2.0",
+    "langdetect==1.0.9",
+    "numpy==2.2.4",
+    "openai==1.82.1",
+    "pdf2image==1.17.0",
+    "pillow==11.2.1",
+    "pytesseract==0.3.13",
+    "python-dotenv==1.1.0",
+    "qdrant-client==1.16.2",
+    "reportlab==4.4.1",
+    "rlpycairo==0.3.0",
+    "werkzeug==3.1.3",
+]
