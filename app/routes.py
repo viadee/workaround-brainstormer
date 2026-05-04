@@ -320,12 +320,16 @@ def generateRoles():
         
         # API call timing
         api_call_start = time.time()
-        roles = llm_service.get_roles(process)
+        try:
+            roles = llm_service.get_roles(process)
+        except Exception as e:
+            current_app.logger.error(f"FATAL: get_roles failed with exception: {type(e).__name__}: {str(e)}", exc_info=True)
+            return jsonify({'error': f'Failed to generate roles: {str(e)}'}), 500
         api_call_end = time.time()
         
         session['roles'] = roles
         
-        current_app.logger.info("Successfully generated roles")
+        current_app.logger.info(f"Successfully generated {len(roles)} roles: {roles}")
         response = jsonify(roles)
         
         # Add all timing headers including file processing if present
@@ -634,12 +638,14 @@ def retreive_similar_few_shot_examples():
         data = request.get_json()
         process_description = data.get('process_description', {})
 
-        # If Qdrant credentials are not provided, return service not availiable response.
+        # If Qdrant credentials are not provided, gracefully return empty results
         if not current_app.config['QDRANT_URL'] or not current_app.config['QDRANT_WORKAROUNDS_READ_KEY']:
+            current_app.logger.info("Qdrant Vector DB not configured, falling back to default few-shot examples.")
             return jsonify({
-                'status':'failure',
-                'error': 'Qdrant Vector DB not setup. Standard few-shot examples are loaded.'
-            }), 503
+                'status': 'success',
+                'data': [],
+                'message': 'Qdrant Vector DB not configured. Using default few-shot examples.'
+            }), 200
 
         rag_service = RAGService(session_id=session.get('id'))
         retreived_similar_workarounds = rag_service.retreive_similar_workarounds(process_description=process_description)

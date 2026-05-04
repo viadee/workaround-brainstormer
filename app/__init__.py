@@ -34,7 +34,7 @@ def create_app(testing: bool = False) -> Flask:
         TESTING=testing,
         # OpenAI settings
         AZURE_API_KEY=os.getenv('AZURE_OPENAI_API_KEY'),
-        AZURE_API_VERSION=os.getenv('AZURE_OPENAI_API_VERSION', '2023-12-01-preview'),
+        AZURE_API_VERSION=os.getenv('AZURE_OPENAI_API_VERSION', '2024-08-01-preview'),
         AZURE_API_URL=os.getenv('AZURE_OPENAI_API_URL'),
         AZURE_CHAT_MODEL=os.getenv('AZURE_OPENAI_CHAT_MODEL'),
         AZURE_EMBEDDING_MODEL=os.getenv('AZURE_OPENAI_EMBEDDING_MODEL'),
@@ -46,6 +46,16 @@ def create_app(testing: bool = False) -> Flask:
         QDRANT_WORKAROUNDS_READ_KEY = os.getenv('QDRANT_WORKAROUNDS_READ_KEY'),
         # Add logs directory to config
         LOGS_DIR=os.path.join(PROJECT_ROOT, 'logs')
+    )
+
+    # Temporary: log resolved Azure config for debugging (remove after fixing auth)
+    _key = app.config.get('AZURE_API_KEY') or ''
+    _url = app.config.get('AZURE_API_URL') or ''
+    _ver = app.config.get('AZURE_API_VERSION') or ''
+    _model = app.config.get('AZURE_CHAT_MODEL') or ''
+    app.logger.warning(
+        f"[DEBUG] Azure config — key: {_key[:6]}...{_key[-4:]} ({len(_key)} chars) | "
+        f"url: {_url!r} | version: {_ver!r} | model: {_model!r}"
     )
 
     # Ensure upload and log directories exist

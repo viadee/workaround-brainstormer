@@ -165,6 +165,10 @@ class App {
         }
         this.apiService.setFormData(formData)
         try {
+            console.log('[Main] Starting createInitialStructure');
+            console.log('[Main] Process description:', description);
+            console.log('[Main] Additional context:', additionalContext);
+            
             const { roles, rolesData } = await this.expandRootNodeWithRoles(rootNode)
            
             formData.append('roles',rolesData)
@@ -176,7 +180,8 @@ class App {
             const {workaroundData, workarounds } = await this.expandMisfitNodesWithWorkarounds(misfits)
 
         } catch (error) {
-            console.error('Error creating initial structure:', error);
+            console.error('[Main] Error creating initial structure:', error);
+            console.error('[Main] Error stack:', error.stack);
             alert(error.message || 'Error retrieving initial workarounds.');
         } finally {
             this.spinner.style.display = "none";
@@ -210,8 +215,11 @@ class App {
         return { misfitsData: misfitData, misfits: misfitNodes }
     }
     async expandRootNodeWithRoles(rootNode){
-        const rolesData = await this.apiService.getRoles(this.graphManager.promptExtensions.getRolesPromptContext())
-        let roles = []
+        console.log('[Main] Calling getRoles...');
+        try {
+            const rolesData = await this.apiService.getRoles(this.graphManager.promptExtensions.getRolesPromptContext())
+            console.log('[Main] getRoles succeeded, data:', rolesData);
+            let roles = []
             rolesData.forEach(role => {
                 const childNode = {
                     text:role,
@@ -227,6 +235,10 @@ class App {
 
             this.updateUI();
             return {rolesData: rolesData, roles: roles}
+        } catch (error) {
+            console.error('[Main] expandRootNodeWithRoles failed:', error);
+            throw error;
+        }
     }
     async expandMisfitNodesWithWorkarounds(misfits){
         const misfitsData = {}

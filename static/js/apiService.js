@@ -14,21 +14,34 @@ class ApiService {
     }
 
     async #post(endpoint) {
+        console.log(`[API] POST to ${endpoint}`);
+        console.log('[API] FormData contents:', Object.fromEntries(this.formData.entries()));
+        
         const response = await fetch(`${this.baseUrl}${endpoint}`, {
             method: 'POST',
             body: this.formData,
         })
         
+        console.log(`[API] Response status: ${response.status} ${response.statusText}`);
+        console.log('[API] Response headers:', Object.fromEntries(response.headers.entries()));
+        
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            const errorText = await response.text();
+            console.error(`[API] HTTP error response body: ${errorText}`);
+            throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
         }
 
         const data = await response.json()
+        console.log('[API] Response data type:', typeof data, 'is array:', Array.isArray(data));
+        console.log('[API] Response data:', data);
+        
         if (data.error) {
+            console.error('[API] Backend error:', data.error);
             throw new Error("Error fetching api: " + data.error)
         }
         // flask backend returns [] in llm.py if internal or connection errors occur 
         if(Array.isArray(data) && data.length == 0){
+            console.error('[API] Empty array response from backend (likely OpenAI API error or misconfiguration)');
             throw new Error("Error fetching API. This usually occurs due to a connection or internal server error.")
         }
         if(response.headers.get('X-Language') != null){
@@ -39,16 +52,24 @@ class ApiService {
     }
 
     async getRoles(additional_context = null, quantity = 3) {
-
+        console.log('[API] getRoles called with:', { additional_context, quantity });
+        
         if (additional_context) {
-            this.formData.set('additional_context',additional_context)
+            this.formData.set('additional_context', additional_context)
         }
 
         if (quantity) {
             this.formData.set('roles_quantity', quantity)
         }
-        return await this.#post('/generateRoles')
-
+        
+        try {
+            const result = await this.#post('/generateRoles');
+            console.log('[API] getRoles succeeded');
+            return result;
+        } catch (error) {
+            console.error('[API] getRoles failed:', error);
+            throw error;
+        }
     }
 
     async getMisfits(roles, additional_context = null, quantity = 2) {

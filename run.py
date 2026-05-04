@@ -3,7 +3,7 @@ from dotenv import load_dotenv, find_dotenv
 from app import create_app
 
 # Load environment variables
-load_dotenv(find_dotenv())
+load_dotenv(find_dotenv(), override=True)
 
 ## required environment variables
 # AZUREAPIKEY
