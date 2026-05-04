@@ -30,9 +30,9 @@ https://github.com/user-attachments/assets/dd0d4a32-e647-4089-b7b8-37ae73847dd8
 ## Installation
 
 1. Clone this repository and create a python virtual environment
-2. Install the requirements.txt
+2. Install the dependencies
 ``` 
-    pip install -r requirements.txt
+    pip install .
 ``` 
 3. Create a .env file based on the .envtemplate and set you variables
 
@@ -42,9 +42,9 @@ https://github.com/user-attachments/assets/dd0d4a32-e647-4089-b7b8-37ae73847dd8
 ``` 
 5. Or run a production server
 ``` 
-    pip install uwsgi
+    pip install gunicorn
    
-    uwsgi --http 0.0.0.0:5000 --module run:app --master --processes 4 --threads 2
+    gunicorn run:app --workers=4 --bind 0.0.0.0:5000
 ``` 
     
 # Acknowledgements

@@ -42,9 +42,9 @@ RUN mkdir -p /app/logs /app/temp_uploads && \
     chown -R appuser:appgroup /app/logs && \
     chown -R appuser:appgroup /app/temp_uploads
 
-# Copy requirements first for better caching
-COPY --chown=appuser:appgroup requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy pyproject.toml first for better caching
+COPY --chown=appuser:appgroup pyproject.toml .
+RUN pip install --no-cache-dir .
 
 # Install Gunicorn
 RUN pip install --no-cache-dir gunicorn
