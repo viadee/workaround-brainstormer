@@ -1,5 +1,8 @@
 FROM python:3.11-slim
 
+# Install uv
+RUN pip install uv
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     gcc \
@@ -44,10 +47,7 @@ RUN mkdir -p /app/logs /app/temp_uploads && \
 
 # Copy pyproject.toml first for better caching
 COPY --chown=appuser:appgroup pyproject.toml .
-RUN pip install --no-cache-dir .
-
-# Install Gunicorn
-RUN pip install --no-cache-dir gunicorn
+RUN uv pip install --system --no-cache-dir -r pyproject.toml gunicorn
 
 # Copy the application code
 COPY --chown=appuser:appgroup app app/
