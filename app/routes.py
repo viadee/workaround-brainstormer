@@ -31,13 +31,16 @@ def add_timing_headers(response, **kwargs):
     return response
 
 
-def get_ui_language() -> str:
-    """Return the active UI language for the current request.
+def resolve_ui_language() -> str:
+    """Resolve and cache the active UI language for the current request.
 
     Priority order:
     1. Value stored in the Flask session (user has explicitly switched language).
     2. Browser's Accept-Language header (first EN or DE match).
     3. Fall back to DEFAULT_LANGUAGE ('en').
+
+    The resolved language is cached in the session so subsequent requests
+    within the same session skip the header inspection.
     """
     # 1. Explicit session preference
     if 'ui_language' in session and session['ui_language'] in SUPPORTED_LANGUAGES:
@@ -134,7 +137,7 @@ def index():
 def brainstormer():
     """Render main application page."""
     current_app.logger.info("Rendering index for: %s", session.get('username'))
-    lang = get_ui_language()
+    lang = resolve_ui_language()
     return render_template(
         'index.html',
         login_is_required=current_app.config['AUTH_LOGIN_REQUIRED'],
@@ -152,7 +155,7 @@ def brainstormer():
 @login_required
 @admin_required
 def admin():
-    lang = get_ui_language()
+    lang = resolve_ui_language()
     return render_template(
         'admin.html',
         app_version=current_app.config['APP_VERSION'],
