@@ -1,6 +1,14 @@
 :root {
-    --border-color-grey: #ccc;
-    --background-color-white: #f0f0f0;
-    --background-color-grey: #aaa;
-    --green: #45a049
+    --border-color-grey: #ddd;
+    --background-color-white: #ffffff;
+    --background-color-grey: #f5f5f5;
+    /* viadee brand colors */
+    --viadee-primary: #FF5546;
+    --viadee-primary-dark: #E03D30;
+    --viadee-primary-light: #fff0ee;
+    --viadee-secondary: #642864;
+    --viadee-secondary-light: #f5eef5;
+    --font-primary: "DINNextLTPro", Arial, sans-serif;
+    /* legacy alias */
+    --green: #FF5546;
 }
