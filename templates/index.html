@@ -8,8 +8,7 @@
 <div id="map-container">
     <div class="spinner" id="map-spinner"></div>
     <div id="instructions">
-        Left click to expand node.<br>
-        Right click to open context menu.
+        {{ t.map_instructions | safe }}
     </div>
     <div id="app-version">App Version: {{ app_version }}</div>
 </div>
@@ -24,7 +23,7 @@
     <div id="input-container">
         <h2>
             <span class="header-text">
-                <i class="fas fa-sitemap"></i> Process Description
+                <i class="fas fa-sitemap"></i> {{ t.process_description }}
             </span>
             <span class="icon-container">
                 <i class="fas fa-cog" id="settings-icon"></i>
@@ -39,15 +38,15 @@
             <textarea 
                 id="process-input" 
                 class="process-textarea"
-                placeholder="Type your process description here..."
+                placeholder="{{ t.process_textarea_placeholder }}"
             ></textarea>
         
             <!-- Instructions Overlay -->
             <div class="overlay-placeholder" id="overlay-placeholder">
                 <div class="upload-instructions">
                     <i class="fas fa-file-upload upload-icon"></i>
-                    <p class="drag-drop-text">Drag & drop a process diagram here</p>
-                    <p class="browse-text">or <a href="#" id="browse-link" class="browse-link">click to browse</a></p>
+                    <p class="drag-drop-text">{{ t.drag_drop_text }}</p>
+                    <p class="browse-text">{{ t.browse_or }} <a href="#" id="browse-link" class="browse-link">{{ t.browse_link }}</a></p>
                 </div>
             </div>
         
@@ -71,26 +70,26 @@
 
         <div id="context-hint" class="context-hint" style="display: none;">
             <i class="fas fa-lightbulb"></i>
-            <span>Click the <i class="fas fa-cog"></i> icon to add more context about your process!</span>
+            <span>{{ t.context_hint }}</span>
         </div>
 
         <!-- Expert panel (toggled via settings icon) -->
         <div id="expert-panel">
-            <h3>Additional Context</h3>
+            <h3>{{ t.additional_context }}</h3>
             <textarea 
                 id="additional-context" 
-                placeholder="Enter additional context about the company or process"
+                placeholder="{{ t.additional_context_placeholder }}"
                 style="width: 100%; min-height: 100px;"
             ></textarea>
             <!-- Nicely styled button to open the few–shot editor -->
-            <button id="edit-few-shot-btn" type="button" class="edit-btn">Edit Few Shot Examples</button>
+            <button id="edit-few-shot-btn" type="button" class="edit-btn">{{ t.edit_few_shot_btn }}</button>
         </div>
 
         <!-- Modal for editing few-shot examples -->
         <div id="few-shot-modal" class="modal">
             <div class="modal-content">
             <span class="close-modal">&times;</span>
-            <h3>Edit Few Shot Examples</h3>
+            <h3>{{ t.few_shot_modal_title }}</h3>
             
             <!-- Language tabs (using short labels) -->
             <div id="language-tabs" style="margin-bottom:10px;">
@@ -111,7 +110,7 @@
 
             <!-- Button for retreiving similar workarounds -->
             <div class="few-shot-row add-row">
-                <button id="retreive-similar-few-shot-btn" type="button" class="edit-btn">Retreive similar Few Shot Examples</button>
+                <button id="retreive-similar-few-shot-btn" type="button" class="edit-btn">{{ t.retrieve_few_shot_btn }}</button>
             </div>
             
             <!-- Inline feedback message -->
@@ -120,17 +119,17 @@
         </div>
 
         <!-- Start button -->
-        <button id="start-button">Generate Workarounds</button>
+        <button id="start-button">{{ t.generate_workarounds }}</button>
     </div>
 
     <!-- Info Container: Workaround List -->
     <div id="info-container">
         <h2>
             <span class="header-text">
-                <i class="fas fa-list"></i> Workaround List
+                <i class="fas fa-list"></i> {{ t.workaround_list }}
             </span>
             <span class="icon-container">
-                <a href="#" id="download-btn" class="download-icon" title="Download Workarounds">
+                <a href="#" id="download-btn" class="download-icon" title="{{ t.download_workarounds }}">
                     <svg xmlns="http://www.w3.org/2000/svg"
                          width="24" height="24" viewBox="0 0 24 24"
                          fill="none" stroke="currentColor"

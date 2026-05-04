@@ -15,6 +15,7 @@ from .utils import save_uploaded_file, process_image, format_workarounds_tree
 from .llm import LLMService, ProcessContext, CostLimitExceeded, RAGService, PromptSettings, PromptSettings
 import logging
 from .limiter import limiter
+from .translations import get_translations, SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE
 
 # Create blueprints
 auth_bp = Blueprint('auth', __name__)
@@ -28,6 +29,40 @@ def add_timing_headers(response, **kwargs):
     for key, value in kwargs.items():
         response.headers[f'X-{key}'] = str(value)
     return response
+
+
+def get_ui_language() -> str:
+    """Return the active UI language for the current request.
+
+    Priority order:
+    1. Value stored in the Flask session (user has explicitly switched language).
+    2. Browser's Accept-Language header (first EN or DE match).
+    3. Fall back to DEFAULT_LANGUAGE ('en').
+    """
+    # 1. Explicit session preference
+    if 'ui_language' in session and session['ui_language'] in SUPPORTED_LANGUAGES:
+        return session['ui_language']
+
+    # 2. Browser preference
+    accept_language = request.headers.get('Accept-Language', '')
+    for part in accept_language.replace(' ', '').split(','):
+        lang_tag = part.split(';')[0].lower()
+        lang_code = lang_tag[:2]
+        if lang_code in SUPPORTED_LANGUAGES:
+            session['ui_language'] = lang_code
+            return lang_code
+
+    # 3. Default
+    session['ui_language'] = DEFAULT_LANGUAGE
+    return DEFAULT_LANGUAGE
+
+
+@main_bp.route('/set_language/<lang>')
+def set_language(lang: str):
+    """Persist a language choice in the session and redirect back."""
+    if lang in SUPPORTED_LANGUAGES:
+        session['ui_language'] = lang
+    return redirect(request.referrer or url_for('main.brainstormer'))
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -99,11 +134,14 @@ def index():
 def brainstormer():
     """Render main application page."""
     current_app.logger.info("Rendering index for: %s", session.get('username'))
+    lang = get_ui_language()
     return render_template(
         'index.html',
         login_is_required=current_app.config['AUTH_LOGIN_REQUIRED'],
         app_version=current_app.config['APP_VERSION'],
-        default_few_shot_examples=DEFAULT_FEW_SHOT_EXAMPLES
+        default_few_shot_examples=DEFAULT_FEW_SHOT_EXAMPLES,
+        t=get_translations(lang),
+        ui_language=lang,
     )
 
 
@@ -114,10 +152,13 @@ def brainstormer():
 @login_required
 @admin_required
 def admin():
+    lang = get_ui_language()
     return render_template(
         'admin.html',
         app_version=current_app.config['APP_VERSION'],
-         default_few_shot_examples=DEFAULT_FEW_SHOT_EXAMPLES
+        default_few_shot_examples=DEFAULT_FEW_SHOT_EXAMPLES,
+        t=get_translations(lang),
+        ui_language=lang,
     )
 
 
