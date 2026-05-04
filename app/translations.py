@@ -16,7 +16,7 @@ UI_STRINGS = {
         "drag_drop_text": "Drag & drop a process diagram here",
         "browse_or": "or",
         "browse_link": "click to browse",
-        "context_hint": "Click the icon to add more context about your process!",
+        "context_hint": 'Click the <i class="fas fa-cog"></i> icon to add more context about your process!',
         # Expert panel
         "additional_context": "Additional Context",
         "additional_context_placeholder": "Enter additional context about the company or process",
@@ -44,7 +44,7 @@ UI_STRINGS = {
         "drag_drop_text": "Prozessdiagramm hierher ziehen & ablegen",
         "browse_or": "oder",
         "browse_link": "Datei auswählen",
-        "context_hint": "Klicken Sie auf das Symbol, um weitere Informationen zu Ihrem Prozess hinzuzufügen!",
+        "context_hint": 'Klicken Sie auf das <i class="fas fa-cog"></i> Symbol, um weitere Informationen zu Ihrem Prozess hinzuzufügen!',
         # Expert panel
         "additional_context": "Zusätzlicher Kontext",
         "additional_context_placeholder": "Zusätzlichen Kontext zum Unternehmen oder Prozess eingeben",

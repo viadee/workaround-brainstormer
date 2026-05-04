@@ -59,10 +59,10 @@ def get_ui_language() -> str:
 
 @main_bp.route('/set_language/<lang>')
 def set_language(lang: str):
-    """Persist a language choice in the session and redirect back."""
+    """Persist a language choice in the session and redirect to the brainstormer page."""
     if lang in SUPPORTED_LANGUAGES:
         session['ui_language'] = lang
-    return redirect(request.referrer or url_for('main.brainstormer'))
+    return redirect(url_for('main.brainstormer'))
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
