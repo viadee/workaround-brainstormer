@@ -1,6 +1,6 @@
 <!-- templates/base.html -->
 <!DOCTYPE html>
-<html lang="{{ ui_language | default('en') }}">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,29 +28,21 @@
         <div class="top-buttons">
             {% if 'username' in session and login_is_required == True %}
             <a href="{{ url_for('auth.logout') }}" class="logout-button">
-                <i class="fas fa-sign-out-alt"></i> {{ t.logout }}
+                <i class="fas fa-sign-out-alt"></i> Logout
             </a>
             {% endif %}
             <a href="https://forms.office.com/e/TAbpUC1hTp" class="feedback-button" target="_blank">
-                <i class="fas fa-comment-dots feedback-icon"></i> {{ t.give_feedback }}
+                <i class="fas fa-comment-dots feedback-icon"></i> Give Feedback
             </a>
             <a href="{{ url_for('info.index') }}" class="">
-                <i class="fas"></i> {{ t.documentation }}
+                <i class="fas"></i> Documentation
             </a>
             {% if 'is_admin' in session and session['is_admin'] %}
                     <a href="{{ url_for('main.admin') }}" class="admin-button">
-                        {{ t.admin_console }}
+                        Admin Console
                     </a>
             {% endif %}
 
-            <!-- Language switcher -->
-            <div class="lang-switcher">
-                <a href="{{ url_for('main.set_language', lang='en') }}"
-                   class="lang-switcher-btn{% if ui_language == 'en' %} lang-switcher-btn--active{% endif %}">EN</a>
-                <span class="lang-switcher-sep">|</span>
-                <a href="{{ url_for('main.set_language', lang='de') }}"
-                   class="lang-switcher-btn{% if ui_language == 'de' %} lang-switcher-btn--active{% endif %}">DE</a>
-            </div>
         </div>
 
 

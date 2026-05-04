@@ -104,29 +104,10 @@ ul.task-list li input[type="checkbox"] {
   color: #bbb;
 }
 </style>
-
-<script>
-(function() {
-  // Only auto-redirect on first visit (no explicit preference stored)
-  if (!sessionStorage.getItem('lang-choice')) {
-    var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
-    for (var i = 0; i < langs.length; i++) {
-      var l = langs[i].toLowerCase().slice(0, 2);
-      if (l === 'de') {
-        sessionStorage.setItem('lang-choice', 'de');
-        window.location.replace('/index_de.html');
-        return;
-      }
-      if (l === 'en') break;
-    }
-    sessionStorage.setItem('lang-choice', 'en');
-  }
-})();
-</script>
 </head>
 
 <body class="nav-fixed quarto-light">
-<div class="lang-switcher-bar"><a href="/index.html" class="active">EN</a><span class="sep">|</span><a href="/index_de.html">DE</a></div>
+<div class="lang-switcher-bar"><a href="/index.html">EN</a><span class="sep">|</span><a href="/index_de.html" class="active">DE</a></div>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -146,7 +127,7 @@ ul.task-list li input[type="checkbox"] {
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
     <a class="nav-link" href="./brainstormer"> 
-<span class="menu-text"><a class="btn btn-secondary" style="margin-bottom: 12px" target="_blank" href="./brainstormer">Find Workarounds Now</a></span></a>
+<span class="menu-text"><a class="btn btn-secondary" style="margin-bottom: 12px" target="_blank" href="./brainstormer">Jetzt Workarounds finden</a></span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -166,27 +147,27 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#workaround-brainstormer" id="toc-workaround-brainstormer" class="nav-link active" data-scroll-target="#workaround-brainstormer">Workaround Brainstormer</a>
   <ul>
-  <li><a href="#beispiel-coffee-coders-inc." id="toc-beispiel-coffee-coders-inc." class="nav-link" data-scroll-target="#beispiel-coffee-coders-inc.">Example: Coffee Coders Inc.</a></li>
-  <li><a href="#forschungskontext" id="toc-forschungskontext" class="nav-link" data-scroll-target="#forschungskontext">Research Context</a>
+  <li><a href="#beispiel-coffee-coders-inc." id="toc-beispiel-coffee-coders-inc." class="nav-link" data-scroll-target="#beispiel-coffee-coders-inc.">Beispiel Coffee Coders Inc.</a></li>
+  <li><a href="#forschungskontext" id="toc-forschungskontext" class="nav-link" data-scroll-target="#forschungskontext">Forschungskontext</a>
   <ul class="collapse">
-  <li><a href="#workarounds-als-mittel-für-wettbewerbsfähigkeit" id="toc-workarounds-als-mittel-für-wettbewerbsfähigkeit" class="nav-link" data-scroll-target="#workarounds-als-mittel-für-wettbewerbsfähigkeit">Workarounds as a Driver of Competitiveness</a></li>
-  <li><a href="#wie-workarounds-finden" id="toc-wie-workarounds-finden" class="nav-link" data-scroll-target="#wie-workarounds-finden">How to Find Workarounds?</a></li>
-  <li><a href="#lösungsansatz-latente-workarounds-und-erste-erfahrungen" id="toc-lösungsansatz-latente-workarounds-und-erste-erfahrungen" class="nav-link" data-scroll-target="#lösungsansatz-latente-workarounds-und-erste-erfahrungen">Approach: Latent Workarounds and First Experiences</a></li>
-  <li><a href="#beispielhafte-nutzungsszenarien" id="toc-beispielhafte-nutzungsszenarien" class="nav-link" data-scroll-target="#beispielhafte-nutzungsszenarien">Exemplary Use Cases</a></li>
-  <li><a href="#ausblick-weiterentwicklung-des-brainstormers" id="toc-ausblick-weiterentwicklung-des-brainstormers" class="nav-link" data-scroll-target="#ausblick-weiterentwicklung-des-brainstormers">Outlook – Further Development of the Brainstormer</a></li>
+  <li><a href="#workarounds-als-mittel-für-wettbewerbsfähigkeit" id="toc-workarounds-als-mittel-für-wettbewerbsfähigkeit" class="nav-link" data-scroll-target="#workarounds-als-mittel-für-wettbewerbsfähigkeit">Workarounds als Mittel für Wettbewerbsfähigkeit</a></li>
+  <li><a href="#wie-workarounds-finden" id="toc-wie-workarounds-finden" class="nav-link" data-scroll-target="#wie-workarounds-finden">Wie Workarounds finden?</a></li>
+  <li><a href="#lösungsansatz-latente-workarounds-und-erste-erfahrungen" id="toc-lösungsansatz-latente-workarounds-und-erste-erfahrungen" class="nav-link" data-scroll-target="#lösungsansatz-latente-workarounds-und-erste-erfahrungen">Lösungsansatz: Latente Workarounds und erste Erfahrungen</a></li>
+  <li><a href="#beispielhafte-nutzungsszenarien" id="toc-beispielhafte-nutzungsszenarien" class="nav-link" data-scroll-target="#beispielhafte-nutzungsszenarien">Beispielhafte Nutzungsszenarien</a></li>
+  <li><a href="#ausblick-weiterentwicklung-des-brainstormers" id="toc-ausblick-weiterentwicklung-des-brainstormers" class="nav-link" data-scroll-target="#ausblick-weiterentwicklung-des-brainstormers">Ausblick – Weiterentwicklung des Brainstormers</a></li>
   </ul></li>
-  <li><a href="#benutzerhandbuch" id="toc-benutzerhandbuch" class="nav-link" data-scroll-target="#benutzerhandbuch">User Manual</a>
+  <li><a href="#benutzerhandbuch" id="toc-benutzerhandbuch" class="nav-link" data-scroll-target="#benutzerhandbuch">Benutzerhandbuch</a>
   <ul class="collapse">
-  <li><a href="#primäre-komponenten-der-benutzeroberfläche" id="toc-primäre-komponenten-der-benutzeroberfläche" class="nav-link" data-scroll-target="#primäre-komponenten-der-benutzeroberfläche">Primary UI Components</a></li>
-  <li><a href="#workarounds-generieren" id="toc-workarounds-generieren" class="nav-link" data-scroll-target="#workarounds-generieren">Generating Workarounds</a>
+  <li><a href="#primäre-komponenten-der-benutzeroberfläche" id="toc-primäre-komponenten-der-benutzeroberfläche" class="nav-link" data-scroll-target="#primäre-komponenten-der-benutzeroberfläche">Primäre Komponenten der Benutzeroberfläche</a></li>
+  <li><a href="#workarounds-generieren" id="toc-workarounds-generieren" class="nav-link" data-scroll-target="#workarounds-generieren">Workarounds generieren</a>
   <ul class="collapse">
-  <li><a href="#initiale-workarounds-generieren" id="toc-initiale-workarounds-generieren" class="nav-link" data-scroll-target="#initiale-workarounds-generieren">Generating Initial Workarounds</a></li>
-  <li><a href="#kind-workarounds-generieren" id="toc-kind-workarounds-generieren" class="nav-link" data-scroll-target="#kind-workarounds-generieren">Generating Child Workarounds</a></li>
+  <li><a href="#initiale-workarounds-generieren" id="toc-initiale-workarounds-generieren" class="nav-link" data-scroll-target="#initiale-workarounds-generieren">Initiale Workarounds generieren</a></li>
+  <li><a href="#kind-workarounds-generieren" id="toc-kind-workarounds-generieren" class="nav-link" data-scroll-target="#kind-workarounds-generieren">Kind-Workarounds generieren</a></li>
   </ul></li>
-  <li><a href="#workarounds-entfernen" id="toc-workarounds-entfernen" class="nav-link" data-scroll-target="#workarounds-entfernen">Removing Workarounds</a></li>
-  <li><a href="#zusätzlichen-kontext-hinzufügen" id="toc-zusätzlichen-kontext-hinzufügen" class="nav-link" data-scroll-target="#zusätzlichen-kontext-hinzufügen">Adding Additional Context</a></li>
-  <li><a href="#few-shot-examples-bearbeiten" id="toc-few-shot-examples-bearbeiten" class="nav-link" data-scroll-target="#few-shot-examples-bearbeiten">Editing Few-Shot Examples</a></li>
-  <li><a href="#eingebettete-workaround-beispiele-hinzufügen" id="toc-eingebettete-workaround-beispiele-hinzufügen" class="nav-link" data-scroll-target="#eingebettete-workaround-beispiele-hinzufügen">Adding Embedded Workaround Examples</a></li>
+  <li><a href="#workarounds-entfernen" id="toc-workarounds-entfernen" class="nav-link" data-scroll-target="#workarounds-entfernen">Workarounds entfernen</a></li>
+  <li><a href="#zusätzlichen-kontext-hinzufügen" id="toc-zusätzlichen-kontext-hinzufügen" class="nav-link" data-scroll-target="#zusätzlichen-kontext-hinzufügen">Zusätzlichen Kontext hinzufügen</a></li>
+  <li><a href="#few-shot-examples-bearbeiten" id="toc-few-shot-examples-bearbeiten" class="nav-link" data-scroll-target="#few-shot-examples-bearbeiten">Few-shot Examples bearbeiten</a></li>
+  <li><a href="#eingebettete-workaround-beispiele-hinzufügen" id="toc-eingebettete-workaround-beispiele-hinzufügen" class="nav-link" data-scroll-target="#eingebettete-workaround-beispiele-hinzufügen">Eingebettete Workaround-Beispiele hinzufügen</a></li>
   </ul></li>
   <li><a href="#faq" id="toc-faq" class="nav-link" data-scroll-target="#faq">FAQ</a></li>
   </ul></li>
@@ -201,12 +182,12 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="workaround-brainstormer" class="level1">
 <h1>Workaround Brainstormer</h1>
-<p><a href="https://blog.viadee.de/changeworkaround-projektstart" target="_blank">That workarounds occur in organizations is a fact.</a> But how can they be managed effectively? First, they need to be identified. <br> The <i>Workaround Brainstormer</i> helps process owners and other stakeholders uncover previously unknown, targeted deviations from a process and form plausible hypotheses. <br> To try out the tool, click the button below.</p>
-<p><a class="cta-button btn btn-secondary" target="_blank" href="./brainstormer">Find Workarounds Now</a></p>
+<p><a href="https://blog.viadee.de/changeworkaround-projektstart" target="_blank"> Dass Workarounds in Unternehmen stattfinden, steht fest.</a> Doch wie kann der Umgang mit diesen sinnvoll gestaltet werden? Zuerst gilt es sie zu identifizieren. <br> Der <i>Workaround Brainstormer</i> kann Process Owner:innen oder anderen Stakeholdern helfen noch unbekannte, zielgerichtete Abweichungen eines Prozesses aufzudecken und plausible Hyothesen zu bilden. <br> Um das Tool auszuprobieren, können Sie auf den folgenden Button klicken.</p>
+<p><a class="cta-button btn btn-secondary" target="_blank" href="./brainstormer">Jetzt Workarounds finden</a></p>
 <section id="beispiel-coffee-coders-inc." class="level2">
-<h2 class="anchored" data-anchor-id="beispiel-coffee-coders-inc.">Example: Coffee Coders Inc.</h2>
-<p>The input is a business process description (simplified here – a BPMN diagram would work too)</p>
-<div class="callout callout-style-default callout-note callout-titled" title="Simplified Process">
+<h2 class="anchored" data-anchor-id="beispiel-coffee-coders-inc.">Beispiel Coffee Coders Inc.</h2>
+<p>Input ist eine Beschreibung eines Geschäftsprozesses (hier stark vereinfacht - es könnte auch ein BPMN-Diagramm sein)</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Vereinfachter Prozess">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -217,29 +198,29 @@ Vereinfachter Prozess
 </div>
 <div class="callout-body-container callout-body">
 <blockquote class="blockquote">
-<p>… in IT consulting, we first gather customer requirements. Then we add coffee and create software solutions.</p>
+<p>… in der IT-Beratung nehmen wir erst Kundenanforderungen auf. Dann geben wir Kaffee hinzu und erstellen Software-Lösungen.</p>
 </blockquote>
 </div>
 </div>
-<p>The output is a set of <i>Workaround Stories</i> that are plausible within this business process:</p>
+<p>Als Output erhalten wir <i>Workaround-Stories</i> die in diesem Geschäftsprozess plausibel sind:</p>
 <div class="coffee-image">
 <div style="display: flex; flex-wrap:wrap; justify-content: flex-start">
 <div style="max-width:900px">
-<div class="callout callout-style-default callout-tip callout-titled" title="Workaround Stories">
+<div class="callout callout-style-default callout-tip callout-titled" title="Workaround-Stories">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Workaround Stories
+Workaround-Stories
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <ol type="1">
-<li>As a software developer, I am unproductive if the coffee machine breaks down. I therefore keep instant coffee in my desk to maintain my caffeine level.</li>
-<li>As a Scrum Master, my meetings are unproductive when a queue forms daily at the coffee machine. I therefore prepare filter coffee for everyone to reduce waiting time.</li>
-<li>As a software developer, I am unfocused when the coffee machine breaks down. I therefore switch to tea to meet my deadlines.</li>
-<li>As a software architect, I am unfocused when the coffee machine breaks down or the queue gets too long. I therefore prefer to work from home to be independent of the coffee machine and the queue.</li>
+<li>Als Software-Entwickler bin ich unproduktiv, falls die Kaffeemaschine kaputt ist. Ich habe daher Instant-Kaffee in meinem Schreibtisch bevorratet, um mein Koffein-Level abzusichern.</li>
+<li>Als Scrum-Masterin sind meine Meetings unproduktiv, wenn sich täglich eine Schlange an der Kaffeemaschine bildet. Ich bereite daher Filterkaffee für alle vor, um die Wartezeit zu verringern.</li>
+<li>Als Software-Entwicklerin bin ich unkonzentriert, falls die Kaffeemaschine ausfällt. Ich weiche daher auf Tee aus, um meine Deadlines zu erreichen.</li>
+<li>Als Software-Architektin bin ich unkonzentriert, falls die Kaffeemaschine ausfällt oder die Schlange vor der Maschine zu lang ist. Ich bleibe daher lieber im Homeoffice, um unabhängig von der Kaffeemaschine und der Warteschlange zu sein.</li>
 </ol>
 </div>
 </div>
@@ -247,76 +228,76 @@ Workaround Stories
 <p><img src="assets/Brainstormer_GIF.gif" style="margin-top: 38px" alt="An interesting GIF" width="400"></p>
 </div>
 </div>
-<p>We get an overview of the potentially involved people and their “Misfits” – i.e. concerns, challenges, and in particular external conditions that cause them to deviate from the target process. Some of these are undesirable (software architect working exclusively from home), while others can be the seed of an adapted target process (the strategic instant-coffee reserve).</p>
+<p>Wir bekommen einen Überblick über potenziell beteiligte Personen und deren “Misfits”, also Sorgen und Herausforderungen und insb. externe Rahmenbedingungen, die sie dazu bringen vom Sollprozess abzuweichen. Einige davon sind nicht wünschenswert (Software-Architektin nur im Home-Office) andere können Keimzelle eines angepassten Soll-Prozesses sein (die strategische Instant-Kaffee-Reserve).</p>
 </section>
 <section id="forschungskontext" class="level2">
-<h2 class="anchored" data-anchor-id="forschungskontext">Research Context</h2>
+<h2 class="anchored" data-anchor-id="forschungskontext">Forschungskontext</h2>
 <section id="workarounds-als-mittel-für-wettbewerbsfähigkeit" class="level3">
-<h3 class="anchored" data-anchor-id="workarounds-als-mittel-für-wettbewerbsfähigkeit">Workarounds as a Driver of Competitiveness</h3>
-<p>The Workaround Brainstormer is an interim result of the Change.WorkAROUND project, a project funded by the German Federal Ministry of Education and Research (BMBF). The project addresses the growing need for adaptability in industry, which is confronted with shorter innovation cycles and disruptive global events such as the COVID-19 pandemic and the energy transition. Operational employees often find creative solutions that can become the basis for process innovations when the target process learns about them (in time).</p>
-<p>The project aims to develop new methods, tools, and organizational concepts to identify, evaluate, and translate these workarounds into process innovations.</p>
+<h3 class="anchored" data-anchor-id="workarounds-als-mittel-für-wettbewerbsfähigkeit">Workarounds als Mittel für Wettbewerbsfähigkeit</h3>
+<p>Der Workaround Brainstormer ist ein Zwischenergebnis des Projektes Change.WorkAROUND, einem vom Bundesministerium für Bildung und Forschung (BMBF) geförderten Projekt. Das Projekt adressiert den wachsenden Bedarf nach Wandlungsfähigkeit in der Industrie, welche mit kürzeren Innovationszyklen und disruptiven globalen Ereignissen wie der COVID-19 Pandemie und der Energiewende konfrontiert wird. Oft finden operative Mitarbeitende kreative Lösungen, die Grundlage von Prozessinnovationen werden können, wenn der Soll-Prozess (rechtzeitig) davon erfährt.</p>
+<p>Das Projekt zielt auf neue Methoden, Werkzeuge und Organisationskonzepte, um diese Workarounds zu erkennen, zu bewerten und in Prozessinnovationen umzusetzen.</p>
 </section>
 <section id="wie-workarounds-finden" class="level3">
-<h3 class="anchored" data-anchor-id="wie-workarounds-finden">How to Find Workarounds?</h3>
-<p>Despite their potential value, workarounds often remain hidden or undiscovered within organizational workflows. They are typically undocumented, informal, and escape the attention of process owners. With appropriate data, such process changes can be found via Process Mining – but such data often does not exist, since workarounds occur outside of IT systems or use informal communication channels. Identifying these latent workarounds is therefore a major challenge. An employee might, for example, use personal messaging apps. Employee surveys are valuable but provide an incomplete picture, as employees are often unwilling to disclose their non-standard behavior (whether out of fear, lack of time, or initiative). Can modern LLMs perhaps help form targeted hypotheses for a business process – estimating which workarounds are likely to occur?</p>
+<h3 class="anchored" data-anchor-id="wie-workarounds-finden">Wie Workarounds finden?</h3>
+<p>Trotz ihres potenziellen Werts bleiben Workarounds häufig in den Arbeitsabläufen des Unternehmens verborgen oder unentdeckt. In der Regel sind sie undokumentiert, informell und entgehen der Aufmerksamkeit der Prozessverantwortlichen. Mit geeigneter Datengrundlage können solche Prozessveränderungen per Process Mining gefunden werden – oft gibt es eine solche Grundlage aber nicht, da Workarounds außerhalb von IT-Systemen auftreten oder informelle Kommunikationskanäle nutzen. Die Identifizierung dieser latenten Umgehungslösungen stellt deshalb eine große Herausforderung dar. So kann ein Mitarbeiter beispielsweise persönliche Messaging-Apps verwenden. Mitarbeiterbefragungen sind zwar wertvoll, liefern aber ein unvollständiges Bild, da Mitarbeitende oft nicht bereit sind, ihr nicht-standardgemäßes Verhalten offenzulegen (sei es aus Angst, Zeitmangel oder fehlender Initiative). Können moderne LLMs vielleicht helfen, für einen Geschäftsprozess gezielt Hypothesen zu bilden – abzuschätzen, welche Workarounds es vermutlich geben wird?</p>
 </section>
 <section id="lösungsansatz-latente-workarounds-und-erste-erfahrungen" class="level3">
-<h3 class="anchored" data-anchor-id="lösungsansatz-latente-workarounds-und-erste-erfahrungen">Approach: Latent Workarounds and First Experiences</h3>
-<p>Surprisingly often, this works. The Workaround Brainstormer is a tool that makes this creative process easy and interactive.</p>
-<p>Based on a textual process description or a BPMN diagram, it enables the generation of individual, domain-specific workarounds with just a few clicks. The approach is as follows: the process description and (optionally) additional context are inserted into a specialized prompt that instructs the LLM to systematically identify workarounds. The prompt also contains several workaround examples (few-shot examples) to improve the LLM's results. These examples can be extended via a RAG system that accesses a knowledge base of nearly 83 company-validated workarounds.</p>
-<p>In the current version of the tool, your files are not stored – i.e. your process description and the generated workarounds only travel from your web browser to the LLM we host in Azure.</p>
-<p>Initial experiences and experiments examining the quality and general usability of the workarounds show positive but preliminary results. In one experiment, 62 participants (industry practitioners, members of the research consortium, consulting firm employees, and students) were presented with 83 workaround stories and found that AI-generated workarounds are at a similar quality level to those produced by informed humans. Further experience shows that, in a few cases, the workarounds identified by the Brainstormer actually exist in companies and can therefore be acted upon. This is the optimal outcome of using the tool – identifying latent workarounds, evaluating them, and ultimately achieving process innovations.</p>
-<p>The Workaround Brainstormer should therefore be seen not as an isolated tool, but as a creativity instrument that provides valuable impulses in improvement initiatives, which are then evaluated and discussed in expert groups.</p>
+<h3 class="anchored" data-anchor-id="lösungsansatz-latente-workarounds-und-erste-erfahrungen">Lösungsansatz: Latente Workarounds und erste Erfahrungen</h3>
+<p>Erstaunlich oft gelingt das. Der Workaround Brainstormer ist ein Werkzeug, das diesen kreativen Prozess leicht und interaktiv macht.</p>
+<p>Anhand einer textuellen Prozessbeschreibung oder eines BPMN-Diagramms bietet er die Möglichkeit, individuelle und domänenspezifische Workarounds mit nur wenigen Mausklicks zu generieren. Der Ansatz ist hierbei wie folgt: Die Prozessbeschreibung und (optional) weiterer Kontext werden in einen speziellen Prompt eingefügt, welcher das LLM instruiert, systematisch Workarounds zu identifizieren. Der Prompt enthält zusätzlich mehrere Workaround-Beispiele (few-shot-examples), um die Ergebnisse des LLM zu verbessern. Diese Beispiele können mithilfe eines RAG-Systems, welches auf eine Wissensdatenbank mit knapp 83 von Unternehmen validierten Workarounds zugreift, erweitert werden.</p>
+<p>In der aktuellen Version des Werkzeugs werden Ihre Dateien nicht gespeichert, d.h. Ihre Prozessbeschreibung sowie die generierten Workarounds durchlaufen den Zyklus von Ihrem Webbrowser bis zu dem von uns gehosteten LLM in Azure.</p>
+<p>Erste Erfahrungen und Experimente, in denen die Qualität und allgemeine Nutzbarkeit der Workarounds untersucht wurde, zeigen positive, aber vorläufige Ergebnisse. So wurden in einem Experiment, in dem 62 Personen (Anwender aus Industrieunternehmen, Mitglieder des Forschungskonsortiums, Mitarbeiter eines Beratungsunternehmens sowie Studenten) insgesamt 83 Workaround-Storys vorgestellt wurden, herausgefunden, dass die mit KI generierten Workarounds auf einem ähnlichen Qualitätsniveau wie die von informierten Personen sind. Weiter zeigen die Erfahrungen, dass die mit dem Brainstormer identifizierten Workarounds in wenigen Fällen tatsächlich in Unternehmen existieren und somit verwertet werden können. Genau dies ist das optimale Ergebnis bei der Nutzung des Tools – latente Workarounds identifizieren, um sie anschließend bewerten und ultimativ Prozessinnovationen erreichen zu können.</p>
+<p>Folgend sollte der Workaround Brainstormer nicht als isoliertes Tool, sondern als ein Kreativitätswerkzeug betrachtet werden, welches in Verbesserungsinitiativen wertvolle Impulse gibt, die anschließend in Expertengruppen bewertet und diskutiert werden.</p>
 </section>
 <section id="beispielhafte-nutzungsszenarien" class="level3">
-<h3 class="anchored" data-anchor-id="beispielhafte-nutzungsszenarien">Exemplary Use Cases</h3>
-<p>We see two primary use cases for the Workaround Brainstormer:</p>
+<h3 class="anchored" data-anchor-id="beispielhafte-nutzungsszenarien">Beispielhafte Nutzungsszenarien</h3>
+<p>Wir sehen vor allem zwei Nutzungsszeanarien für den Workaround Brainstormer:</p>
 <ul>
-<li>The interactive, easy-to-understand interface allows use in workshop settings within a team working on process optimization or compliance questions for an existing business process. The workshop concludes with a selection of hypotheses about existing workarounds to be validated in the next step.</li>
-<li>Unlike Data Mining methods, the Workaround Brainstormer requires only a process description and no event data, making it useful for process owners to proactively assess, before launching a new process, which environmental influences might affect participants and how they are likely to respond.</li>
+<li>Das interaktive, leicht verständliche Interface erlaubt die Nutzung in Workshop-Situationen in einem Team, dass sich mit Prozess-Optimierungen oder Compliance-Fragen zu einem bestehenden Geschäftsprozess beschäftigt. Der Workshop endet mit einer Auswahl an Hypothesen zu existierenden Workarounds. Ob sie tatsächlich existieren, ist im nächsten Schritt zu prüfen.</li>
+<li>Da der Workaround Brainstormer anders als Data Mining-Verfahren nur eine Prozessbeschreibung voraussetzt und keine Event-Daten, nutzen Prozessverantwortliche ihn auch, um vor Inbetriebnahme eines neuen Prozesses zu prüfen, welche Umwelteinflüsse die Prozessbeteiligten potenziell beeinflussen werden und wie sie darauf vermutlich reagieren.</li>
 </ul>
 </section>
 <section id="ausblick-weiterentwicklung-des-brainstormers" class="level3">
-<h3 class="anchored" data-anchor-id="ausblick-weiterentwicklung-des-brainstormers">Outlook – Further Development of the Brainstormer</h3>
-<p>The Brainstormer is the result of three years of research within the Change.WorkAROUND project. However, since the research is not yet complete and there is still much room for further development of the Brainstormer, we encourage you to use the tool and to provide feedback. With your <a target="__blank" href="https://forms.office.com/pages/responsepage.aspx?id=uRWItZkdCkeisbP9f2Y9thOIGj0hKMNNi0kBX1tWIEFUMVY3RkRUQzZTTzFLVTY5Qkw0QVpFVlQ3OS4u&amp;route=shorturl">feedback</a>, you can help us further refine the tool and, ideally, create more process innovations.</p>
-<p>A key building block of the tool is our knowledge base of workarounds observed in business processes and the insight that similar workarounds recur across organizations. This collection is welcome to grow. We look forward to your workarounds – feel free to contribute via <a target="__blank" href="https://github.com/viadee/workaround-brainstormer/issues">GitHub</a> or contact us directly: Frank.Koehne@viadee.de / <a href="https://www.linkedin.com/in/frank-köhne-9b586395" target="__blank">LinkedIn</a>.</p>
+<h3 class="anchored" data-anchor-id="ausblick-weiterentwicklung-des-brainstormers">Ausblick – Weiterentwicklung des Brainstormers</h3>
+<p>Der Brainstormer ist ein Ergebnis der in den letzten drei Jahren im Rahmen des Projektes Change.WorkAROUND geleisteten Forschungsarbeit. Da allerdings die Forschung noch nicht abgeschlossen ist und bei der Weiterentwicklung des Brainstormers noch viel Gestaltungsspielraum besteht, möchten wir für die Nutzung des Tools einschließlich für das Geben von Feedback appellieren. Mit Ihrem <a target="__blank" href="https://forms.office.com/pages/responsepage.aspx?id=uRWItZkdCkeisbP9f2Y9thOIGj0hKMNNi0kBX1tWIEFUMVY3RkRUQzZTTzFLVTY5Qkw0QVpFVlQ3OS4u&amp;route=shorturl">Feedback</a> können Sie uns helfen, das Werkzeug weiter zu verfeinern und im Idealfall mehr Prozessinnovationen zu schaffen.</p>
+<p>Ein zentraler Baustein des Werkzeugs ist unsere Wissensdatenbank von in Geschäftsprozessen beobachteten Workarounds und die Erkenntnis, dass ähnliche Workarounds unternehmensübergreifend immer wieder auftauchen. Diese Sammlung von Workarounds darf daher gern wachsen. Wir freuen uns über Ihre Workarounds – gern als Beitrag im <a target="__blank" href="https://github.com/viadee/workaround-brainstormer/issues">GitHub</a> oder sprechen Sie uns an: Frank.Koehne@viadee.de / <a href="https://www.linkedin.com/in/frank-köhne-9b586395" target="__blank">LinkedIn</a>.</p>
 </section>
 </section>
 <section id="benutzerhandbuch" class="level2">
-<h2 class="anchored" data-anchor-id="benutzerhandbuch">User Manual</h2>
-<p>The following manual describes the functionalities of the Brainstormer for generating and deleting workarounds, as well as for customizing the prompt passed to the LLM.</p>
+<h2 class="anchored" data-anchor-id="benutzerhandbuch">Benutzerhandbuch</h2>
+<p>Folgendes Handbuch beschreibt die Funktionalitäten des Brainstormers zur Generierung und Löschung von Workarounds sowie zur Anpassung des dem LLM übergebenden Prompts.</p>
 <section id="primäre-komponenten-der-benutzeroberfläche" class="level3">
-<h3 class="anchored" data-anchor-id="primäre-komponenten-der-benutzeroberfläche">Primary UI Components</h3>
-<p>Workarounds are visualized centrally on the user interface using a directed graph. This graph serves as the central exploration interface for workarounds and can be expanded during use.</p>
-<p>The process input field, shown in the upper right, manages both the textual and visual process description; the latter can be uploaded by clicking “click to browse” or by dragging and dropping the image.</p>
-<p>The Workaround List is the third component in the lower right of the interface. Generated workarounds are displayed in a nested structure here. To the right of the heading there is also a button for exporting the workarounds.</p>
+<h3 class="anchored" data-anchor-id="primäre-komponenten-der-benutzeroberfläche">Primäre Komponenten der Benutzeroberfläche</h3>
+<p>Die Workarounds werden grundsätzlich mithilfe eines gerichteten Graphs zentral auf der Benutzeroberfläche visualisiert. Dieser Graph dient als zentrale Erkundungsschnittstelle der Workarounds und kann während der Nutzung erweitert werden.</p>
+<p>Das Prozesseingabefeld, oben rechts dargestellt, verwaltet die textuelle sowie visuelle Prozessbeschreibung, wobei letzteres mit einem Klick auf „click to browse“ als auch mit dem Ziehen und Ablegen des Bildes hochgeladen werden kann.</p>
+<p>Die Workaround-Liste stellt die dritte Komponente unten rechts auf der Oberfläche dar. Hier werden die generierten Workarounds geschachtelt dargestellt. Rechts neben der Überschrift befindet sich außerdem ein Button für das Exportieren der Workarounds.</p>
 </section>
 <section id="workarounds-generieren" class="level3">
-<h3 class="anchored" data-anchor-id="workarounds-generieren">Generating Workarounds</h3>
+<h3 class="anchored" data-anchor-id="workarounds-generieren">Workarounds generieren</h3>
 <section id="initiale-workarounds-generieren" class="level4">
-<h4 class="anchored" data-anchor-id="initiale-workarounds-generieren">Generating Initial Workarounds</h4>
-<p>After entering your process description as text in the upper right or uploading it as a BPMN diagram, you can generate the initial workarounds by clicking the “Generate Workarounds” button.</p>
+<h4 class="anchored" data-anchor-id="initiale-workarounds-generieren">Initiale Workarounds generieren</h4>
+<p>Nachdem Sie Ihre Prozessbeschreibung oben rechts textuell eingegeben oder als BPMN-Diagramm hochgeladen haben, können Sie mit einem Klick auf den grünen Button „Generate Workarounds“ die initialen fünf Workarounds generieren.</p>
 </section>
 <section id="kind-workarounds-generieren" class="level4">
-<h4 class="anchored" data-anchor-id="kind-workarounds-generieren">Generating Child Workarounds</h4>
-<p>After the initial workarounds have been generated, a left-click produces further child workarounds. A second prompt is used to generate similar workarounds that retain the parent's practicability, address similar problem types, and achieve similar benefits, but introduce variations in the roles considered as well as the resources and approaches used.</p>
+<h4 class="anchored" data-anchor-id="kind-workarounds-generieren">Kind-Workarounds generieren</h4>
+<p>Nachdem die ersten Workarounds generiert wurden, können mit einem Linksklick fünf weitere Kind-Workarounds erzeugt werden. Mittels eines zweiten Prompts werden hierbei ähnliche Workarounds erzeugt, welche dieselbe Praktikabilität des Vaters beibehalten, ähnliche Problemtypen adressieren und ähnliche Vorteile erzielen, allerdings Variationen in die betrachteten Rollen sowie in die verwendeten Ressourcen und Vorgehensweisen bringen.</p>
 </section>
 </section>
 <section id="workarounds-entfernen" class="level3">
-<h3 class="anchored" data-anchor-id="workarounds-entfernen">Removing Workarounds</h3>
-<p>Right-clicking on a node in the graph opens the context menu – here nodes and subnodes can be removed.</p>
+<h3 class="anchored" data-anchor-id="workarounds-entfernen">Workarounds entfernen</h3>
+<p>Mit einem Rechtsklick auf einen Knoten im Graph wird das Kontextmenü geöffnet – hier können Knoten und Unterknoten entfernt werden.</p>
 </section>
 <section id="zusätzlichen-kontext-hinzufügen" class="level3">
-<h3 class="anchored" data-anchor-id="zusätzlichen-kontext-hinzufügen">Adding Additional Context</h3>
-<p>In addition to the process description, the prompts can be enriched with additional information relevant to workaround generation. This can include additional information about the company, the roles involved in the process, circumstances, or specific topics of particular interest to the user. The button in the upper right next to the “Process Description” heading reveals an additional “Additional Context” input field when clicked.</p>
+<h3 class="anchored" data-anchor-id="zusätzlichen-kontext-hinzufügen">Zusätzlichen Kontext hinzufügen</h3>
+<p>Die Prompts können neben der Prozessbeschreibung mit zusätzlichen Informationen angereichert werden, welche für die Workaround-Generierung relevant sein könnte. Dies kann zusätzliche Informationen über das Unternehmen, die im Prozess involvierten Rollen, Umstände oder bestimmte, für den Nutzer besonders interessante Themen sein. Der Button oben rechts neben der Überschrift „Process Description“ zeigt hierfür bei einem Rechtsklick ein zusätzliches Eingabefeld „Additional Context“ an, in dem die Informationen eingegeben werden können.</p>
 </section>
 <section id="few-shot-examples-bearbeiten" class="level3">
-<h3 class="anchored" data-anchor-id="few-shot-examples-bearbeiten">Editing Few-Shot Examples</h3>
-<p>Below the input field described in the previous point, there is an “Edit Few Shot Examples” button. In this dialog, the examples passed to the prompt can be edited, removed, or new ones added.</p>
+<h3 class="anchored" data-anchor-id="few-shot-examples-bearbeiten">Few-shot Examples bearbeiten</h3>
+<p>Unter dem im vorherigen Punkt beschriebenen Eingabefeld befindet sich ein Button „Edit Few Shot Examples“. In diesem Dialog können die dem Prompt übergebenden Beispiele bearbeitet, entfernt und neue hinzugefügt werden.</p>
 </section>
 <section id="eingebettete-workaround-beispiele-hinzufügen" class="level3">
-<h3 class="anchored" data-anchor-id="eingebettete-workaround-beispiele-hinzufügen">Adding Embedded Workaround Examples</h3>
-<p>The Brainstormer offers the ability to supplement the prompt with additional workaround examples based on the process description. Clicking the “Retrieve similar Few Shot Examples” button retrieves similar workarounds from a vector database and appends them to the prompt.</p>
+<h3 class="anchored" data-anchor-id="eingebettete-workaround-beispiele-hinzufügen">Eingebettete Workaround-Beispiele hinzufügen</h3>
+<p>Der Brainstormer bietet die Möglichkeit, basierend auf der Prozessbeschreibung, den Prompt um weitere Workaround-Beispiele zu ergänzen. Mit einem Klick auf den Button „Retrieve similar Few Shot Examples“ werden aus in einer Vektordatenbank eingebetteten Workarounds ähnliche abgerufen und dem Prompt beigefügt.</p>
 </section>
 </section>
 <section id="faq" class="level2">
@@ -327,14 +308,14 @@ Workaround Stories
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-What exactly is meant by “workaround”?
+Was genau ist mit Workaround gemeint?
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Scientifically, a workaround is a goal-oriented adaptation, improvisation, or other modification of an existing work system to overcome or circumvent obstacles, exceptions [...] that prevent its participants from achieving a desired level of efficiency, effectiveness, or other organizational or personal goals (<a href="https://aisel.aisnet.org/cais/vol34/iss1/55/">Alter, 2014</a>).</p>
-<p>Workarounds are therefore not inherently bad; they can also turn out to be creative solutions for improving processes or achieving goals. We therefore recommend separating the identification and evaluation of workarounds.</p>
+<p>Ein Workaround ist wissenschaftlich gesehen eine zielgerichtete Anpassung, Improvisation oder sonstige Änderung eines eines bestehenden Arbeitssystems, um Hindernisse, Ausnahmen [..] zu überwinden oder zu umgehen [..] die seine Teilnehmer daran hindern, ein gewünschtes Maß an Effizienz, Effektivität oder andere organisatorische oder persönliche Ziele zu erreichen (<a href="https://aisel.aisnet.org/cais/vol34/iss1/55/">Alter, 2014</a>).</p>
+<p>Workarounds sind damit nicht per se schlecht, sondern können sich auch als kreative Lösungen zur Verbesserung von Prozessen oder zur Erreichung von Zielen betrachtet herausstellen. Wir empfehlen daher, die Identifikation und die Bewertung von Workarounds voneinander zu trennen.</p>
 </div>
 </div>
 </div>
@@ -344,13 +325,13 @@ What exactly is meant by “workaround”?
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-What are Workaround Stories?
+Was sind Workaround-Storys?
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Workaround Stories (inspired by the well-known User Story format) combine the key elements <i>Actor</i>, <i>Context</i>, <i>Challenge or Misfit</i>, <i>Adaptive Action</i>, and <i>Intended Outcome</i> into a single, coherent statement while also conveying sufficient information for analysis purposes. This enables the easy exchange of workarounds and similarity search via LLM.</p>
+<p>Workaround-Storys fassen (angelehnt an das bekannt User-Story-Format) die Schlüsselelemente <i>Actor</i>, <i>Context</i>, <i>Challenge or Misfit</i>, <i>Adaptive Action</i> sowie <i>Intended Outcome</i> in einer einzigen, kohärenten Aussage zusammen und vermitteln gleichzeitig ausreichend Informationen für Analysezwecke. Dies ermöglicht den einfachen Austausch von Workarounds und die Ähnlichkeitssuche per LLM.</p>
 </div>
 </div>
 </div>
@@ -360,13 +341,13 @@ What are Workaround Stories?
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-How good are the results?
+Wie gut sind die Ergebnisse?
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>It is important to understand what constitutes a good result. The Workaround Brainstormer generates <i>plausible</i> hypotheses. This means that the generated workarounds likely <b>exist</b> in the described business process. This says nothing about whether they represent useful process innovations (mastering new challenges) or are undesirable for various reasons (shadow IT, compliance violations, etc.). Deciding this would be the next (manual) process step.<br> In this sense, the results are good: for sufficiently detailed process descriptions, people generally cannot distinguish the generated suggestions from human-created ones.</p>
+<p>Hier ist wichtig zu verstehen, was ein gutes Ergebnis ist. Der Workaround-Brainstormer erzeugt <i>plausible</i> Hypothesen. Das bedeutet, dass die generierten Workarounds vermutlich im beschriebenen Geschäftsprozess <b>existieren</b>. Das sagt Nichts darüber aus, ob sie nützliche Prozessinnovationen darstellen (Meistern neuer Herausforderungen) oder aus unterschiedlichsten Gründen nicht wünschenswert sind (Schatten-IT, Compliance-Verletzungen etc.). Das zu entscheiden wäre der nächste (manuelle) Prozessschritt.<br> In diesem Sinne sind die Ergebnisse gut, denn für detailliert beschrieben Prozesse können Menschen i.A. die generierten Vorschläge nicht von menschlichen Vorschlägen unterscheiden.</p>
 </div>
 </div>
 </div>
@@ -376,13 +357,13 @@ How good are the results?
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-How precisely do I need to describe the process?
+Wie genau muss ich den Prozess beschreiben?
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p><p>This is flexible and showcases the strength of the LLM approach. Often good results can be achieved with just a few sentences. The more details you provide, the better the results. The LLM is also capable of processing BPMN diagrams, which are then converted to text and used as the process description. We have also obtained good results with images of processes or workplaces, or a combination of these elements.<br> One insight from the project is that workarounds often occur at a level of detail not captured in BPMN diagrams or formal process descriptions (e.g., "forgot safety gloves"). It is therefore helpful to use the process description to illustrate very concrete work situations and workplaces.</p>
+<p>Das ist flexibel und hier wird die Stärke des LLM-Ansatzes sichtbar. Oft sind mit wenigen Sätzen schon gute Ergebnisse zu erzielen. Je mehr Details Sie angeben, desto besser werden die Ergebnisse. Das LLM ist in der Lage, auch BPMN-Diagramme zu verarbeiten. Diese werden dann in Text umgewandelt und als Prozessbeschreibung verwendet. Auch mit Bildern von Prozessen oder Arbeitsplätzen oder einer Kombination dieser Elemente haben wir gute Ergebnisse bekommen.<br> Eine Erkenntnis aus dem Projekt ist, dass Workarounds häufig auf einem Detail-Level stattfinden, das in BPMN-Diagrammen und formalen Prozessbeschreibungen nicht abgebildet ist (bspw. “Sicherheitshandschuhe vergessen”). Daher ist es sinnvoll, auch die Prozessbeschreibung zu verwenden, um sehr konkrete Arbeitssituationen und Arbeitsplätze zu verdeutlichen.</p>
 </div>
 </div>
 </div>
@@ -418,17 +399,17 @@ How precisely do I need to describe the process?
 
 
         <div class="footer-legal">
-            <h3>Legal</h3>
+            <h3>Rechtliches</h3>
             <a href="./impressum.html" class="footer-link">
-                <i class=" " aria-hidden="true"></i> Imprint
+                <i class=" " aria-hidden="true"></i> Impressum
             </a>
         
             <a href="./datenschutz.html" class="footer-link">
-                <i class="" aria-hidden="true"></i> Privacy Policy
+                <i class="" aria-hidden="true"></i> Datenschutz
             </a>
 
             <a href="./nutzungsbedingungen.html" class="footer-link">
-                <i class="" aria-hidden="true"></i> Terms of Use
+                <i class="" aria-hidden="true"></i> Nutzungsbedingungen
             </a>
         </div>
         <div class="footer-links">
