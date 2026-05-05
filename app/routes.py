@@ -152,13 +152,20 @@ def generateWorkarounds():
     start_time = time.time()
     process_description = request.form.get('process_description', '').strip()
     additional_context = request.form.get('additional_context', '').strip()
-    misfits = request.form.get('misfits').strip()
+    misfits = request.form.get('misfits', '').strip()
     workarounds_quantity = request.form.get('workarounds_quantity', '').strip()
 
-    if(misfits is None):
-        raise ValueError()
-    
     current_app.logger.info("Starting workaround generation")
+    current_app.logger.debug(f"[generateWorkarounds] Process description: {process_description[:100] if process_description else 'N/A'}")
+    current_app.logger.debug(f"[generateWorkarounds] Additional context: {additional_context[:100] if additional_context else 'N/A'}")
+    current_app.logger.debug(f"[generateWorkarounds] Misfits input preview: {misfits[:200] if misfits else 'N/A'}")
+    current_app.logger.debug(f"[generateWorkarounds] Workarounds quantity: {workarounds_quantity}")
+    
+    if(misfits is None or misfits == ''):
+        error_msg = "Misfits parameter is missing or empty"
+        current_app.logger.error(f"[generateWorkarounds] FATAL: {error_msg}")
+        return jsonify({'error': error_msg}), 400
+    
     base64_image = None
     temp_file_path = None
     file_processing_start = file_processing_end = None
@@ -181,35 +188,61 @@ def generateWorkarounds():
         
         # Language from session
         # logically, this route is fetched after /generateRoles
-        process.language = session['detected_language']
+        if 'detected_language' not in session:
+            current_app.logger.warning("[generateWorkarounds] No detected_language in session")
+            process.language = "en"
+        else:
+            process.language = session['detected_language']
+            current_app.logger.debug(f"[generateWorkarounds] Using detected language: {process.language}")
         
         # API call timing
         api_call_start = time.time()
-        workarounds = llm_service.get_workarounds_from_misfits(process, misfits)
+        current_app.logger.debug("[generateWorkarounds] Calling llm_service.get_workarounds_from_misfits()")
+        try:
+            workarounds = llm_service.get_workarounds_from_misfits(process, misfits)
+            current_app.logger.debug(f"[generateWorkarounds] get_workarounds_from_misfits returned: {type(workarounds)} with content preview: {str(workarounds)[:200] if workarounds else 'None'}")
+        except Exception as e:
+            error_msg = f"LLM service error during get_workarounds_from_misfits: {type(e).__name__}: {str(e)}"
+            current_app.logger.error(f"[generateWorkarounds] FATAL: {error_msg}", exc_info=True)
+            return jsonify({'error': error_msg}), 500
         api_call_end = time.time()
+        
+        # Validate response
+        if workarounds is None:
+            error_msg = "get_workarounds_from_misfits returned None"
+            current_app.logger.error(f"[generateWorkarounds] FATAL: {error_msg}")
+            return jsonify({'error': error_msg}), 500
+        
+        if isinstance(workarounds, dict) and len(workarounds) == 0:
+            error_msg = "get_workarounds_from_misfits returned empty dictionary"
+            current_app.logger.error(f"[generateWorkarounds] FATAL: {error_msg}")
+            return jsonify({'error': error_msg}), 500
         
         session['workarounds'] = workarounds
         
-        current_app.logger.info("Successfully generated workarounds")
+        current_app.logger.info(f"[generateWorkarounds] Successfully generated workarounds with keys: {list(workarounds.keys()) if isinstance(workarounds, dict) else 'not a dict'}")
         response = jsonify(workarounds)
         
         # Add all timing headers including file processing if present
         timing_headers = {
             'API_Call_Start': api_call_start,
-            'API_Call_End': api_call_end
+            'API_Call_End': api_call_end,
+            'API_Call_Duration': api_call_end - api_call_start
         }
         
         if file_processing_start and file_processing_end:
             timing_headers.update({
                 'File_Processing_Start': file_processing_start,
-                'File_Processing_End': file_processing_end
+                'File_Processing_End': file_processing_end,
+                'File_Processing_Duration': file_processing_end - file_processing_start
             })
             
         return add_timing_headers(response, **timing_headers)
     
     except Exception as e:
-        current_app.logger.exception("Error in workarounds generation: %s", e)
-        return jsonify({'error': str(e)}), 500
+        error_msg = f"Unexpected error in workarounds generation: {type(e).__name__}: {str(e)}"
+        current_app.logger.exception(f"[generateWorkarounds] FATAL: {error_msg}")
+        return jsonify({'error': error_msg}), 500
 
     finally:
         if temp_file_path and os.path.exists(temp_file_path):
@@ -224,10 +257,18 @@ def generateMisfits():
     additional_context = request.form.get('additional_context', '').strip()
     roles = request.form.get('roles').strip()
     challenges_quantity = request.form.get('challenges_quantity', '').strip()
-    if(roles is None):
-        raise ValueError()
     
     current_app.logger.info("Starting misfits generation")
+    current_app.logger.debug(f"[generateMisfits] Process description: {process_description[:100] if process_description else 'N/A'}")
+    current_app.logger.debug(f"[generateMisfits] Additional context: {additional_context[:100] if additional_context else 'N/A'}")
+    current_app.logger.debug(f"[generateMisfits] Roles input: '{roles}'")
+    current_app.logger.debug(f"[generateMisfits] Challenges quantity: {challenges_quantity}")
+    
+    if(roles is None or roles == ''):
+        error_msg = "Roles parameter is missing or empty"
+        current_app.logger.error(f"[generateMisfits] FATAL: {error_msg}")
+        return jsonify({'error': error_msg}), 400
+    
     base64_image = None
     temp_file_path = None
     file_processing_start = file_processing_end = None
@@ -250,35 +291,61 @@ def generateMisfits():
         
         # Language from session
         # logically, this route is fetched after /generateRoles
-        process.language = session['detected_language']
+        if 'detected_language' not in session:
+            current_app.logger.warning("[generateMisfits] No detected_language in session")
+            process.language = "en"
+        else:
+            process.language = session['detected_language']
+            current_app.logger.debug(f"[generateMisfits] Using detected language: {process.language}")
 
         # API call timing
         api_call_start = time.time()
-        misfits = llm_service.get_misfits(process, roles)
+        current_app.logger.debug("[generateMisfits] Calling llm_service.get_misfits()")
+        try:
+            misfits = llm_service.get_misfits(process, roles)
+            current_app.logger.debug(f"[generateMisfits] get_misfits returned: {type(misfits)} with content preview: {str(misfits)[:200] if misfits else 'None'}")
+        except Exception as e:
+            error_msg = f"LLM service error during get_misfits: {type(e).__name__}: {str(e)}"
+            current_app.logger.error(f"[generateMisfits] FATAL: {error_msg}", exc_info=True)
+            return jsonify({'error': error_msg}), 500
         api_call_end = time.time()
+        
+        # Validate response
+        if misfits is None:
+            error_msg = "get_misfits returned None"
+            current_app.logger.error(f"[generateMisfits] FATAL: {error_msg}")
+            return jsonify({'error': error_msg}), 500
+        
+        if isinstance(misfits, dict) and len(misfits) == 0:
+            error_msg = "get_misfits returned empty dictionary"
+            current_app.logger.error(f"[generateMisfits] FATAL: {error_msg}")
+            return jsonify({'error': error_msg}), 500
         
         session['misfits'] = misfits
         
-        current_app.logger.info("Successfully generated misfits")
+        current_app.logger.info(f"[generateMisfits] Successfully generated misfits with keys: {list(misfits.keys()) if isinstance(misfits, dict) else 'not a dict'}")
         response = jsonify(misfits)
         
         # Add all timing headers including file processing if present
         timing_headers = {
             'API_Call_Start': api_call_start,
-            'API_Call_End': api_call_end
+            'API_Call_End': api_call_end,
+            'API_Call_Duration': api_call_end - api_call_start
         }
         
         if file_processing_start and file_processing_end:
             timing_headers.update({
                 'File_Processing_Start': file_processing_start,
-                'File_Processing_End': file_processing_end
+                'File_Processing_End': file_processing_end,
+                'File_Processing_Duration': file_processing_end - file_processing_start
             })
             
         return add_timing_headers(response, **timing_headers)
     
     except Exception as e:
-        current_app.logger.exception("Error in misfits generation: %s", e)
-        return jsonify({'error': str(e)}), 500
+        error_msg = f"Unexpected error in misfits generation: {type(e).__name__}: {str(e)}"
+        current_app.logger.exception(f"[generateMisfits] FATAL: {error_msg}")
+        return jsonify({'error': error_msg}), 500
 
     finally:
         if temp_file_path and os.path.exists(temp_file_path):
@@ -293,6 +360,10 @@ def generateRoles():
     additional_context = request.form.get('additional_context', '').strip()
     roles_quantity = request.form.get('roles_quantity','').strip()
     current_app.logger.info("Starting roles generation")
+    current_app.logger.debug(f"[generateRoles] Process description: {process_description[:100] if process_description else 'N/A'}")
+    current_app.logger.debug(f"[generateRoles] Additional context: {additional_context[:100] if additional_context else 'N/A'}")
+    current_app.logger.debug(f"[generateRoles] Roles quantity: {roles_quantity}")
+    
     base64_image = None
     temp_file_path = None
     file_processing_start = file_processing_end = None
@@ -318,14 +389,18 @@ def generateRoles():
         session['detected_language'] = llm_service.detect_language(process)
         process.language = session['detected_language']
         lang_detect_end = time.time()
+        current_app.logger.info(f"[generateRoles] Detected language: {process.language}")
         
         # API call timing
         api_call_start = time.time()
+        current_app.logger.debug("[generateRoles] Calling llm_service.get_roles()")
         try:
             roles = llm_service.get_roles(process)
+            current_app.logger.debug(f"[generateRoles] get_roles returned: {type(roles)} with content: {roles}")
         except Exception as e:
-            current_app.logger.error(f"FATAL: get_roles failed with exception: {type(e).__name__}: {str(e)}", exc_info=True)
-            return jsonify({'error': f'Failed to generate roles: {str(e)}'}), 500
+            error_msg = f"LLM service error during get_roles: {type(e).__name__}: {str(e)}"
+            current_app.logger.error(f"FATAL: {error_msg}", exc_info=True)
+            return jsonify({'error': error_msg}), 500
         api_call_end = time.time()
         
         session['roles'] = roles
@@ -337,22 +412,26 @@ def generateRoles():
         timing_headers = {
             'Language_Detection_Start': lang_detect_start,
             'Language_Detection_End': lang_detect_end,
+            'Language_Detection_Duration': lang_detect_end - lang_detect_start,
             'API_Call_Start': api_call_start,
             'API_Call_End': api_call_end,
+            'API_Call_Duration': api_call_end - api_call_start,
             'Language': session['detected_language']
         }
         
         if file_processing_start and file_processing_end:
             timing_headers.update({
                 'File_Processing_Start': file_processing_start,
-                'File_Processing_End': file_processing_end
+                'File_Processing_End': file_processing_end,
+                'File_Processing_Duration': file_processing_end - file_processing_start
             })
             
         return add_timing_headers(response, **timing_headers)
     
     except Exception as e:
-        current_app.logger.exception("Error in roles generation: %s", e)
-        return jsonify({'error': str(e)}), 500
+        error_msg = f"Unexpected error in roles generation: {type(e).__name__}: {str(e)}"
+        current_app.logger.exception(f"FATAL: {error_msg}")
+        return jsonify({'error': error_msg}), 500
 
     finally:
         if temp_file_path and os.path.exists(temp_file_path):

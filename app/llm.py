@@ -225,7 +225,7 @@ class LLMService:
         try:
             completion = self.client.beta.chat.completions.parse(
                 model=self.chat_model,
-                max_tokens=20000,
+                max_completion_tokens=20000,
                 messages=messages,
                 response_format={"type": "json_object"},
             )
@@ -248,55 +248,94 @@ class LLMService:
         prompt = self._get_prompt(key, process, roles=roles)
         messages = self._create_messages(prompt, process)
         parsed_roles = roles.split(",")
+        logger.debug(f"[get_misfits] Parsed roles: {parsed_roles}, input roles string: '{roles}'")
+        
         ResponseModel = create_model("misfit_response_model",**{field_name:(list[Misfit],...) for field_name in parsed_roles})
 
         try:
+            logger.debug(f"[get_misfits] Calling OpenAI API with model: {self.chat_model}")
+            logger.debug(f"[get_misfits] Number of messages: {len(messages)}")
+            logger.debug(f"[get_misfits] Message content preview: {messages[-1]['content'][:200] if messages else 'No messages'}")
+            
             completion = self.client.beta.chat.completions.parse(
                 model= self.chat_model,
                 messages=messages,
-                max_tokens=20000,
+                max_completion_tokens=20000,
                 response_format=ResponseModel
             )
+            
+            result_content = completion.choices[0].message.content
+            logger.debug(f"[get_misfits] Raw API response: {result_content[:500]}")
+            parsed_result = json.loads(result_content)
+            logger.info(f"[get_misfits] Successfully parsed response with keys: {list(parsed_result.keys())}")
+            
             self._log_api_call(
                 function="get_misfits",
                 input_data=prompt,
-                output_data=completion.choices[0].message.content,
+                output_data=result_content,
                 token_usage=completion.usage.model_dump()
             )
-            return json.loads(completion.choices[0].message.content)
+            return parsed_result
         except openai.OpenAIError as e:
-            logger.error(f"OpenAI API error on get_misfits: {str(e)}")
-            return []
+            error_msg = f"OpenAI API error on get_misfits: {type(e).__name__}: {str(e)}"
+            logger.error(error_msg, exc_info=True)
+            raise Exception(error_msg) from e
+        except json.JSONDecodeError as e:
+            error_msg = f"JSON decode error in get_misfits: {str(e)}"
+            logger.error(error_msg, exc_info=True)
+            raise Exception(error_msg) from e
         except Exception as e:
-            logger.error(f"Unexpected error during get_misfits: {str(e)}")
-            return []
+            error_msg = f"Unexpected error during get_misfits: {type(e).__name__}: {str(e)}"
+            logger.error(error_msg, exc_info=True)
+            raise Exception(error_msg) from e
     def get_workarounds_from_misfits(self, process: ProcessContext, misfits):
         
         key = "GenerateWorkaroundsPrompt"
         prompt = self._get_prompt(key, process, misfits=misfits)
         messages = self._create_messages(prompt, process)
-        parsed_misfits = json.loads(misfits)
+        
+        try:
+            parsed_misfits = json.loads(misfits)
+            logger.debug(f"[get_workarounds_from_misfits] Parsed misfits keys: {list(parsed_misfits.keys())}")
+        except json.JSONDecodeError as e:
+            error_msg = f"JSON decode error parsing misfits input: {str(e)}"
+            logger.error(f"[get_workarounds_from_misfits] {error_msg}", exc_info=True)
+            raise Exception(error_msg) from e
+            
         ResponseModel = create_model("workaround_response_model",**{field_name:(list[Workaround],...) for field_name in parsed_misfits.keys()})
         try:
+            logger.debug(f"[get_workarounds_from_misfits] Calling OpenAI API with model: {self.chat_model}")
             completion = self.client.beta.chat.completions.parse(
                 model= self.chat_model,
                 messages=messages,
-                max_tokens=20000,
+                max_completion_tokens=20000,
                 response_format=ResponseModel
             )
+            
+            result_content = completion.choices[0].message.content
+            logger.debug(f"[get_workarounds_from_misfits] Raw API response: {result_content[:500]}")
+            parsed_result = json.loads(result_content)
+            logger.info(f"[get_workarounds_from_misfits] Successfully parsed response with keys: {list(parsed_result.keys())}")
+            
             self._log_api_call(
                 function="get_workarounds_from_misfits",
                 input_data=prompt,
-                output_data=completion.choices[0].message.content,
+                output_data=result_content,
                 token_usage=completion.usage.model_dump()
             )
-            return json.loads(completion.choices[0].message.content)
+            return parsed_result
         except openai.OpenAIError as e:
-            logger.error(f"OpenAI API error on get_workarounds_from_misfits: {str(e)}")
-            return []
+            error_msg = f"OpenAI API error on get_workarounds_from_misfits: {type(e).__name__}: {str(e)}"
+            logger.error(f"[get_workarounds_from_misfits] {error_msg}", exc_info=True)
+            raise Exception(error_msg) from e
+        except json.JSONDecodeError as e:
+            error_msg = f"JSON decode error in get_workarounds_from_misfits: {str(e)}"
+            logger.error(f"[get_workarounds_from_misfits] {error_msg}", exc_info=True)
+            raise Exception(error_msg) from e
         except Exception as e:
-            logger.error(f"Unexpected error during get_workarounds_from_misfits: {str(e)}")
-            return []
+            error_msg = f"Unexpected error during get_workarounds_from_misfits: {type(e).__name__}: {str(e)}"
+            logger.error(f"[get_workarounds_from_misfits] {error_msg}", exc_info=True)
+            raise Exception(error_msg) from e
 
     def get_roles(self, process: ProcessContext) -> List[str]:
 
