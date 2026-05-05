@@ -40,7 +40,4 @@ ENV/
 *.swo
 
 
-#Quarto
-.quarto
-
 node_modules

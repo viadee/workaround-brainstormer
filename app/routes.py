@@ -29,6 +29,7 @@ def add_timing_headers(response, **kwargs):
         response.headers[f'X-{key}'] = str(value)
     return response
 
+
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     """Handle user login."""

@@ -24,6 +24,12 @@ Both the [CWA Corpus](rag/workarounds_corpus.csv) and the software tool are lice
 https://github.com/user-attachments/assets/dd0d4a32-e647-4089-b7b8-37ae73847dd8
 
 
+## Website Content
+
+The public-facing landing pages are maintained directly as static HTML in `static/`.
+Quarto source files are no longer part of the repository.
+
+
 
 # Getting Started
 
