@@ -81,9 +81,8 @@ class GraphManager {
     }
 
     generateWorkaroundColor() {
-        // Slightly randomize green shades around hsl(120, 57%, 40%)
-        const saturation = 45 + Math.random() * 20; // 45–65 %
-        const lightness  = 32 + Math.random() * 16; // 32–48 %
+        const saturation = 35 + Math.random() * 45; // 35–80 %
+        const lightness  = 25 + Math.random() * 30; // 25–55 %
         return `hsl(120, ${saturation}%, ${lightness}%)`;
     }
 
@@ -220,15 +219,6 @@ class GraphManager {
                 }
             })
 
-        subNodeGroup.append("text") // Number label inside workaround circles
-            .attr("text-anchor", "middle")
-            .attr("dy", "0.35em")
-            .attr("font-size", "7px")
-            .attr("fill", "white")
-            .attr("pointer-events", "none")
-            .attr("class", d => `workaround-number workaround-number-${d.id}`)
-            .text(d => d.category === "workaround" ? d.workaroundNumber : "")
-        
         subNodeGroup.append("image")
             .attr("xlink:href", "https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png") // Replace with your icon URL
             .attr("xlink:href", d => {
@@ -283,13 +273,23 @@ class GraphManager {
                 }
             })
             .attr("class", d => `graph-icon icon icon-${d.id}`) // Optional classes for the icon
-            .raise()
 
-        nodeGroup.selectAll("text")
+        subNodeGroup.append("text") // Number label — appended last so it renders on top
+            .attr("text-anchor", "middle")
+            .attr("dy", "0.35em")
+            .attr("font-size", "7px")
+            .attr("font-weight", "normal")
+            .attr("fill", "white")
+            .attr("pointer-events", "none")
+            .attr("class", d => `workaround-number workaround-number-${d.id}`)
+            .text(d => d.category === "workaround" ? d.workaroundNumber : "")
+
+        nodeGroup.selectAll("text.graph-label")
             .data(d => (d.expanded && d.label) ? [d] : [])
             .join("text")
-            .attr("dx", 12)
+            .attr("dx", 15)
             .attr("dy", ".35em")
+            .attr("text-anchor", "start")
             .text(d => d.label)
             .attr("class", "graph-label")
             .attr("font-size", "10px")
