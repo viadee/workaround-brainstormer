@@ -7,7 +7,7 @@ config:
   brainstormer:rg_name_prod: change-work-around-prod
   brainstormer:AZURE-API-URL: https://litellm.ai.viadee.cloud
   brainstormer:AZURE_OPENAI_EMBEDDING_MODEL: text-embedding-3-small
-  brainstormer:AZURE_OPENAI_CHAT_MODEL: gpt-4.1-mini-US
+  brainstormer:AZURE_OPENAI_CHAT_MODEL: gpt-5.4-mini-US
   brainstormer:AUTH_LOGIN_REQUIRED: "false"
   brainstormer:APP-SECRET-KEY:
     secure: v1:1YU2t3uhyX3J0fNi:STwX2YmV7tbW+FSEm5RR8s0i/GVqgP1fQfTt+s3MO2I9GJosCzhDY0YxjilnXAL066RDcfQZ
