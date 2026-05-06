@@ -8,6 +8,7 @@ class GraphManager {
         this.setupEventHandlers();
         this.promptExtensions = new PromptExtensions;
         this.nextNodeId = 0;
+        this.nextWorkaroundNumber = 1;
     }
 
     initializeD3() {
@@ -70,9 +71,20 @@ class GraphManager {
 
     addNode(node) {
         node["id"] = this.nextNodeId++;
+        if (node.category === "workaround") {
+            node.workaroundNumber = this.nextWorkaroundNumber++;
+            node.color = this.generateWorkaroundColor();
+        }
         this.nodes.set(node.id, node);
         this.promptExtensions.handleAddNode(node)
         return node;
+    }
+
+    generateWorkaroundColor() {
+        // Slightly randomize green shades around hsl(120, 57%, 40%)
+        const saturation = 45 + Math.random() * 20; // 45–65 %
+        const lightness  = 32 + Math.random() * 16; // 32–48 %
+        return `hsl(120, ${saturation}%, ${lightness}%)`;
     }
 
     addLink(source, target) {
@@ -202,11 +214,20 @@ class GraphManager {
                     case "misfit":
                         return this.colors.misfit
                     case "workaround":
-                        return this.colors.workaround
+                        return d.color || this.colors.workaround
                     default:
                         return this.colors.collapsed
                 }
             })
+
+        subNodeGroup.append("text") // Number label inside workaround circles
+            .attr("text-anchor", "middle")
+            .attr("dy", "0.35em")
+            .attr("font-size", "7px")
+            .attr("fill", "white")
+            .attr("pointer-events", "none")
+            .attr("class", d => `workaround-number workaround-number-${d.id}`)
+            .text(d => d.category === "workaround" ? d.workaroundNumber : "")
         
         subNodeGroup.append("image")
             .attr("xlink:href", "https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png") // Replace with your icon URL
@@ -308,6 +329,7 @@ class GraphManager {
         })
         
         this.nextNodeId = 0
+        this.nextWorkaroundNumber = 1
     }
 
     highlightNode(nodeId) {
