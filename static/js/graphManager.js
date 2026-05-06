@@ -8,6 +8,7 @@ class GraphManager {
         this.setupEventHandlers();
         this.promptExtensions = new PromptExtensions;
         this.nextNodeId = 0;
+        this.nextWorkaroundNumber = 1;
     }
 
     initializeD3() {
@@ -70,9 +71,19 @@ class GraphManager {
 
     addNode(node) {
         node["id"] = this.nextNodeId++;
+        if (node.category === "workaround") {
+            node.workaroundNumber = this.nextWorkaroundNumber++;
+            node.color = this.generateWorkaroundColor();
+        }
         this.nodes.set(node.id, node);
         this.promptExtensions.handleAddNode(node)
         return node;
+    }
+
+    generateWorkaroundColor() {
+        const saturation = 35 + Math.random() * 45; // 35–80 %
+        const lightness  = 25 + Math.random() * 30; // 25–55 %
+        return `hsl(120, ${saturation}%, ${lightness}%)`;
     }
 
     addLink(source, target) {
@@ -202,12 +213,12 @@ class GraphManager {
                     case "misfit":
                         return this.colors.misfit
                     case "workaround":
-                        return this.colors.workaround
+                        return d.color || this.colors.workaround
                     default:
                         return this.colors.collapsed
                 }
             })
-        
+
         subNodeGroup.append("image")
             .attr("xlink:href", "https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png") // Replace with your icon URL
             .attr("xlink:href", d => {
@@ -262,13 +273,23 @@ class GraphManager {
                 }
             })
             .attr("class", d => `graph-icon icon icon-${d.id}`) // Optional classes for the icon
-            .raise()
 
-        nodeGroup.selectAll("text")
+        subNodeGroup.append("text") // Number label — appended last so it renders on top
+            .attr("text-anchor", "middle")
+            .attr("dy", "0.35em")
+            .attr("font-size", "7px")
+            .attr("font-weight", "normal")
+            .attr("fill", "white")
+            .attr("pointer-events", "none")
+            .attr("class", d => `workaround-number workaround-number-${d.id}`)
+            .text(d => d.category === "workaround" ? d.workaroundNumber : "")
+
+        nodeGroup.selectAll("text.graph-label")
             .data(d => (d.expanded && d.label) ? [d] : [])
             .join("text")
-            .attr("dx", 12)
+            .attr("dx", 15)
             .attr("dy", ".35em")
+            .attr("text-anchor", "start")
             .text(d => d.label)
             .attr("class", "graph-label")
             .attr("font-size", "10px")
@@ -308,6 +329,7 @@ class GraphManager {
         })
         
         this.nextNodeId = 0
+        this.nextWorkaroundNumber = 1
     }
 
     highlightNode(nodeId) {
