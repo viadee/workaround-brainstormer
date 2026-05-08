@@ -392,19 +392,22 @@ h2 {
 
 /* File Preview */
 .file-preview-overlay {
-  position: absolute;
-  inset: 0;
+  position: relative;
   background: white;
   border-radius: 6px;
   overflow: hidden;
-  z-index: 4;
+  z-index: 1;
   display: none;
+  margin-top: 12px;
+  border: 1px solid #e0e0e0;
+  max-height: 300px;
 }
 
 .file-preview-overlay img {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  max-height: 250px;
 }
 
 .file-preview-remove {

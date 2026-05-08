@@ -18,7 +18,7 @@ class FileUploadManager {
         this.fileInput = document.getElementById("file-input");
         this.browseLink = document.getElementById("browse-link");
         this.alertContainer = document.getElementById("file-upload-alert");
-        this.previewOverlay = this.uploadContainer.querySelector('.file-preview-overlay');
+        this.previewOverlay = document.querySelector('.file-preview-overlay');
         this.previewImage = this.previewOverlay.querySelector('img');
         this.filename = this.previewOverlay.querySelector('.file-preview-filename');
         this.removeButton = this.previewOverlay.querySelector('.file-preview-remove');
