@@ -49,6 +49,16 @@
     {% block content %}{% endblock %}
     </div>
 
+    <!-- Footer with compliance links -->
+    <footer class="brainstormer-footer">
+        <div class="footer-links-container">
+            <a href="{{ url_for('static', filename='impressum.html') }}" class="footer-link" target="_blank">Imprint</a>
+            <span class="footer-separator">|</span>
+            <a href="{{ url_for('static', filename='datenschutz.html') }}" class="footer-link" target="_blank">Privacy Policy</a>
+            <span class="footer-separator">|</span>
+            <a href="{{ url_for('static', filename='nutzungsbedingungen.html') }}" class="footer-link" target="_blank">Terms of Use</a>
+        </div>
+    </footer>
 
     <!-- Load main app -->
     <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
