@@ -390,6 +390,36 @@ h2 {
   text-decoration: underline;
 }
 
+.file-formats {
+  margin: 8px 0 0 0;
+  font-size: 12px;
+  line-height: 1.4;
+  pointer-events: none;
+  color: #999;
+  text-align: center;
+}
+
+.instruction-divider {
+  margin: 10px 0;
+  border: none;
+  border-top: 1px solid #ddd;
+}
+
+.bpmn-hint {
+  margin: 8px 0 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  pointer-events: none;
+  color: #999;
+  text-align: center;
+  background-color: transparent;
+}
+
+.bpmn-hint strong {
+  color: var(--viadee-primary);
+  font-weight: 500;
+}
+
 /* File Preview */
 .file-preview-overlay {
   position: relative;
