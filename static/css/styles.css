@@ -451,6 +451,10 @@ h2 {
   stroke-opacity: 0.6;
 }
 
+.graph-icon {
+  filter: brightness(0) invert(1);
+}
+
 .node-group text {
   pointer-events: none;
   text-shadow: 0 1px 0 #fff,
