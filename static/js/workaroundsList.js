@@ -34,6 +34,19 @@ class WorkaroundsList {
         return rootNode;
     }
 
+    getNodeTypeIcon(category) {
+        switch (category) {
+            case "role":
+                return "fa-user";
+            case "misfit":
+                return "fa-bolt";
+            case "workaround":
+                return "fa-lightbulb";
+            default:
+                return "";
+        }
+    }
+
     createListHtml(node) {
         const li = document.createElement('li');
         li.classList.add('workaround-item', `list-node-${node.id}`);
@@ -59,6 +72,14 @@ class WorkaroundsList {
                 else this.expandedNodes.delete(node.id.toString());
             });
             header.appendChild(expandIcon);
+        }
+
+        // Add node type icon
+        const iconClass = this.getNodeTypeIcon(node.category);
+        if (iconClass) {
+            const iconSpan = document.createElement('span');
+            iconSpan.classList.add('node-type-icon', 'fas', iconClass);
+            header.appendChild(iconSpan);
         }
 
         const textSpan = document.createElement('span');

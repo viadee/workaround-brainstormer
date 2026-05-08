@@ -556,6 +556,16 @@ h2 {
   font-size: 16px;
 }
 
+.node-type-icon {
+  margin-right: 8px;
+  margin-left: 2px;
+  font-size: 14px;
+  color: var(--viadee-primary);
+  width: 16px;
+  text-align: center;
+  display: inline-block;
+}
+
 .workaround-text {
   flex: 1;
   font-size: 14px;
