@@ -603,6 +603,62 @@ h2 {
   pointer-events: none;
 }
 
+/* Legend Styles */
+#legend {
+  position: absolute;
+  bottom: 60px;
+  left: 10px;
+  background-color: rgba(255, 255, 255, 0.98);
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 13px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  pointer-events: auto;
+  z-index: 500;
+}
+
+.legend-title {
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #333;
+  font-size: 12px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+  gap: 8px;
+}
+
+.legend-item:last-child {
+  margin-bottom: 0;
+}
+
+.legend-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.legend-icon {
+  color: white;
+  font-size: 8px;
+  position: absolute;
+}
+
+.legend-item span {
+  color: #333;
+  white-space: nowrap;
+}
+
 /* Settings Panel */
 #settings-icon {
   cursor: pointer;
