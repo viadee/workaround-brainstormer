@@ -587,6 +587,26 @@ h2 {
   display: block;
 }
 
+/* Creative workaround styles */
+.creative-workaround > .workaround-card {
+  border-left: 3px solid #e6820a;
+  background-color: #fffbf5;
+}
+
+.creative-workaround > .workaround-card:hover {
+  border-color: #e6820a;
+  box-shadow: 0 2px 6px rgba(230, 130, 10, 0.25);
+}
+
+.creative-badge {
+  display: inline-block;
+  margin-right: 6px;
+  font-size: 13px;
+  color: #e6820a;
+  flex-shrink: 0;
+  cursor: default;
+}
+
 /* Selected States */
 .selected {
   border-color: var(--viadee-primary);

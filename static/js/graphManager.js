@@ -73,7 +73,9 @@ class GraphManager {
         node["id"] = this.nextNodeId++;
         if (node.category === "workaround") {
             node.workaroundNumber = this.nextWorkaroundNumber++;
-            node.color = this.generateWorkaroundColor();
+            node.color = node.isCreative
+                ? this.generateCreativeWorkaroundColor()
+                : this.generateWorkaroundColor();
         }
         this.nodes.set(node.id, node);
         this.promptExtensions.handleAddNode(node)
@@ -84,6 +86,12 @@ class GraphManager {
         const saturation = 35 + Math.random() * 45; // 35–80 %
         const lightness  = 25 + Math.random() * 30; // 25–55 %
         return `hsl(120, ${saturation}%, ${lightness}%)`;
+    }
+
+    generateCreativeWorkaroundColor() {
+        const saturation = 60 + Math.random() * 30; // 60–90 %
+        const lightness  = 35 + Math.random() * 20; // 35–55 %
+        return `hsl(35, ${saturation}%, ${lightness}%)`; // warm amber/orange
     }
 
     addLink(source, target) {
