@@ -6,8 +6,12 @@ import os
 from typing import Optional
 from .limiter import limiter
 from .auth import login_is_required
+from .logger_config import (
+    configure_app_logging, configure_llm_logging, 
+    sanitize_api_key, is_dev_mode
+)
 # App version
-APP_VERSION = '0.3.1'
+APP_VERSION = '1.0.1'
 
 # Define project root directory
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -53,10 +57,12 @@ def create_app(testing: bool = False) -> Flask:
     _url = app.config.get('AZURE_API_URL') or ''
     _ver = app.config.get('AZURE_API_VERSION') or ''
     _model = app.config.get('AZURE_CHAT_MODEL') or ''
-    app.logger.warning(
-        f"[DEBUG] Azure config — key: {_key[:6]}...{_key[-4:]} ({len(_key)} chars) | "
-        f"url: {_url!r} | version: {_ver!r} | model: {_model!r}"
-    )
+    
+    if is_dev_mode():
+        app.logger.warning(
+            f"[DEBUG] Azure config — key: {_key[:6]}...{_key[-4:]} ({len(_key)} chars) | "
+            f"url: {_url!r} | version: {_ver!r} | model: {_model!r}"
+        )
 
     # Ensure upload and log directories exist
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -64,7 +70,7 @@ def create_app(testing: bool = False) -> Flask:
 
     # Configure logging
     if not testing:
-        configure_logging(app)
+        configure_app_logging(app, app.config['LOGS_DIR'], APP_VERSION)
     
     # Register blueprints
     from .routes import auth_bp, main_bp, info_bp, api_bp
@@ -75,42 +81,5 @@ def create_app(testing: bool = False) -> Flask:
     app.register_blueprint(api_bp)
     limiter.limit(override_defaults=True, limit_value="2 per second;2000/hour")(main_bp)
 
-
-    
-
     return app
 
-def configure_logging(app: Flask) -> None:
-    """Configure application logging."""
-    logs_dir = app.config['LOGS_DIR']
-    
-    # Clear any existing handlers
-    app.logger.handlers.clear()
-    
-    # Configure standard formatter for app logs
-    formatter = logging.Formatter(
-        '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
-    )
-    
-    # Main app log handler
-    file_handler = RotatingFileHandler(
-        os.path.join(logs_dir, 'app.log'),
-        maxBytes=1024 * 1024,  # 1MB
-        backupCount=10
-    )
-    file_handler.setFormatter(formatter)
-    file_handler.setLevel(logging.INFO)
-    
-    # Also add a stream handler for console output during development
-    stream_handler = logging.StreamHandler()
-    stream_handler.setFormatter(formatter)
-    stream_handler.setLevel(logging.INFO)
-    
-    # Add handlers and set level
-    app.logger.addHandler(file_handler)
-    app.logger.addHandler(stream_handler)
-    app.logger.setLevel(logging.INFO)
-    
-    # Start-up log message
-    app.logger.info(f'Application startup (v{APP_VERSION})')

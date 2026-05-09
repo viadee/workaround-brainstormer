@@ -5,14 +5,7 @@ from app import create_app
 # Load environment variables
 load_dotenv(find_dotenv(), override=True)
 
-## required environment variables
-# AZUREAPIKEY
-# AZUREAPIURL
-# APPSECRETKEY
-# WAPASSWORDHASH
-# WAUSERNAME
-# ADMINPASSWORDHASH
-# DAILYCOSTTHRESHOLD
+## Check the required environment variables, see .env.example for reference
 
 # Create application instance
 app = create_app()

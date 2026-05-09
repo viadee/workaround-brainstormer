@@ -13,6 +13,7 @@ from .prompts import DEFAULT_FEW_SHOT_EXAMPLES
 from .auth import login_required, admin_required, check_credentials, setUserCredentialVariables
 from .utils import save_uploaded_file, process_image, format_workarounds_tree
 from .llm import LLMService, ProcessContext, CostLimitExceeded, RAGService, PromptSettings, PromptSettings
+from .logger_config import should_log_sensitive_info, truncate_content
 import logging
 from .limiter import limiter
 
@@ -156,9 +157,12 @@ def generateWorkarounds():
     workarounds_quantity = request.form.get('workarounds_quantity', '').strip()
 
     current_app.logger.info("Starting workaround generation")
-    current_app.logger.debug(f"[generateWorkarounds] Process description: {process_description[:100] if process_description else 'N/A'}")
-    current_app.logger.debug(f"[generateWorkarounds] Additional context: {additional_context[:100] if additional_context else 'N/A'}")
-    current_app.logger.debug(f"[generateWorkarounds] Misfits input preview: {misfits[:200] if misfits else 'N/A'}")
+    
+    # Log detailed information only in development mode
+    if should_log_sensitive_info():
+        current_app.logger.debug(f"[generateWorkarounds] Process description: {process_description[:100] if process_description else 'N/A'}")
+        current_app.logger.debug(f"[generateWorkarounds] Additional context: {additional_context[:100] if additional_context else 'N/A'}")
+        current_app.logger.debug(f"[generateWorkarounds] Misfits input preview: {misfits[:200] if misfits else 'N/A'}")
     current_app.logger.debug(f"[generateWorkarounds] Workarounds quantity: {workarounds_quantity}")
     
     if(misfits is None or misfits == ''):
@@ -200,7 +204,13 @@ def generateWorkarounds():
         current_app.logger.debug("[generateWorkarounds] Calling llm_service.get_workarounds_from_misfits()")
         try:
             workarounds = llm_service.get_workarounds_from_misfits(process, misfits)
-            current_app.logger.debug(f"[generateWorkarounds] get_workarounds_from_misfits returned: {type(workarounds)} with content preview: {str(workarounds)[:200] if workarounds else 'None'}")
+            
+            # Log response details only in development mode
+            if should_log_sensitive_info():
+                current_app.logger.debug(f"[generateWorkarounds] get_workarounds_from_misfits returned: {type(workarounds)} with content preview: {str(workarounds)[:200] if workarounds else 'None'}")
+            else:
+                current_app.logger.debug(f"[generateWorkarounds] get_workarounds_from_misfits returned: {type(workarounds)}")
+                
         except Exception as e:
             error_msg = f"LLM service error during get_workarounds_from_misfits: {type(e).__name__}: {str(e)}"
             current_app.logger.error(f"[generateWorkarounds] FATAL: {error_msg}", exc_info=True)

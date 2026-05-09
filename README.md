@@ -52,8 +52,29 @@ Quarto source files are no longer part of the repository.
    
     gunicorn run:app --workers=4 --bind 0.0.0.0:5000
 ``` 
-    
-# Acknowledgements
+
+## Logging Configuration
+
+The application supports environment-specific logging to help with debugging in development and protect sensitive data in production.
+
+### Setting Log Levels
+
+Set the `ENVIRONMENT` variable in your `.env` file:
+
+```bash
+# Development mode - detailed logging
+ENVIRONMENT=dev
+
+# Production mode - limited logging (default)
+ENVIRONMENT=prod
+```
+
+### Features
+
+- **Dev Mode**: Full details including request content, LLM responses, and API parameters
+- **Prod Mode**: Limited logging with sensitive information redacted and API keys masked
+
+For detailed information, see [LOGGING.md](LOGGING.md).
 
 The first implementation of the concept was created by [Fresh-P](https://github.com/Fresh-P) as part of his master thesis in cooperation with the University of Münster and viadee in 2024.
 

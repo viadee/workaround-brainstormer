@@ -10,6 +10,7 @@ import openai
 from flask import current_app, has_request_context
 from .language_service import LanguageService
 from .prompts import PROMPTS, DEFAULT_FEW_SHOT_EXAMPLES
+from .logger_config import configure_llm_logging
 from pydantic import BaseModel, create_model, Field
 
 # RAG dependencies
@@ -24,53 +25,12 @@ logger.setLevel(logging.INFO)
 
 def setup_logging():
     """Setup rotating file handler for LLM calls."""
-    logger = logging.getLogger('llm_calls')
-    if logger.handlers:
-        logger.handlers.clear()
-    
     # Ensure log directory exists
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     logs_dir = os.path.join(project_root, 'logs')
-    os.makedirs(logs_dir, exist_ok=True)
     
-    handler = logging.handlers.RotatingFileHandler(
-        os.path.join(logs_dir, 'llm_calls.log'),
-        maxBytes=5*1024*1024,
-        backupCount=5
-    )
-    
-    class JsonFormatter(logging.Formatter):
-        def format(self, record):
-            # For API call logs (containing all required fields)
-            if all(hasattr(record, field) for field in 
-                  ['function', 'input', 'output', 'estimated_cost']):
-                log_record = {
-                    'timestamp': self.formatTime(record, self.datefmt),
-                    'level': record.levelname,
-                    'type': 'api_call',
-                    'session_id': getattr(record, 'session_id', 'unknown'),
-                    'function': getattr(record, 'function'),
-                    'input': getattr(record, 'input'),
-                    'output': getattr(record, 'output'),
-                    'estimated_cost': getattr(record, 'estimated_cost'),
-                    'input_tokens': getattr(record, 'input_tokens'),
-                    'output_tokens': getattr(record, 'output_tokens'),
-                    'total_tokens': getattr(record, 'total_tokens')
-                }
-            # For regular logs
-            else:
-                log_record = {
-                    'timestamp': self.formatTime(record, self.datefmt),
-                    'level': record.levelname,
-                    'type': 'info',
-                    'session_id': getattr(record, 'session_id', 'unknown'),
-                    'message': record.getMessage()
-                }
-            return json.dumps(log_record)
-
-    handler.setFormatter(JsonFormatter(datefmt='%Y-%m-%d %H:%M:%S'))
-    logger.addHandler(handler)
-    logger.propagate = False
+    # Use the centralized logger configuration
+    configure_llm_logging(logs_dir)
 
 
 
