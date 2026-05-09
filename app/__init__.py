@@ -8,7 +8,7 @@ from .limiter import limiter
 from .auth import login_is_required
 from .logger_config import (
     configure_app_logging, configure_llm_logging, 
-    sanitize_api_key, is_dev_mode
+    sanitize_api_key, is_dev_mode, is_prod_mode
 )
 # App version
 APP_VERSION = '1.0.1'
@@ -80,6 +80,10 @@ def create_app(testing: bool = False) -> Flask:
     app.register_blueprint(info_bp)
     app.register_blueprint(api_bp)
     limiter.limit(override_defaults=True, limit_value="2 per second;2000/hour")(main_bp)
+
+    # Suppress Werkzeug's verbose HTTP request logging in production
+    if is_prod_mode():
+        logging.getLogger('werkzeug').setLevel(logging.WARNING)
 
     return app
 
