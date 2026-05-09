@@ -150,7 +150,7 @@ class LLMService:
             template = PROMPTS[key]
         except KeyError:
             logger.error(f"Prompt template not found: {key}")
-            raise
+            raise KeyError(f"Prompt template '{key}' not found in PROMPTS")
 
         # Retrieve the stored few-shot examples from session.
         stored = session.get('few_shot_examples')

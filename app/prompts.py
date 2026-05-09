@@ -123,7 +123,6 @@ Finally, for each challenge, formulate {workarounds_quantity} unique workarounds
 -	Present each workaround as a user story broadly along the following format:
 -	Template: "As a [role] [context], when [challenge], I [adaptive action] to [intended outcome]."
 -   Keep it brief and use words and tone fitting for the role (avoid vagueness and unnecessary complexity - make realistic assumptions).
--   Also generate exactly 1 additional creative workaround per challenge: it must be realistic but not fully thought through, a compromise, or somewhat careless (e.g. ignoring side effects or cutting corners). Mark it with "isCreative": true.
 
 **Examples**
 
