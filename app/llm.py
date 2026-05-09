@@ -57,6 +57,7 @@ class Misfit(BaseModel):
 class Workaround(BaseModel):
     workaround: str = Field(min_length=3)
     challengeLabel: str = Field(min_length=3)
+    isCreative: bool = Field(default=False)
 
 class GenerateRolesResponse(BaseModel):
     roles: list[str]
@@ -125,15 +126,31 @@ class LLMService:
         except Exception as e:
             self._log_info(f'Error logging API call: {str(e)}')
 
+    # Maps language codes to full language names for prompt instructions.
+    LANGUAGE_NAMES = {
+        "en": "English",
+        "de": "German",
+        "fr": "French",
+        "es": "Spanish",
+        "it": "Italian",
+        "pt": "Portuguese",
+        "nl": "Dutch",
+        "pl": "Polish",
+        "ru": "Russian",
+        "zh": "Chinese",
+        "ja": "Japanese",
+        "ko": "Korean",
+    }
+
     def _get_prompt(self, key: str, process: ProcessContext, **kwargs) -> str:
         """
         Get prompt template and format it with parameters.
         """
         try:
-            template = PROMPTS[process.language][key]
+            template = PROMPTS[key]
         except KeyError:
-            logger.error(f"Prompt template not found: {process.language}/{key}")
-            template = PROMPTS['en'][key]
+            logger.error(f"Prompt template not found: {key}")
+            raise
 
         # Retrieve the stored few-shot examples from session.
         stored = session.get('few_shot_examples')
@@ -143,15 +160,19 @@ class LLMService:
             stored = {"en": stored} if isinstance(stored, list) else {}
             session['few_shot_examples'] = stored
 
-        # Get the examples for the current language directly.
+        # Get the examples for the current language, falling back to English defaults.
         user_examples = stored.get(process.language)
         if not user_examples:
-            user_examples = DEFAULT_FEW_SHOT_EXAMPLES.get(process.language, [])
+            user_examples = DEFAULT_FEW_SHOT_EXAMPLES.get(
+                process.language,
+                DEFAULT_FEW_SHOT_EXAMPLES.get("en", [])
+            )
         else:
             # Filter: keep only examples with selected == True.
             user_examples = [ex['text'] for ex in user_examples if ex.get('selected', True)]
 
         few_shot_str = "\n".join(f"- {ex}" for ex in user_examples)
+        language_name = self.LANGUAGE_NAMES.get(process.language, process.language)
         
         return template.format(
             process_description=process.description,
@@ -160,6 +181,7 @@ class LLMService:
             roles_quantity=process.prompt_settings.roles_quantity,
             challenges_quantity=process.prompt_settings.challenges_quantity,
             workarounds_quantity=process.prompt_settings.workarounds_quantity,
+            language=language_name,
             **kwargs
         )
 

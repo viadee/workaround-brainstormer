@@ -265,7 +265,8 @@ class App {
                         text: workaround.workaround,
                         expanded: false,
                         parent: misfitNode.id,
-                        category: "workaround"
+                        category: "workaround",
+                        isCreative: workaround.isCreative === true
                     }
                     workaroundNodes.push(this.graphManager.addNode(workaroundNode));
                     this.graphManager.addLink(misfitNode.id, workaroundNode.id);

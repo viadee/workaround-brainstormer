@@ -50,6 +50,9 @@ class WorkaroundsList {
     createListHtml(node) {
         const li = document.createElement('li');
         li.classList.add('workaround-item', `list-node-${node.id}`);
+        if (node.category === 'workaround' && node.isCreative) {
+            li.classList.add('creative-workaround');
+        }
 
         const card = document.createElement('div');
         card.classList.add('workaround-card');
@@ -80,6 +83,15 @@ class WorkaroundsList {
             const iconSpan = document.createElement('span');
             iconSpan.classList.add('node-type-icon', 'fas', iconClass);
             header.appendChild(iconSpan);
+        }
+
+        // Add creative badge for creative workarounds
+        if (node.category === 'workaround' && node.isCreative) {
+            const creativeBadge = document.createElement('span');
+            creativeBadge.classList.add('creative-badge');
+            creativeBadge.title = 'Creative workaround — realistic but not fully thought through';
+            creativeBadge.textContent = '✦';
+            header.appendChild(creativeBadge);
         }
 
         const textSpan = document.createElement('span');
