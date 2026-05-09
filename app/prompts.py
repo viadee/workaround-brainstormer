@@ -15,8 +15,8 @@ Consider the following process and/or the attached process diagram:
 1.	First, list the explicit mentioned roles in the process description.
 2.	Secondly, consider the following questions and instructions to gather implicitly mentioned or other relevant roles. Gather as many roles as you can: 	
     -	think about roles that are most common or obvious in the described process domain e.g. industry the process is performed in
-    -	consider roles that perform the most critical tasks and what roles have decision-making power or hold specific insides about the process
-    -	think about jobs not mentioned in but indirectly affected by the process
+    -	consider roles that perform the most critical tasks and what roles have decision-making power or hold specific insights about the process
+    -	think about jobs not mentioned in but indirectly affecting the process
     -	explore diverse types of roles and ensure including roles that are different accordingly to the following dimensions:
         o	Hierarchy level (Management, Supervisor, staff jobs, line jobs), 
         o	Occupation 
@@ -31,7 +31,6 @@ Consider the following process and/or the attached process diagram:
         o	type of employment (e.g. intern, full-time seasonal workers, etc.), 
         o	function/department (e.g. Control tower, Accounting, Production line, Kitchen)
     -	make sure the generated roles match the domain of the process
-
 
 
 Finally, from the basic population of roles, minimize the role selection by 
@@ -79,7 +78,7 @@ For each role, let’s systematically analyze unusual potential obstacles, issue
 
 
 
-Based on this analysis, for each given role, return {challenges_quantity} Challenges as an JSON object in the following format:
+Based on this analysis, for each given role, return {challenges_quantity} challenges as an JSON object in the following format:
 -	Start each sentence with the role e.g. “As a consultant, ”
 -	Continue with the context or action e.g. “As a consultant, when I am in a workshop with my client”
 -	Finish with the identified challenge:  “As a consultant, when I am in a workshop with my client, I can’t find the issue in the information system.”
@@ -121,8 +120,9 @@ For each challenge:
 
 Finally, for each challenge, formulate {workarounds_quantity} unique workarounds that enable the role to overcome, bypass or minimize the challenge:
 -   make sure to generate the just mentioned quantity ({workarounds_quantity}) of workarounds for each challenge. For example, if you have three challenges per role and 3 roles in total, you must generate 3 * 3 * {workarounds_quantity} workarounds in total!
--	Present each workaround as a user story using the following format:
+-	Present each workaround as a user story broadly along the following format:
 -	Template: "As a [role] [context], when [challenge], I [adaptive action] to [intended outcome]."
+-   Keep it brief and use words and tone fitting for the role (avoid vagueness and unnecessary complexity - make realistic assumptions).
 
 **Examples**
 
@@ -820,6 +820,8 @@ Return the workarounds as a JSON object in the following format:
             - "Als Lagerarbeiter, wenn das Warenwirtschaftssystem während der Stoßzeiten verzögert reagiert, notiere ich Artikel zuerst auf Papier und gebe sie in ruhigeren Zeiten ein, um die Geschwindigkeit der Arbeitsabläufe aufrechtzuerhalten."
             - "Als Lagerarbeiter, wenn Systemaktualisierungen den Betrieb unterbrechen, fasse ich ähnliche Artikel zusammen und verarbeite sie in großen Mengen, wenn das System wieder verfügbar ist, um die Gesamtzeit beim Scannen zu reduzieren."
             - "Als Lagerarbeiter, wenn die Netzwerkverbindung instabil ist, fotografiere ich Barcodes mit meinem Handy, um sie später an einem Ort mit besserer Verbindung einzuscannen."
+
+            - Wir fassen uns kurz, verwenden Wörter und Stil die zur jeweiligen Rolle passen. Wir vermeiden Vagheit und treffen realistische Annahmen über die Sitation.
 
             Geben Sie die Workarounds als JSON-Objekt im folgenden Format zurück:
             {{
