@@ -49,7 +49,7 @@ class ContainerApp(pulumi.ComponentResource):
         secrets: Optional[List[azure_native.app.SecretArgs]] = None,
         exposed_port: Optional[bool] = None,
         opts: Optional[pulumi.ResourceOptions] = None,
-        min_replicas: int = 0,
+        min_replicas: int = 0,  # Scale to zero for cost savings
         max_replicas: int = 1,
         cpu: int = 1,
         memory: str = "2Gi",

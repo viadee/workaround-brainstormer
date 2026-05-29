@@ -12,6 +12,7 @@ from .language_service import LanguageService
 from .prompts import PROMPTS, DEFAULT_FEW_SHOT_EXAMPLES
 from .logger_config import configure_llm_logging
 from pydantic import BaseModel, create_model, Field
+import time
 
 # RAG dependencies
 from qdrant_client import QdrantClient
@@ -31,6 +32,44 @@ def setup_logging():
     
     # Use the centralized logger configuration
     configure_llm_logging(logs_dir)
+
+
+def retry_with_backoff(func, max_retries=3, initial_delay=2.0):
+    """Retry a function with exponential backoff for timeout errors (cold start recovery).
+    
+    Args:
+        func: Callable that may raise APITimeoutError
+        max_retries: Number of retries after first attempt
+        initial_delay: Initial delay in seconds between retries (doubles each retry)
+        
+    Returns:
+        Result of successful function call
+        
+    Raises:
+        Exception: Last error if all retries exhausted
+    """
+    last_error = None
+    delay = initial_delay
+    
+    for attempt in range(max_retries + 1):
+        try:
+            if attempt > 0:
+                logger.info(f"Retry attempt {attempt}/{max_retries} after {delay}s delay (cold start warm-up)")
+                time.sleep(delay)
+            return func()
+        except openai.APITimeoutError as e:
+            last_error = e
+            if attempt < max_retries:
+                logger.warning(f"Timeout on attempt {attempt + 1}, retrying in {delay}s: {str(e)}")
+                delay *= 2  # Exponential backoff
+            else:
+                logger.error(f"Failed after {max_retries + 1} attempts due to timeout")
+        except Exception as e:
+            # Don't retry on non-timeout errors
+            raise
+    
+    if last_error:
+        raise last_error
 
 
 
@@ -84,10 +123,13 @@ class LLMService:
         if not all([api_key, api_version, azure_endpoint]):
             raise ValueError("Missing configuration for Azure OpenAI API.")
 
+        # Initialize client with timeout to prevent hanging during cold starts
+        # Timeout: 60s for regular operations, can be extended for large responses
         self.client = openai.AzureOpenAI(
             api_key=api_key,
             api_version=api_version,
-            azure_endpoint=azure_endpoint
+            azure_endpoint=azure_endpoint,
+            timeout=60.0  # 60 second timeout for API calls
         )
         
         self.chat_model = current_app.config['AZURE_CHAT_MODEL']
@@ -285,14 +327,20 @@ class LLMService:
             raise Exception(error_msg) from e
             
         ResponseModel = create_model("workaround_response_model",**{field_name:(list[Workaround],...) for field_name in parsed_misfits.keys()})
-        try:
+        
+        # Retry logic to handle cold start timeouts
+        def make_api_call():
             logger.debug(f"[get_workarounds_from_misfits] Calling OpenAI API with model: {self.chat_model}")
-            completion = self.client.beta.chat.completions.parse(
+            return self.client.beta.chat.completions.parse(
                 model= self.chat_model,
                 messages=messages,
                 max_completion_tokens=20000,
                 response_format=ResponseModel
             )
+        
+        try:
+            # Use retry logic for timeout resilience during cold starts
+            completion = retry_with_backoff(make_api_call, max_retries=2, initial_delay=1.0)
             
             result_content = completion.choices[0].message.content
             logger.debug(f"[get_workarounds_from_misfits] Raw API response: {result_content[:500]}")
@@ -306,6 +354,11 @@ class LLMService:
                 token_usage=completion.usage.model_dump()
             )
             return parsed_result
+        except openai.APITimeoutError as e:
+            # Timeout even after retries - likely cold start took too long
+            error_msg = f"OpenAI API timeout on get_workarounds_from_misfits (cold start exceeded timeout): {str(e)}"
+            logger.error(f"[get_workarounds_from_misfits] {error_msg}", exc_info=True)
+            raise Exception(error_msg) from e
         except openai.OpenAIError as e:
             error_msg = f"OpenAI API error on get_workarounds_from_misfits: {type(e).__name__}: {str(e)}"
             logger.error(f"[get_workarounds_from_misfits] {error_msg}", exc_info=True)

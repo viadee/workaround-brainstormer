@@ -11,7 +11,7 @@ from .logger_config import (
     sanitize_api_key, is_dev_mode, is_prod_mode
 )
 # App version
-APP_VERSION = '1.0.1'
+APP_VERSION = '1.0.2'
 
 # Define project root directory
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
