@@ -4,60 +4,63 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 from typing import Optional
-from .limiter import limiter
-from .auth import login_is_required
-from .logger_config import (
-    configure_app_logging, configure_llm_logging, 
-    sanitize_api_key, is_dev_mode, is_prod_mode
+from app.limiter import limiter
+from app.auth import login_is_required
+from app.logger_config import (
+    configure_app_logging,
+    configure_llm_logging,
+    sanitize_api_key,
+    is_dev_mode,
+    is_prod_mode,
 )
+
 # App version
-APP_VERSION = '1.0.3'
+APP_VERSION = "1.0.4"
 
 # Define project root directory
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-
 def create_app(testing: bool = False) -> Flask:
     """Create and configure the Flask application."""
-    app = Flask(__name__, 
-                static_url_path='/',
-                template_folder='../templates',  
-                static_folder='../static')       
-    
-    
+    app = Flask(
+        __name__,
+        static_url_path="/",
+        template_folder="../templates",
+        static_folder="../static",
+    )
+
     limiter.init_app(app)
 
     # Load configuration
-    app.secret_key = os.getenv('APPSECRETKEY')
+    app.secret_key = os.getenv("APPSECRETKEY")
     app.config.update(
-        UPLOAD_FOLDER=os.path.join(PROJECT_ROOT, 'temp_uploads'),
+        UPLOAD_FOLDER=os.path.join(PROJECT_ROOT, "temp_uploads"),
         MAX_CONTENT_LENGTH=5 * 1024 * 1024,  # 5MB limit
-        ALLOWED_EXTENSIONS={'png', 'jpg', 'jpeg', 'pdf'},
+        ALLOWED_EXTENSIONS={"png", "jpg", "jpeg", "pdf"},
         APP_VERSION=APP_VERSION,
         TESTING=testing,
         # OpenAI settings
-        AZURE_API_KEY=os.getenv('AZURE_OPENAI_API_KEY'),
-        AZURE_API_VERSION=os.getenv('AZURE_OPENAI_API_VERSION', '2024-08-01-preview'),
-        AZURE_API_URL=os.getenv('AZURE_OPENAI_API_URL'),
-        AZURE_CHAT_MODEL=os.getenv('AZURE_OPENAI_CHAT_MODEL'),
-        AZURE_EMBEDDING_MODEL=os.getenv('AZURE_OPENAI_EMBEDDING_MODEL'),
+        AZURE_API_KEY=os.getenv("AZURE_OPENAI_API_KEY"),
+        AZURE_API_VERSION=os.getenv("AZURE_OPENAI_API_VERSION", "2024-08-01-preview"),
+        AZURE_API_URL=os.getenv("AZURE_OPENAI_API_URL"),
+        AZURE_CHAT_MODEL=os.getenv("AZURE_OPENAI_CHAT_MODEL"),
+        AZURE_EMBEDDING_MODEL=os.getenv("AZURE_OPENAI_EMBEDDING_MODEL"),
         AUTH_LOGIN_REQUIRED=login_is_required(),
-        DAILY_COST_THRESHOLD=float(os.getenv('DAILYCOSTTHRESHOLD', '10.0')),
-        
+        DAILY_COST_THRESHOLD=float(os.getenv("DAILYCOSTTHRESHOLD", "10.0")),
         # Q-Drant settings
-        QDRANT_URL = os.getenv('QDRANT_URL'),
-        QDRANT_WORKAROUNDS_READ_KEY = os.getenv('QDRANT_WORKAROUNDS_READ_KEY'),
+        QDRANT_URL=os.getenv("QDRANT_URL"),
+        QDRANT_WORKAROUNDS_READ_KEY=os.getenv("QDRANT_WORKAROUNDS_READ_KEY"),
         # Add logs directory to config
-        LOGS_DIR=os.path.join(PROJECT_ROOT, 'logs')
+        LOGS_DIR=os.path.join(PROJECT_ROOT, "logs"),
     )
 
     # Temporary: log resolved Azure config for debugging (remove after fixing auth)
-    _key = app.config.get('AZURE_API_KEY') or ''
-    _url = app.config.get('AZURE_API_URL') or ''
-    _ver = app.config.get('AZURE_API_VERSION') or ''
-    _model = app.config.get('AZURE_CHAT_MODEL') or ''
-    
+    _key = app.config.get("AZURE_API_KEY") or ""
+    _url = app.config.get("AZURE_API_URL") or ""
+    _ver = app.config.get("AZURE_API_VERSION") or ""
+    _model = app.config.get("AZURE_CHAT_MODEL") or ""
+
     if is_dev_mode():
         app.logger.warning(
             f"[DEBUG] Azure config — key: {_key[:6]}...{_key[-4:]} ({len(_key)} chars) | "
@@ -65,16 +68,16 @@ def create_app(testing: bool = False) -> Flask:
         )
 
     # Ensure upload and log directories exist
-    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-    os.makedirs(app.config['LOGS_DIR'], exist_ok=True)
+    os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
+    os.makedirs(app.config["LOGS_DIR"], exist_ok=True)
 
     # Configure logging
     if not testing:
-        configure_app_logging(app, app.config['LOGS_DIR'], APP_VERSION)
-    
+        configure_app_logging(app, app.config["LOGS_DIR"], APP_VERSION)
+
     # Register blueprints
     from .routes import auth_bp, main_bp, info_bp, api_bp
-    
+
     app.register_blueprint(auth_bp)
     app.register_blueprint(main_bp)
     app.register_blueprint(info_bp)
@@ -83,7 +86,6 @@ def create_app(testing: bool = False) -> Flask:
 
     # Suppress Werkzeug's verbose HTTP request logging in production
     if is_prod_mode():
-        logging.getLogger('werkzeug').setLevel(logging.WARNING)
+        logging.getLogger("werkzeug").setLevel(logging.WARNING)
 
     return app
-
